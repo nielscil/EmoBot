@@ -32,25 +32,22 @@ namespace AliceWPF.Controls
             DataContextChanged -= ConverstationItemControl_DataContextChanged;
 
             ConversationItem item = DataContext as ConversationItem;
+
             DockPanel grid = Content as DockPanel;
 
             if (item != null && grid != null)
             {
-                grid.Children.Add(CreateCard(item));
+                SetCard(item);
             }
         }
 
-        private Card CreateCard(ConversationItem item)
+        private void SetCard(ConversationItem item)
         {
-            Card card = new Card();
-
-            SetGridColumn(card, item);
-            card.Content = CreateTextBlock(item);
-
-            return card;
+            SetCardAlignment(card, item);
+            SetText(item);
         }
 
-        private void SetGridColumn(Card card, ConversationItem item)
+        private void SetCardAlignment(Card card, ConversationItem item)
         {
             if(item.Sender == SenderEnum.Bot)
             {
@@ -62,11 +59,9 @@ namespace AliceWPF.Controls
             }
         }
 
-        private TextBlock CreateTextBlock(ConversationItem item)
+        private void SetText(ConversationItem item)
         {
-            TextBlock block = new TextBlock();
-            block.Text = item.Content;
-            return block;
+            content.Text = item.Content;
         }
     }
 }
