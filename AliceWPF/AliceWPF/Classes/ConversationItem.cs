@@ -8,21 +8,13 @@ namespace AliceWPF.Classes
 {
     class ConversationItem
     {
-        // Public variables
-        public enum Sender { Bot, User };
+        public SenderEnum Sender { get; private set; }
+        public string Content { get; private set; }
 
-        // Private variables
-        private Sender sender;
-        private string content;
-
-        public void setSender(Sender sender)
+        public ConversationItem(SenderEnum sender, string content)
         {
-
-        }
-
-        public Sender getSender()
-        {
-            return Sender.Bot;
+            Sender = sender;
+            Content = content;
         }
     }
 }

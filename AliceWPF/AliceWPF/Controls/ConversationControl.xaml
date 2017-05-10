@@ -4,16 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AliceWPF.Controls"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <materialDesign:Card>
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             x:Name="ConverstationControl"
+             Margin="5">
+    <materialDesign:Card Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UIElement}}" >
         <ScrollViewer>
-            <ListView ItemsSource="{Binding DataContext}">
-                <ListView.ItemTemplate>
+            <ItemsControl  ItemsSource="{Binding .}" HorizontalContentAlignment="Stretch" Margin="10">
+                <ItemsControl.ItemTemplate>
                     <ItemContainerTemplate>
-                        <local:ConverstationItemControl DataContext="{Binding .}" />
+                        <local:ConverstationItemControl DataContext="{Binding .}" Margin="0,0,5,0" />
                     </ItemContainerTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
     </materialDesign:Card>
 </UserControl>

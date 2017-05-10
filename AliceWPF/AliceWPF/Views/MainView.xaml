@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AliceWPF.Views"
+        xmlns:controls="clr-namespace:AliceWPF.Controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -15,13 +16,12 @@
         Title="Alice">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <materialDesign:Card Padding="10" Margin="5">
-                <TextBox FontSize="18" x:Name="Input"/>
-            </materialDesign:Card>
-        </Grid>
+        <controls:ConversationControl DataContext="{Binding Path=Conversation, Mode=TwoWay}" Grid.Row="0" />
+        <materialDesign:Card Padding="10" Margin="5" Grid.Row="1">
+            <TextBox FontSize="18" x:Name="Input"/>
+        </materialDesign:Card>
     </Grid>
 </Window>
