@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alice", "Alice\Alice.csproj", "{FBC576F3-DAD7-4371-B488-0F40F384FF75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{FBF8804F-5CD2-4D7F-8289-528FAE572BD3}"
+	ProjectSection(SolutionItems) = preProject
+		Roboto\Roboto-Black.ttf = Roboto\Roboto-Black.ttf
+		Roboto\Roboto-BlackItalic.ttf = Roboto\Roboto-BlackItalic.ttf
+		Roboto\Roboto-Bold.ttf = Roboto\Roboto-Bold.ttf
+		Roboto\Roboto-BoldItalic.ttf = Roboto\Roboto-BoldItalic.ttf
+		Roboto\Roboto-Italic.ttf = Roboto\Roboto-Italic.ttf
+		Roboto\Roboto-Light.ttf = Roboto\Roboto-Light.ttf
+		Roboto\Roboto-LightItalic.ttf = Roboto\Roboto-LightItalic.ttf
+		Roboto\Roboto-Medium.ttf = Roboto\Roboto-Medium.ttf
+		Roboto\Roboto-MediumItalic.ttf = Roboto\Roboto-MediumItalic.ttf
+		Roboto\Roboto-Regular.ttf = Roboto\Roboto-Regular.ttf
+		Roboto\Roboto-Thin.ttf = Roboto\Roboto-Thin.ttf
+		Roboto\Roboto-ThinItalic.ttf = Roboto\Roboto-ThinItalic.ttf
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBC576F3-DAD7-4371-B488-0F40F384FF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC576F3-DAD7-4371-B488-0F40F384FF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC576F3-DAD7-4371-B488-0F40F384FF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC576F3-DAD7-4371-B488-0F40F384FF75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
