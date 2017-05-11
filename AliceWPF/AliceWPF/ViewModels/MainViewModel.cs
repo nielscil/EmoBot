@@ -11,7 +11,7 @@ namespace AliceWPF.ViewModels
 {
     class MainViewModel : PropertyChangedBase
     {
-        private string _input;
+        private string _input = string.Empty;
         public string Input
         {
             get
@@ -21,6 +21,22 @@ namespace AliceWPF.ViewModels
             set
             {
                 _input = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange("Loading"); //TODO: Remove this!
+            }
+        }
+
+        private bool _loading = false;
+        public bool Loading
+        {
+            get
+            {
+                return Input.Length > 0; //TODO: Remove this!
+                return _loading;
+            }
+            set
+            {
+                _loading = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -41,6 +57,7 @@ namespace AliceWPF.ViewModels
 
         public MainViewModel()
         {
+            //TODO: Remove this
             Conversation.Add(new ConversationItem(SenderEnum.Bot, "I'm a bot"));
             Conversation.Add(new ConversationItem(SenderEnum.User, "I'm not a bot"));
         }
