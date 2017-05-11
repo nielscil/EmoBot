@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AliceWPF.Classes
 {
-    class ConversationItem
+    public class ConversationItem
     {
         public SenderEnum Sender { get; private set; }
         public string Content { get; private set; }
