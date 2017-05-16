@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AliceWPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +18,29 @@ namespace AliceWPF.Views
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class MainView : Window
+    public partial class MainView : Window, IDisposable
     {
         public MainView()
         {
             InitializeComponent();
+            Input.KeyDown += Input_KeyDown;
+        }
+
+        public void Dispose()
+        {
+            Input.KeyDown -= Input_KeyDown;
+        }
+
+        private void Input_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                MainViewModel viewModel = DataContext as MainViewModel;
+                if(viewModel != null)
+                {
+                    viewModel.SendContent();
+                }
+            }
         }
     }
 }

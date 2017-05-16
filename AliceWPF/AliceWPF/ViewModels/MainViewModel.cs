@@ -61,5 +61,14 @@ namespace AliceWPF.ViewModels
             Conversation.Add(new ConversationItem(SenderEnum.Bot, "I'm a bot"));
             Conversation.Add(new ConversationItem(SenderEnum.User, "I'm not a bot"));
         }
+
+        public void SendContent()
+        {
+            if (!string.IsNullOrWhiteSpace(Input))
+            {
+                Conversation.Add(new ConversationItem(SenderEnum.User, Input));
+                Input = string.Empty;
+            }
+        }
     }
 }

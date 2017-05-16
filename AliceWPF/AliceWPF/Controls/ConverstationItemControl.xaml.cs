@@ -52,6 +52,8 @@ namespace AliceWPF.Controls
             if(item.Sender == SenderEnum.Bot)
             {
                 card.HorizontalAlignment = HorizontalAlignment.Left;
+                card.Background = Brushes.MediumPurple;
+                card.Foreground = Brushes.White;
             }
             else
             {

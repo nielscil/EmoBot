@@ -18,10 +18,19 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <controls:ConversationControl Grid.Row="0" />
-        <materialDesign:Card Padding="10" Margin="5" Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <controls:ConversationControl Grid.Row="0" Grid.ColumnSpan="3" Margin="5,5,10,5"/>
+        <materialDesign:Card Grid.Column="0" Padding="10" Margin="5,5,52,0" Grid.Row="1" Grid.RowSpan="2">
             <TextBox FontSize="18" x:Name="Input"/>
         </materialDesign:Card>
+        <Button Grid.Row="1" Grid.Column="1" Content="Send" FontSize="18" x:Name="SendContent"/>
+        <CheckBox Grid.Row="2" Grid.Column="1" Content="Dev" FontSize="12" x:Name="ShowDevOptions"/>
+        <ContentControl x:Name="ActiveItem" Grid.Column="2"/>
     </Grid>
 </Window>
