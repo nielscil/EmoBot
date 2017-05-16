@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 
 namespace AliceWPF.ViewModels
 {
-    class MainViewModel : PropertyChangedBase
+    class MainViewModel : ViewModelBase
     {
+
+        public DebugViewModel DebugViewModel { get; private set; }
+
         private string _input = string.Empty;
         public string Input
         {
@@ -41,6 +44,19 @@ namespace AliceWPF.ViewModels
             }
         }
 
+        private bool _debug = false;
+        public bool Debug {
+            get
+            {
+                return _debug;
+            }
+            set
+            {
+                _debug = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         private ObservableCollection<ConversationItem> _converstation = new ObservableCollection<ConversationItem>();
         public ObservableCollection<ConversationItem> Conversation
         {
@@ -57,6 +73,8 @@ namespace AliceWPF.ViewModels
 
         public MainViewModel()
         {
+            DebugViewModel = new DebugViewModel();
+
             //TODO: Remove this
             Conversation.Add(new ConversationItem(SenderEnum.Bot, "I'm a bot"));
             Conversation.Add(new ConversationItem(SenderEnum.User, "I'm not a bot"));

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:AliceWPF.Views"
         xmlns:controls="clr-namespace:AliceWPF.Controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:converters="clr-namespace:AliceWPF.Converters"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -13,7 +14,13 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Alice">
+        MinHeight="500" MinWidth="500"
+        Title="Alice" Width="Auto" Height="Auto" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -25,12 +32,12 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <controls:ConversationControl Grid.Row="0" Grid.ColumnSpan="3" Margin="5,5,10,5"/>
-        <materialDesign:Card Grid.Column="0" Padding="10" Margin="5,5,52,0" Grid.Row="1" Grid.RowSpan="2">
+        <controls:ConversationControl Grid.Row="0" Grid.ColumnSpan="2" Margin="5,5,10,5"/>
+        <materialDesign:Card Grid.Column="0" Padding="10" Margin="5" Grid.Row="1" Grid.RowSpan="2">
             <TextBox FontSize="18" x:Name="Input"/>
         </materialDesign:Card>
-        <Button Grid.Row="1" Grid.Column="1" Content="Send" FontSize="18" x:Name="SendContent"/>
-        <CheckBox Grid.Row="2" Grid.Column="1" Content="Dev" FontSize="12" x:Name="ShowDevOptions"/>
-        <ContentControl x:Name="ActiveItem" Grid.Column="2"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="Send" FontSize="18" Margin="0,0,10,7" x:Name="SendContent"/>
+        <CheckBox Grid.Row="1" Grid.Column="1" Content="Debug" FontSize="12" Margin="0,5,10,0" x:Name="Debug"/>
+        <ContentControl x:Name="DebugViewModel" Grid.Column="2" Grid.RowSpan="3" Visibility="{Binding Debug,Converter={StaticResource BoolToVisibilityConverter}}" />
     </Grid>
 </Window>
