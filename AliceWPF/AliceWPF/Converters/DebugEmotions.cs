@@ -18,19 +18,19 @@ namespace AliceWPF.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         { 
-            if (value.ToString() == "Happy")
+            if (parameter.ToString() == "Happy")
             {
                 return UserEmotion.Happy;
             }
-            else if (value.ToString() == "Sad")
+            else if (parameter.ToString() == "Sad")
             {
                 return UserEmotion.Sad;
             }
-            else if (value.ToString() == "Scared")
+            else if (parameter.ToString() == "Scared")
             {
                 return UserEmotion.Scared;
             }
-            else if (value.ToString() == "Angry")
+            else if (parameter.ToString() == "Angry")
             {
                 return UserEmotion.Angry;
             }

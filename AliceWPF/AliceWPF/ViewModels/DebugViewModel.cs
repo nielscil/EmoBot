@@ -25,21 +25,17 @@ namespace AliceWPF.ViewModels
             set
             {
                 _selectedEmotion = value;
+                NotifyOfPropertyChange("EmotionFeedback");
+                NotifyOfPropertyChange();
             }
         }
 
-        private string _emotionFeedback;
         public string EmotionFeedback
         {
             get
             {
-                return _emotionFeedback;
-            }
-            set
-            {
-                _emotionFeedback = "User is feeling " + value;
-                NotifyOfPropertyChange();
-            }
+                return "User is feeling " + SelectedEmotion.ToString() ;
+            }            
         }
     }
 }

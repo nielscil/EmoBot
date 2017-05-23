@@ -28,7 +28,7 @@
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Scared}"/>
                 <RadioButton Content="Angry" FontSize="18" VerticalContentAlignment="Center"
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Angry}"/>
-                <TextBox x:Name="EmotionFeedback" Text="User is feeling: " FontSize="18"/>
+                <Label x:Name="EmotionFeedback" Content="User is feeling: " FontSize="18"/>
             </StackPanel>
         </materialDesign:Card>
     </Grid>
