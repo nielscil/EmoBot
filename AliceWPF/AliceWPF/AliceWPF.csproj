@@ -86,6 +86,7 @@
     <Compile Include="Classes\ConversationItem.cs">
     </Compile>
     <Compile Include="Classes\SenderEnum.cs" />
+    <Compile Include="Classes\UserEmotion.cs" />
     <Compile Include="Controls\ConversationControl.xaml.cs">
       <DependentUpon>ConversationControl.xaml</DependentUpon>
     </Compile>
@@ -93,6 +94,7 @@
       <DependentUpon>ConverstationItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\DebugEmotions.cs" />
     <Compile Include="Converters\NegativeBoolToVisibilityConverter.cs" />
     <Compile Include="ViewModels\DebugViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

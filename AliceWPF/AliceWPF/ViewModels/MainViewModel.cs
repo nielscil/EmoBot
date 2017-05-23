@@ -84,6 +84,7 @@ namespace AliceWPF.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(Input))
             {
+                // Get userEmotion from camera
                 Conversation.Add(new ConversationItem(SenderEnum.User, Input));
                 Input = string.Empty;
             }
