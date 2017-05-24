@@ -289,4 +289,7 @@ __pycache__/
 
 #custom stuff
 
-!AliceWPF/DLL/**/*.dll
+!AliceWPF/DLL/debug/Affdex.dll
+!AliceWPF/DLL/debug/affdex-native.dll
+!AliceWPF/DLL/release/Affdex.dll
+!AliceWPF/DLL/release/affdex-native.dll
