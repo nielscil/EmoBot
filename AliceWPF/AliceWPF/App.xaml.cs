@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmotionLib;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,6 +14,8 @@ namespace AliceWPF
     /// </summary>
     public partial class App : Application
     {
-
+        public App()
+        {
+        }
     }
 }

@@ -34,8 +34,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\$(ConfigurationName)\Affdex.dll</HintPath>
     </Reference>
+    <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.2.2.5\lib\AForge.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Video, Version=2.2.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Video.2.2.5\lib\AForge.Video.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Video.DirectShow.2.2.5\lib\AForge.Video.DirectShow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,7 +64,10 @@
       <Link>opencv_ffmpeg248_64.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="CameraHelper.cs" />
     <Compile Include="EmotionDetector.cs" />
+    <Compile Include="Extensions\BitmapExtensions.cs" />
+    <Compile Include="Models\Camera.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Classifier\haarcascade\004_lbp_15stage.xml" />
     <Content Include="Classifier\haarcascade\haarcascade_frontalface_alt2.xml" />
@@ -113,6 +129,7 @@
     <None Include="Classifier\production_config\tracker\single_noctali0.81.conf" />
     <None Include="Classifier\production_config\tracker\single_noctali0.83.conf" />
     <None Include="Classifier\production_config\tracker\single_noctali0.83_emoto.conf" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
