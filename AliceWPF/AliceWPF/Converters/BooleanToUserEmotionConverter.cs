@@ -13,7 +13,12 @@ namespace AliceWPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return parameter == value ? true : false;
+            if(value != null && parameter != null)
+            {
+                return parameter.ToString() == value.ToString();
+            }
+
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -94,7 +94,7 @@
       <DependentUpon>ConverstationItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\DebugEmotions.cs" />
+    <Compile Include="Converters\BooleanToUserEmotionConverter.cs" />
     <Compile Include="Converters\NegativeBoolToVisibilityConverter.cs" />
     <Compile Include="ViewModels\DebugViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

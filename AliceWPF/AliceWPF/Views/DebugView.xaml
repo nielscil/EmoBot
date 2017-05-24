@@ -20,6 +20,8 @@
         </Grid.ColumnDefinitions>
         <materialDesign:Card Grid.Column="0" Padding="10" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UIElement}}">
             <StackPanel>
+                <RadioButton Content="Neutral" FontSize="18" VerticalContentAlignment="Center" 
+                             IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Neutral}"/>
                 <RadioButton Content="Happy" FontSize="18" VerticalContentAlignment="Center" 
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Happy}"/>
                 <RadioButton Content="Sad" FontSize="18" VerticalContentAlignment="Center"

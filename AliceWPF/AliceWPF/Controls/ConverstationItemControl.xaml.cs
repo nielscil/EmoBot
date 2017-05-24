@@ -53,7 +53,7 @@ namespace AliceWPF.Controls
             {
                 card.HorizontalAlignment = HorizontalAlignment.Left;
                 card.Background = FindResource("PrimaryHueMidBrush") as Brush;
-                card.Foreground = Brushes.White;
+                card.Foreground = FindResource("PrimaryHueMidForegroundBrush") as Brush;
             }
             else
             {
