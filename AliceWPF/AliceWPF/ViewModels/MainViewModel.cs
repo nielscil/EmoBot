@@ -25,7 +25,6 @@ namespace AliceWPF.ViewModels
             {
                 _input = value;
                 NotifyOfPropertyChange();
-                NotifyOfPropertyChange("Loading"); //TODO: Remove this!
             }
         }
 
@@ -34,7 +33,6 @@ namespace AliceWPF.ViewModels
         {
             get
             {
-                return Input.Length > 0; //TODO: Remove this!
                 return _loading;
             }
             set
@@ -74,17 +72,12 @@ namespace AliceWPF.ViewModels
         public MainViewModel()
         {
             DebugViewModel = new DebugViewModel();
-
-            //TODO: Remove this
-            Conversation.Add(new ConversationItem(SenderEnum.Bot, "I'm a bot"));
-            Conversation.Add(new ConversationItem(SenderEnum.User, "I'm not a bot"));
         }
 
         public void SendContent()
         {
             if (!string.IsNullOrWhiteSpace(Input))
             {
-                // Get userEmotion from camera
                 Conversation.Add(new ConversationItem(SenderEnum.User, Input));
                 Input = string.Empty;
             }

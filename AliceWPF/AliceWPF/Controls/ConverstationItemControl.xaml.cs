@@ -52,7 +52,7 @@ namespace AliceWPF.Controls
             if(item.Sender == SenderEnum.Bot)
             {
                 card.HorizontalAlignment = HorizontalAlignment.Left;
-                card.Background = Brushes.MediumPurple;
+                card.Background = FindResource("PrimaryHueMidBrush") as Brush;
                 card.Foreground = Brushes.White;
             }
             else

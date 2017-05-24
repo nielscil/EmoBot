@@ -9,32 +9,32 @@ using AliceWPF.Classes;
 
 namespace AliceWPF.Converters
 {
-    public class DebugEmotions : IValueConverter
+    public class BooleanToUserEmotionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value?.ToString();
+            return parameter == value ? true : false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         { 
-            if (parameter.ToString() == "Happy")
+            if (parameter != null)
             {
-                return UserEmotion.Happy;
+                switch (parameter.ToString())
+                {
+                    case "Happy":
+                        return UserEmotion.Happy;
+                    case "Sad":
+                        return UserEmotion.Sad;
+                    case "Scared":
+                        return UserEmotion.Scared;
+                    case "Angry":
+                        return UserEmotion.Angry;
+                    default:
+                        return UserEmotion.Neutral;
+                }
             }
-            else if (parameter.ToString() == "Sad")
-            {
-                return UserEmotion.Sad;
-            }
-            else if (parameter.ToString() == "Scared")
-            {
-                return UserEmotion.Scared;
-            }
-            else if (parameter.ToString() == "Angry")
-            {
-                return UserEmotion.Angry;
-            }
-            return UserEmotion.Neutral;
+            return null;
         }
     }
 }
