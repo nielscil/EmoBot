@@ -35,10 +35,10 @@ namespace EmotionLib.Extensions
 
             return bytes;
         }
-        internal static Frame ToFrame(this Bitmap bitmap)
+        internal static Frame ToFrame(this Bitmap bitmap,float timestamp)
         {
             byte[] data = bitmap.ToByteArray();
-            return new Frame(bitmap.Width, bitmap.Height, data, Frame.COLOR_FORMAT.RGB);
+            return new Frame(bitmap.Width, bitmap.Height, data, Frame.COLOR_FORMAT.RGB,timestamp);
         }
     }
 }

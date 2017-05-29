@@ -50,7 +50,7 @@
   <ItemGroup>
     <Reference Include="Affdex, Version=3.4.1.575, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\$(ConfigurationName)\Affdex.dll</HintPath>
+      <HintPath>..\DLL\Release\Affdex.dll</HintPath>
     </Reference>
     <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
       <HintPath>..\packages\AForge.2.2.5\lib\AForge.dll</HintPath>
@@ -75,7 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\DLL\$(ConfigurationName)\affdex-native.dll">
+    <Content Include="..\DLL\Release\affdex-native.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\DLL\opencv_ffmpeg248_64.dll">

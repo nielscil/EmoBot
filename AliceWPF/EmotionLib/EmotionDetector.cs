@@ -139,22 +139,6 @@ namespace EmotionLib
             }
         }
 
-        //public async Task InitAsync(Camera camera)
-        //{
-
-        //    try
-        //    {
-        //        await InitDetector();
-        //        await InitVideoCaptureDevice(camera); 
-                
-        //        Initialized = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Could not complete initialization", ex);
-        //    }
-        //}
-
         private async Task InitVideoCaptureDevice(Camera camera)
         {
             await Task.Run(() =>
@@ -174,7 +158,8 @@ namespace EmotionLib
                     _detector = new FrameDetector(5);
                     _detector.setClassifierPath(GetClasifierPath());
                     _detector.setDetectAllEmotions(true);
-                    //TODO: add listeners
+                    _detector.setImageListener(this);
+                    _detector.setProcessStatusListener(this);
 
                     _detector.start();
                     Initialized = true;
@@ -193,29 +178,31 @@ namespace EmotionLib
             });
         }
 
+        private float _timestamp;
         private void _videoCaptureDevice_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
-            Frame frame = eventArgs.Frame.ToFrame();
+            Frame frame = eventArgs.Frame.ToFrame(_timestamp);
             _newFrameEvent?.Invoke(new Classes.NewFrameEventArgs(eventArgs.Frame));
             _detector.process(frame);
+            _timestamp += 1f;
         }
 
         public async Task StartAsync()
         {
-            if(IsRunning)
+            if (IsRunning)
             {
                 throw new Exception("Already Started");
-            }
-
-            IsRunning = true;
+            } 
 
             if (Camera == null)
             {
                 throw new Exception("No Camera Selected");
             }
-            
+            IsRunning = true;
+
             try
             {
+                _timestamp = 0f;
                 _frameCount = 0;
                 await InitDetector();
                 await InitVideoCaptureDevice(Camera);
@@ -314,7 +301,7 @@ namespace EmotionLib
 
             if (_frameEmotions.Where(x => x == EmotionEnum.None).Count() != 15)
             {
-                emotion = _frameEmotions.Where(x => x != EmotionEnum.None).GroupBy(x => x).Max().Key;
+                emotion = _frameEmotions.Where(x => x != EmotionEnum.None).ToList().GroupBy(x => x).Max().Key; //TODO: Fix this shitt!
             }
 
             _frameCount = 0;
@@ -323,7 +310,7 @@ namespace EmotionLib
 
         public void onImageCapture(Frame frame)
         {
-            
+
         }
 
         public async void onProcessingException(AffdexException ex)
@@ -334,7 +321,7 @@ namespace EmotionLib
 
         public void onProcessingFinished()
         {
-            
+
         }
 
         private EmotionEnum GetFrameValue(Emotions emotions)

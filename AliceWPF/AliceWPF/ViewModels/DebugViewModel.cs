@@ -9,6 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using EmotionLib;
 using EmotionLib.Classes;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.Threading;
+using System.Windows.Threading;
+using System.IO;
+using System.Drawing.Imaging;
+using AliceWPF.Views;
+using System.Windows;
 
 namespace AliceWPF.ViewModels
 {
@@ -19,9 +27,23 @@ namespace AliceWPF.ViewModels
             EmotionDetector.Instance.NewFrameEvent += Instance_NewFrameEvent;
         }
 
+        private DebugView View
+        {
+            get
+            {
+                return GetView() as DebugView;
+            }
+        }
+
         private void Instance_NewFrameEvent(NewFrameEventArgs args)
         {
-            CameraSource = args.Frame;
+            BitmapImage bi;
+            using (var bitmap = (Bitmap)args.Frame.Clone())
+            {
+                bi = bitmap.ToBitmapImage();
+            }
+            bi.Freeze();
+            View.Dispatcher.BeginInvoke(new ThreadStart(delegate { View.CameraSource.Source = bi; }));
         }
 
         private UserEmotion _selectedEmotion;
@@ -35,20 +57,6 @@ namespace AliceWPF.ViewModels
             {
                 _selectedEmotion = value;
                 NotifyOfPropertyChange("EmotionFeedback");
-                NotifyOfPropertyChange();
-            }
-        }
-
-        private Bitmap _cameraSource;
-        public Bitmap CameraSource
-        {
-            get
-            {
-                return _cameraSource;
-            }
-            set
-            {
-                _cameraSource = value;
                 NotifyOfPropertyChange();
             }
         }

@@ -106,6 +106,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\BitmapExtensions.cs" />
     <Compile Include="Classes\ConversationItem.cs">
     </Compile>
     <Compile Include="Classes\SenderEnum.cs" />
