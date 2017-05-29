@@ -266,7 +266,7 @@ namespace EmotionLib
             }
         }
 
-        private EmotionEnum[] _frameEmotions = new EmotionEnum[15];
+        private int[] _frameEmotions = new int[6];
         private int _frameCount = 0;
         public void onImageResults(Dictionary<int, Face> faces, Frame frame)
         {
@@ -275,16 +275,16 @@ namespace EmotionLib
                 //faces becomes, for a strange reason, null between the check and the next call, so catch the error...
                 try
                 {
-                    _frameEmotions[_frameCount] = GetFrameValue(faces[0].Emotions);
+                    _frameEmotions[(int)GetFrameValue(faces[0].Emotions)]++;
                 }
                 catch
                 {
-                    _frameEmotions[_frameCount] = EmotionEnum.None;
+                    _frameEmotions[0]++;
                 }
             }
             else
             {
-                _frameEmotions[_frameCount] = EmotionEnum.None;
+                _frameEmotions[0]++;
             }
             _frameCount++;
 
@@ -298,13 +298,9 @@ namespace EmotionLib
         private void CalculateEmotion()
         {
             EmotionEnum emotion = EmotionEnum.None;
-
-            if (_frameEmotions.Where(x => x == EmotionEnum.None).Count() != 15)
-            {
-                emotion = _frameEmotions.Where(x => x != EmotionEnum.None).ToList().GroupBy(x => x).Max().Key; //TODO: Fix this shitt!
-            }
-
-            _frameCount = 0;
+            
+            //TODO loop over the array and get max value
+           
             Emotion = emotion;
         }
 
