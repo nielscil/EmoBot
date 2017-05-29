@@ -26,7 +26,6 @@ namespace AliceWPF.Controls
         public ConversationControl()
         {
             InitializeComponent();
-
             ObservableCollection<ConversationItem> items = itemsControl.ItemsSource as ObservableCollection<ConversationItem>;
             if(items != null)
             {

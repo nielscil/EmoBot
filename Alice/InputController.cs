@@ -51,9 +51,14 @@ namespace Alice
             categories = new Categories(this);
         }
 
-        public void getResponse(string input)
+        public string GetResponse(string input)
         {
-            categories.isMatch(input);
+            string output = null;
+            if(!categories.isMatch(input, out output))
+            {
+                output = "\"Huh??!\" - Kjeld";
+            }
+            return output;
         }
     }
 }

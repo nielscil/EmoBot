@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Alice
 {
-    public delegate void Execute(string template, InputController IController);
+    public delegate string Execute(string template, InputController IController);
 
     public class Categories
     {
@@ -63,11 +63,12 @@ namespace Alice
 
         }
 
-        public bool isMatch(string input)
+        public bool isMatch(string input, out string response)
         {
+            response = null;
             foreach(Category c in categories)
             {
-                if (c.isMatch(input))
+                if (c.isMatch(input,out response))
                 {
                     return true;
                 }
@@ -100,16 +101,17 @@ namespace Alice
             subcategories.Add(cat);
         }
 
-        public bool isMatch(string input)
+        public bool isMatch(string input, out string response)
         {
+            response = null;
             foreach(Pattern p in patterns)
             {
                 if (p.isMatch(input))
                 {
                     foreach(SubCategory sc in subcategories)
                     {
-                        if (sc.isMatch(input))
-                        {
+                        if (sc.isMatch(input, out response))
+                        { 
                             return true;
                         }
                     }
@@ -136,11 +138,12 @@ namespace Alice
             patterns.Add(p);
         }
 
-        public bool isMatch(string input)
+        public bool isMatch(string input, out string response)
         {
+            response = null;
             foreach(SubCatPattern p in patterns)
             {
-                if (p.Match(input))
+                if (p.Match(input, out response))
                 {
                     return true;
                 }
@@ -189,23 +192,24 @@ namespace Alice
             execute = ex;
         }
 
-        public bool Match(string input)
+        public bool Match(string input, out string response)
         {
+            response = null;
             if (RX == null)
                 RX = new Regex(regex);
 
             if (RX.IsMatch(input))
             {
-                Execute();
+                response = Execute();
                 return true;
             }
             else
                 return false;
         }
 
-        void Execute()
+        string Execute()
         {
-            execute.Invoke(template, parent.parent.parent.IController);
+            return execute.Invoke(template, parent.parent.parent.IController);
         }
     }
 

@@ -78,8 +78,13 @@ namespace AliceWPF.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(Input))
             {
-                Conversation.Add(new ConversationItem(SenderEnum.User, Input));
+                string input = Input;
                 Input = string.Empty;
+                Conversation.Add(new ConversationItem(SenderEnum.User, input));
+                Loading = true;
+                string botResponse = Alice.InputController.Instance.GetResponse(input);
+                Conversation.Add(new ConversationItem(SenderEnum.Bot, botResponse));
+                Loading = false;
             }
         }
     }
