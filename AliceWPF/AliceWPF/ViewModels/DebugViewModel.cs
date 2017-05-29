@@ -1,4 +1,5 @@
 ﻿using AliceWPF.Classes;
+using System.Drawing;
 using AliceWPF.Converters;
 using Caliburn.Micro;
 using System;
@@ -6,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmotionLib;
+using EmotionLib.Classes;
 
 namespace AliceWPF.ViewModels
 {
@@ -13,8 +16,14 @@ namespace AliceWPF.ViewModels
     {
         public DebugViewModel()
         {
-            
+            EmotionDetector.Instance.NewFrameEvent += Instance_NewFrameEvent;
         }
+
+        private void Instance_NewFrameEvent(NewFrameEventArgs args)
+        {
+            CameraSource = args.Frame;
+        }
+
         private UserEmotion _selectedEmotion;
         public UserEmotion SelectedEmotion
         {
@@ -26,6 +35,20 @@ namespace AliceWPF.ViewModels
             {
                 _selectedEmotion = value;
                 NotifyOfPropertyChange("EmotionFeedback");
+                NotifyOfPropertyChange();
+            }
+        }
+
+        private Bitmap _cameraSource;
+        public Bitmap CameraSource
+        {
+            get
+            {
+                return _cameraSource;
+            }
+            set
+            {
+                _cameraSource = value;
                 NotifyOfPropertyChange();
             }
         }

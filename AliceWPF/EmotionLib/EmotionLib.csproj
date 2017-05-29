@@ -29,6 +29,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Affdex, Version=3.4.1.575, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
@@ -65,70 +83,182 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="CameraHelper.cs" />
+    <Compile Include="Classes\NewFrameEventArgs.cs" />
     <Compile Include="EmotionDetector.cs" />
     <Compile Include="Extensions\BitmapExtensions.cs" />
     <Compile Include="Models\Camera.cs" />
+    <Compile Include="Models\EmotionEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Classifier\haarcascade\004_lbp_15stage.xml" />
-    <Content Include="Classifier\haarcascade\haarcascade_frontalface_alt2.xml" />
+    <Content Include="Classifier\haarcascade\004_lbp_15stage.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Classifier\haarcascade\haarcascade_frontalface_alt2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Classifier\CT_pack\agect_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au01ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au02ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au04ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au05ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au06ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au07ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au09de_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au10ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au14ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au15ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au17ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au18ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au20ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au24ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au25ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au26ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\au28ct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\disgustct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\ethnicityct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\eye_closurect_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\genderct_raw_linear_largeface.pbin" />
-    <None Include="Classifier\CT_pack\glassesct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\smilect_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\smirkct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\tongue_outct_raw_linear.pbin" />
-    <None Include="Classifier\CT_pack\winkct_raw_linear.pbin" />
+    <None Include="Classifier\CT_pack\agect_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au01ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au02ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au04ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au05ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au06ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au07ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au09de_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au10ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au14ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au15ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au17ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au18ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au20ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au24ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au25ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au26ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\au28ct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\disgustct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\ethnicityct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\eye_closurect_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\genderct_raw_linear_largeface.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\glassesct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\smilect_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\smirkct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\tongue_outct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\CT_pack\winkct_raw_linear.pbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Classifier\face_model_3d.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Classifier\noctali0.83\classifier_22.arc" />
-    <None Include="Classifier\noctali0.83\classifier_5.arc" />
-    <None Include="Classifier\noctali0.83\Detector.conf" />
-    <None Include="Classifier\noctali0.83\pca_lr_12.arc" />
-    <None Include="Classifier\noctali0.83\pca_lr_15.arc" />
-    <None Include="Classifier\noctali0.83\pca_lr_18.arc" />
-    <None Include="Classifier\noctali0.83\pca_lr_9.arc" />
-    <None Include="Classifier\production_config\aliases\alias.conf" />
-    <None Include="Classifier\production_config\emotion\emoji.conf" />
-    <None Include="Classifier\production_config\emotion\emotion.conf" />
-    <None Include="Classifier\production_config\postprocess\causal.conf" />
-    <None Include="Classifier\production_config\postprocess\static.conf" />
-    <None Include="Classifier\production_config\raw\linear.conf" />
-    <None Include="Classifier\production_config\raw\nonlinear.conf" />
-    <None Include="Classifier\production_config\tracker\default.conf" />
-    <None Include="Classifier\production_config\tracker\facedet_0.1.conf" />
-    <None Include="Classifier\production_config\tracker\facedet_0.1_emoto.conf" />
-    <None Include="Classifier\production_config\tracker\facedet_0.2.conf" />
-    <None Include="Classifier\production_config\tracker\facedet_0.2_emoto.conf" />
-    <None Include="Classifier\production_config\tracker\multi_noctali0.83.conf" />
-    <None Include="Classifier\production_config\tracker\noctali0.81.conf" />
-    <None Include="Classifier\production_config\tracker\single_lbp_noctali0.83.conf" />
-    <None Include="Classifier\production_config\tracker\single_lbp_noctali0.83_emoto.conf" />
-    <None Include="Classifier\production_config\tracker\single_noctali0.81.conf" />
-    <None Include="Classifier\production_config\tracker\single_noctali0.83.conf" />
-    <None Include="Classifier\production_config\tracker\single_noctali0.83_emoto.conf" />
+    <None Include="Classifier\noctali0.83\classifier_22.arc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\noctali0.83\classifier_5.arc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\noctali0.83\Detector.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\noctali0.83\pca_lr_12.arc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\noctali0.83\pca_lr_15.arc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\noctali0.83\pca_lr_18.arc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\noctali0.83\pca_lr_9.arc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\aliases\alias.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\emotion\emoji.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\emotion\emotion.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\postprocess\causal.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\postprocess\static.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\raw\linear.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\raw\nonlinear.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\default.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\facedet_0.1.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\facedet_0.1_emoto.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\facedet_0.2.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\facedet_0.2_emoto.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\multi_noctali0.83.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\noctali0.81.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\single_lbp_noctali0.83.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\single_lbp_noctali0.83_emoto.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\single_noctali0.81.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\single_noctali0.83.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Classifier\production_config\tracker\single_noctali0.83_emoto.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

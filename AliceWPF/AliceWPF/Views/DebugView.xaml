@@ -31,6 +31,7 @@
                 <RadioButton Content="Angry" FontSize="18" VerticalContentAlignment="Center"
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Angry}"/>
                 <Label x:Name="EmotionFeedback" FontSize="18"/>
+                <Image Source="{Binding CameraSource}" Height="100" Width="100" />
             </StackPanel>
         </materialDesign:Card>
     </Grid>
