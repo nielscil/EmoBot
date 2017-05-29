@@ -38,7 +38,7 @@ namespace Alice
             |          - detailed pattern: is Niels happy          |
             |                                                      |
             |------------------------------------------------------|
-            */
+            
             Category cat = new Category(this);
             cat.addPattern("happy");
             
@@ -59,6 +59,8 @@ namespace Alice
             });
             cat.addSubCategory(subcat);
             categories.Add(cat);
+            */
+
         }
 
         public bool isMatch(string input)
