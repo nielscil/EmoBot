@@ -296,12 +296,15 @@ namespace EmotionLib
         }
 
         private void CalculateEmotion()
-        {
-            EmotionEnum emotion = EmotionEnum.None;
-            
-            //TODO loop over the array and get max value
-           
-            Emotion = emotion;
+        { 
+            int maxVal = _frameEmotions.Max();
+
+            Emotion =  (EmotionEnum)_frameEmotions.ToList().IndexOf(maxVal);
+
+            for(int i = 0; i < _frameEmotions.Length; i++)
+            {
+                _frameEmotions[i] = 0;
+            }
         }
 
         public void onImageCapture(Frame frame)
