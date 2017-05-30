@@ -1,4 +1,5 @@
 ﻿using AForge.Video.DirectShow;
+using EmotionLib.Extensions;
 using EmotionLib.Models;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,14 @@ namespace EmotionLib
         {
             FilterInfoCollection devices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
 
-            List<Camera> cameras = new List<Camera>();
+            List<Camera> cameras = devices?.ToCameraList();
 
-            foreach(FilterInfo info in devices)
+            if(cameras == null)
             {
-                cameras.Add(FilterInfoToCamera(info));
+                cameras = new List<Camera>();
             }
 
             return cameras;
-        }
-
-        private static Camera FilterInfoToCamera(FilterInfo info)
-        {
-            return new Camera(info.Name, info.MonikerString);
         }
     }
 }

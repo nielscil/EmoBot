@@ -1,4 +1,6 @@
 ﻿using Affdex;
+using AForge.Video.DirectShow;
+using EmotionLib.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,15 +15,6 @@ namespace EmotionLib.Extensions
 {
     internal static class BitmapExtensions
     {
-        internal static byte[] ToByteArray(this Bitmap bitmap, ImageFormat format)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                bitmap.Save(stream, format);
-                return stream.ToArray();
-            }
-        }
-
         internal static byte[] ToByteArray(this Bitmap bitmap)
         {
             Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
@@ -39,6 +32,29 @@ namespace EmotionLib.Extensions
         {
             byte[] data = bitmap.ToByteArray();
             return new Frame(bitmap.Width, bitmap.Height, data, Frame.COLOR_FORMAT.RGB,timestamp);
+        }
+    }
+
+    internal static class FilterInfoExtensions
+    {
+        internal static Camera ToCamera(this FilterInfo info)
+        {
+            return new Camera(info.Name, info.MonikerString);
+        }
+    }
+
+    internal static class FilterInfoCollectionExtensions
+    {
+        internal static List<Camera> ToCameraList(this FilterInfoCollection collection)
+        {
+            List<Camera> cameras = new List<Camera>();
+
+            foreach (FilterInfo info in collection)
+            {
+                cameras.Add(info.ToCamera());
+            }
+
+            return cameras;
         }
     }
 }

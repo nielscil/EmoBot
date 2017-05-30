@@ -110,7 +110,6 @@
     <Compile Include="Classes\ConversationItem.cs">
     </Compile>
     <Compile Include="Classes\SenderEnum.cs" />
-    <Compile Include="Classes\UserEmotion.cs" />
     <Compile Include="Controls\ConversationControl.xaml.cs">
       <DependentUpon>ConversationControl.xaml</DependentUpon>
     </Compile>

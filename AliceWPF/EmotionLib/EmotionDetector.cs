@@ -39,6 +39,8 @@ namespace EmotionLib
 
         #endregion
 
+        #region Properties
+
         private object _isInitializedLock = new object();
         private bool _isInitialized = false;
         private bool Initialized
@@ -158,54 +160,9 @@ namespace EmotionLib
             }
         }
 
-        private async Task InitVideoCaptureDevice(Camera camera)
-        {
-            await Task.Run(() =>
-            {
-                _videoCaptureDevice = new VideoCaptureDevice(camera.MonikerString);
-                _videoCaptureDevice.NewFrame += _videoCaptureDevice_NewFrame;
-                _videoCaptureDevice.Start();
-            });
-        }
+        #endregion
 
-        private async Task InitDetector()
-        {
-            if(!Initialized)
-            {
-                await Task.Run(() =>
-                {
-                    _detector = new FrameDetector(5);
-                    _detector.setClassifierPath(GetClasifierPath());
-                    _detector.setDetectAllEmotions(true);
-                    _detector.setImageListener(this);
-                    _detector.setProcessStatusListener(this);
-                    _detector.setFaceListener(this);
-
-                    _detector.start();
-                    Initialized = true;
-                });
-            }
-        }
-
-        private async Task CloseVideoCaptureDevice()
-        {
-            await Task.Run(() =>
-            {
-                _videoCaptureDevice.NewFrame -= _videoCaptureDevice_NewFrame;
-                _videoCaptureDevice.SignalToStop();
-                _videoCaptureDevice.WaitForStop();
-                _videoCaptureDevice = null;
-            });
-        }
-
-        private float _timestamp;
-        private void _videoCaptureDevice_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
-        {
-            Frame frame = eventArgs.Frame.ToFrame(_timestamp);
-            _newFrameEvent?.Invoke(new Classes.NewFrameEventArgs(eventArgs.Frame));
-            _detector.process(frame);
-            _timestamp += 1f;
-        }
+        #region Start/Stop Methods
 
         public async Task StartAsync()
         {
@@ -264,11 +221,59 @@ namespace EmotionLib
 
         }
 
+        public async void Dispose()
+        {
+            if (IsRunning)
+            {
+                await StopAsync();
+            }
+        }
+
+        private async Task InitVideoCaptureDevice(Camera camera)
+        {
+            await Task.Run(() =>
+            {
+                _videoCaptureDevice = new VideoCaptureDevice(camera.MonikerString);
+                _videoCaptureDevice.NewFrame += _videoCaptureDevice_NewFrame;
+                _videoCaptureDevice.Start();
+            });
+        }
+
+        private async Task InitDetector()
+        {
+            if (!Initialized)
+            {
+                await Task.Run(() =>
+                {
+                    _detector = new FrameDetector(5);
+                    _detector.setClassifierPath(GetClasifierPath());
+                    _detector.setDetectAllEmotions(true);
+                    _detector.setImageListener(this);
+                    _detector.setProcessStatusListener(this);
+                    _detector.setFaceListener(this);
+
+                    _detector.start();
+                    Initialized = true;
+                });
+            }
+        }
+
+        private async Task CloseVideoCaptureDevice()
+        {
+            await Task.Run(() =>
+            {
+                _videoCaptureDevice.NewFrame -= _videoCaptureDevice_NewFrame;
+                _videoCaptureDevice.SignalToStop();
+                _videoCaptureDevice.WaitForStop();
+                _videoCaptureDevice = null;
+            });
+        }
+
         private void CheckInitalized()
         {
-            if(!Initialized)
+            if (!Initialized)
             {
-                throw new Exception("EmotionDetector is not Initialized, call Init() first");
+                throw new Exception("EmotionDetector is not Initialized, call Start() first");
             }
         }
 
@@ -278,57 +283,29 @@ namespace EmotionLib
             return $"{new Uri(dir).LocalPath}//Classifier";
         }
 
-        public async void Dispose()
-        {
-            if(IsRunning)
-            {
-                await StopAsync();
-            }
-        }
+        #endregion
+
+        #region ImageListener
 
         private int[] _frameEmotions = new int[7];
         private int _frameCount = 0;
         public void onImageResults(Dictionary<int, Face> faces, Frame frame)
         {
+            EmotionEnum emotion = EmotionEnum.Neutral;
+
             if(faces != null & faces.Count > 0)
             {
                 //faces becomes, for a strange reason, null between the check and the next call, so catch the error...
                 try
                 {
-                    int face = -1;
+                    int faceID = GetFaceId();
 
-                    lock(_faceIdsLock)
-                    {
-                        if(_faceIds.Count > 0)
-                        {
-                            face = _faceIds.First();
-                        }
-                    }
-
-                    EmotionEnum val = EmotionEnum.Neutral;
-
-                    if(face != -1)
-                    {
-                        val = GetFrameValue(faces[face].Emotions);
-
-                        if(Debugger.IsAttached)
-                        {
-                            WriteValues(faces[face].Emotions);
-                        }
-                        
-                    }
-                        
-                    _frameEmotions[(int)val]++;
+                    emotion = GetEmotionValue(faces, faceID);
                 }
-                catch(Exception e)
-                {
-                    _frameEmotions[0]++;
-                }
+                catch{}
             }
-            else
-            {
-                _frameEmotions[0]++;
-            }
+
+            _frameEmotions[(int)emotion]++;
             _frameCount++;
 
             if(_frameCount == 15)
@@ -338,16 +315,52 @@ namespace EmotionLib
 
         }
 
+        public void onImageCapture(Frame frame)
+        {
+
+        }
+
+        private int GetFaceId()
+        {
+            int face = -1;
+
+            lock (_faceIdsLock)
+            {
+                if (_faceIds.Count > 0)
+                {
+                    face = _faceIds.First();
+                }
+            }
+
+            return face;
+        }
+
+        private EmotionEnum GetEmotionValue(Dictionary<int, Face> faces, int face)
+        {
+            EmotionEnum val = EmotionEnum.Neutral;
+
+            if (face != -1)
+            {
+                val = GetFrameValue(faces[face].Emotions);
+
+                if (Debugger.IsAttached)
+                {
+                    WriteValues(faces[face].Emotions);
+                }
+
+            }
+
+            return val;
+        }
+
         private void CalculateEmotion()
         { 
             int maxVal = _frameEmotions.Max();
 
             Emotion =  (EmotionEnum)_frameEmotions.ToList().IndexOf(maxVal);
 
-            for(int i = 0; i < _frameEmotions.Length; i++)
-            {
-                _frameEmotions[i] = 0;
-            }
+            Array.Clear(_frameEmotions, 0, _frameEmotions.Length);
+
             _frameCount = 0;
         }
 
@@ -356,10 +369,9 @@ namespace EmotionLib
             Console.WriteLine($"{DateTime.Now.Ticks} | Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
         }
 
-        public void onImageCapture(Frame frame)
-        {
+        #endregion
 
-        }
+        #region Processlistener
 
         public async void onProcessingException(AffdexException ex)
         {
@@ -371,6 +383,30 @@ namespace EmotionLib
         {
 
         }
+
+        #endregion
+
+        #region FaceListener
+
+        private object _faceIdsLock = new object();
+        private List<int> _faceIds = new List<int>();
+        public void onFaceFound(float timestamp, int faceId)
+        {
+            lock(_faceIdsLock)
+            {
+                _faceIds.Add(faceId);
+            }
+        }
+
+        public void onFaceLost(float timestamp, int faceId)
+        {
+            lock(_faceIdsLock)
+            {
+                _faceIds.Remove(faceId);
+            }
+        }
+
+        #endregion
 
         private EmotionEnum GetFrameValue(Emotions emotions)
         {
@@ -416,22 +452,13 @@ namespace EmotionLib
             return val;
         }
 
-        private object _faceIdsLock = new object();
-        private List<int> _faceIds = new List<int>();
-        public void onFaceFound(float timestamp, int faceId)
+        private float _timestamp;
+        private void _videoCaptureDevice_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
-            lock(_faceIdsLock)
-            {
-                _faceIds.Add(faceId);
-            }
-        }
-
-        public void onFaceLost(float timestamp, int faceId)
-        {
-            lock(_faceIdsLock)
-            {
-                _faceIds.Remove(faceId);
-            }
+            Frame frame = eventArgs.Frame.ToFrame(_timestamp);
+            _newFrameEvent?.Invoke(new Classes.NewFrameEventArgs(eventArgs.Frame));
+            _detector.process(frame);
+            _timestamp += 1f;
         }
     }
 }
