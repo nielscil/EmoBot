@@ -9,10 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EmotionLib.Extensions;
+using System.Diagnostics;
 
 namespace EmotionLib
 {
-    public class EmotionDetector : IDisposable, ImageListener, ProcessStatusListener
+    public class EmotionDetector : IDisposable, ImageListener, ProcessStatusListener, FaceListener
     {
         #region singleton
 
@@ -120,8 +121,26 @@ namespace EmotionLib
             {
                 lock(_emotionLock)
                 {
-                    _emotion = value;
+                    if(_emotion != value)
+                    {
+                        _newEmotionDetectedEvent?.Invoke(new Classes.NewEmotionDetectedEventArgs(_emotion, value));
+                        _emotion = value;                       
+                    }
                 }
+            }
+        }
+
+        public delegate void NewEmotionDetected(Classes.NewEmotionDetectedEventArgs args);
+        private event NewEmotionDetected _newEmotionDetectedEvent;
+        public event NewEmotionDetected NewEmotionDetectedEvent
+        {
+            add
+            {
+                _newEmotionDetectedEvent += value;
+            }
+            remove
+            {
+                _newEmotionDetectedEvent -= value;
             }
         }
 
@@ -160,6 +179,7 @@ namespace EmotionLib
                     _detector.setDetectAllEmotions(true);
                     _detector.setImageListener(this);
                     _detector.setProcessStatusListener(this);
+                    _detector.setFaceListener(this);
 
                     _detector.start();
                     Initialized = true;
@@ -266,7 +286,7 @@ namespace EmotionLib
             }
         }
 
-        private int[] _frameEmotions = new int[6];
+        private int[] _frameEmotions = new int[7];
         private int _frameCount = 0;
         public void onImageResults(Dictionary<int, Face> faces, Frame frame)
         {
@@ -275,9 +295,32 @@ namespace EmotionLib
                 //faces becomes, for a strange reason, null between the check and the next call, so catch the error...
                 try
                 {
-                    _frameEmotions[(int)GetFrameValue(faces[0].Emotions)]++;
+                    int face = -1;
+
+                    lock(_faceIdsLock)
+                    {
+                        if(_faceIds.Count > 0)
+                        {
+                            face = _faceIds.First();
+                        }
+                    }
+
+                    EmotionEnum val = EmotionEnum.Neutral;
+
+                    if(face != -1)
+                    {
+                        val = GetFrameValue(faces[face].Emotions);
+
+                        if(Debugger.IsAttached)
+                        {
+                            WriteValues(faces[face].Emotions);
+                        }
+                        
+                    }
+                        
+                    _frameEmotions[(int)val]++;
                 }
-                catch
+                catch(Exception e)
                 {
                     _frameEmotions[0]++;
                 }
@@ -305,6 +348,12 @@ namespace EmotionLib
             {
                 _frameEmotions[i] = 0;
             }
+            _frameCount = 0;
+        }
+
+        private void WriteValues(Emotions emotions)
+        {
+            Console.WriteLine($"{DateTime.Now.Ticks} | Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
         }
 
         public void onImageCapture(Frame frame)
@@ -328,43 +377,61 @@ namespace EmotionLib
             EmotionEnum val = EmotionEnum.Neutral;
             float exactVal = 0f;
 
-            if (emotions.Anger > exactVal && emotions.Anger > 0.01)
+            if (emotions.Anger > exactVal && emotions.Anger > 1f)
             {
                 val = EmotionEnum.Anger;
                 exactVal = emotions.Anger;
             }
 
-            if (emotions.Fear > exactVal && emotions.Fear > 0.01)
+            if (emotions.Fear > exactVal && emotions.Fear > 1f)
             {
                 val = EmotionEnum.Fear;
                 exactVal = emotions.Fear;
             }
 
-            if (emotions.Joy > exactVal && emotions.Joy > 0.01)
+            if (emotions.Joy > exactVal && emotions.Joy > 1f)
             {
                 val = EmotionEnum.Happy;
                 exactVal = emotions.Joy;
             }
 
-            if (emotions.Sadness > exactVal && emotions.Sadness > 0.01)
+            if (emotions.Sadness > exactVal && emotions.Sadness > 1f)
             {
                 val = EmotionEnum.Sad;
                 exactVal = emotions.Sadness;
             }
 
-            if (emotions.Disgust > exactVal && emotions.Disgust > 0.01)
+            if (emotions.Disgust > exactVal && emotions.Disgust > 1f)
             {
                 val = EmotionEnum.Disgust;
                 exactVal = emotions.Disgust;
             }
 
-            if (emotions.Surprise > exactVal && emotions.Surprise > 0.01)
+            if (emotions.Surprise > exactVal && emotions.Surprise > 1f)
             {
                 val = EmotionEnum.Suprise;
                 exactVal = emotions.Sadness;
             }
 
             return val;
+        }
+
+        private object _faceIdsLock = new object();
+        private List<int> _faceIds = new List<int>();
+        public void onFaceFound(float timestamp, int faceId)
+        {
+            lock(_faceIdsLock)
+            {
+                _faceIds.Add(faceId);
+            }
+        }
+
+        public void onFaceLost(float timestamp, int faceId)
+        {
+            lock(_faceIdsLock)
+            {
+                _faceIds.Remove(faceId);
+            }
         }
     }
 }

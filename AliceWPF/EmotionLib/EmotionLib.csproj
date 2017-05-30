@@ -83,6 +83,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="CameraHelper.cs" />
+    <Compile Include="Classes\NewEmotionDetectedEventArgs.cs" />
     <Compile Include="Classes\NewFrameEventArgs.cs" />
     <Compile Include="EmotionDetector.cs" />
     <Compile Include="Extensions\BitmapExtensions.cs" />

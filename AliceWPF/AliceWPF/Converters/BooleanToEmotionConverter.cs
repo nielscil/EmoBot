@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using AliceWPF.Classes;
+using EmotionLib.Models;
 
 namespace AliceWPF.Converters
 {
-    public class BooleanToUserEmotionConverter : IValueConverter
+    public class BooleanToEmotionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -28,15 +29,15 @@ namespace AliceWPF.Converters
                 switch (parameter.ToString())
                 {
                     case "Happy":
-                        return UserEmotion.Happy;
+                        return EmotionEnum.Happy;
                     case "Sad":
-                        return UserEmotion.Sad;
+                        return EmotionEnum.Sad;
                     case "Scared":
-                        return UserEmotion.Scared;
+                        return EmotionEnum.Fear;
                     case "Angry":
-                        return UserEmotion.Angry;
+                        return EmotionEnum.Anger;
                     default:
-                        return UserEmotion.Neutral;
+                        return EmotionEnum.Neutral;
                 }
             }
             return null;

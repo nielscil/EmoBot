@@ -8,7 +8,6 @@ namespace EmotionLib.Models
 {
     public enum EmotionEnum
     {
-        None,
         Neutral,
         Happy,
         Anger,

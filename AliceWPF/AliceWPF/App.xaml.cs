@@ -24,14 +24,17 @@ namespace AliceWPF
         private async void App_Exit(object sender, ExitEventArgs e)
         {
             Exit -= App_Exit;
-            await EmotionDetector.Instance.StopAsync();
+
+            if(EmotionDetector.Instance.IsRunning)
+            {
+                await EmotionDetector.Instance.StopAsync();
+            }
         }
 
-        private async void StartEmotionDector()
+        private void StartEmotionDector()
         {
             List<Camera> cameras = CameraHelper.GetCameras();
             EmotionDetector.Instance.Camera = cameras[0];
-            await EmotionDetector.Instance.StartAsync();
         }
     }
 }
