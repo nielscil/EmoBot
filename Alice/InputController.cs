@@ -51,14 +51,17 @@ namespace Alice
             categories = new Categories(this);
         }
 
-        public string GetResponse(string input)
+        public async Task<string> GetResponse(string input)
         {
-            string output = null;
-            if(!categories.isMatch(input, out output))
+            return await Task.Run<string>(() =>
             {
-                output = "\"Huh??!\" - Kjeld";
-            }
-            return output;
+                string output = null;
+                if(!categories.isMatch(input, out output))
+                {
+                    output = "\"Huh??!\" - Kjeld";
+                }
+                return output;
+            });
         }
     }
 }
