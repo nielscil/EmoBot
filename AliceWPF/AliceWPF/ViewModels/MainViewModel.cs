@@ -74,7 +74,7 @@ namespace AliceWPF.ViewModels
             DebugViewModel = new DebugViewModel();
         }
 
-        public void SendContent()
+        public async Task SendContent()
         {
             if (!string.IsNullOrWhiteSpace(Input))
             {
@@ -82,7 +82,7 @@ namespace AliceWPF.ViewModels
                 Input = string.Empty;
                 Conversation.Add(new ConversationItem(SenderEnum.User, input));
                 Loading = true;
-                string botResponse = Alice.InputController.Instance.GetResponse(input);
+                string botResponse = await Alice.InputController.Instance.GetResponse(input);
                 Conversation.Add(new ConversationItem(SenderEnum.Bot, botResponse));
                 Loading = false;
             }
