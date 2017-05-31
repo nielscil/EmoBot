@@ -45,8 +45,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
+    <Compile Include="CategoryManager.cs" />
+    <Compile Include="Classes\TemplateChooser.cs" />
+    <Compile Include="Models\CategoryBase.cs" />
+    <Compile Include="Models\ICategoryCollection.cs" />
+    <Compile Include="Classes\SerializedFactsHelper.cs" />
     <Compile Include="Facts.cs" />
     <Compile Include="InputController.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\IResponseFinder.cs" />
+    <Compile Include="Models\ResponseFinder.cs" />
+    <Compile Include="Models\SerializedFacts.cs" />
+    <Compile Include="Models\SubCategory.cs" />
+    <Compile Include="Models\Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

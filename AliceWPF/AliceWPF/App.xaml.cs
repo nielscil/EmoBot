@@ -18,9 +18,8 @@ namespace AliceWPF
         public App()
         {
             string codeBasePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-            string dir = new Uri(codeBasePath).LocalPath + "\\Resources";
-            string factsfile = "Facts.json";
-            Alice.InputController.Init(dir, factsfile);
+            string path = new Uri(codeBasePath).LocalPath + "\\Resources\\Facts.json";
+            ChatBot.LoadFacts(path);
         }
     }
 }

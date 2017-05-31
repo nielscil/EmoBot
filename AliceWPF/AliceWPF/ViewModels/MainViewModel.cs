@@ -1,4 +1,5 @@
-﻿using AliceWPF.Classes;
+﻿using Alice;
+using AliceWPF.Classes;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,7 @@ namespace AliceWPF.ViewModels
                 Input = string.Empty;
                 Conversation.Add(new ConversationItem(SenderEnum.User, input));
                 Loading = true;
-                string botResponse = await Alice.InputController.Instance.GetResponse(input);
+                string botResponse = await ChatBot.GetResponse(input);
                 Conversation.Add(new ConversationItem(SenderEnum.Bot, botResponse));
                 Loading = false;
             }

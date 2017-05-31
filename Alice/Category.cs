@@ -7,211 +7,197 @@ using System.Text.RegularExpressions;
 
 namespace Alice
 {
-    public delegate string Execute(string template, InputController IController);
+    //public delegate string Execute(string template, Match match);
 
-    public class Categories
-    {
-        public List<Category> categories;
-        public InputController IController;
+    //public class Categories
+    //{
+    //    public List<Category> categories;
 
-        public Categories(InputController IControl)
-        {
-            IController = IControl;
-            categories = new List<Category>();
-            createCategories();
-        }
+    //    public Categories()
+    //    {
+    //        categories = new List<Category>();
+    //        CreateCategories();
+    //    }
 
-        public void createCategories()
-        {
-            /*
-            Define all categories here that the AI can recognise
+    //    public void CreateCategories()
+    //    {
+    //        /*
+    //        Define all categories here that the AI can recognise
             
-            Example:
+    //        Example:
 
-            |------------------------------------------------------|
-            |                                                      |
-            |  * Category:                                         |
-            |      - gobal pattern: happy                          |
-            |                                                      |
-            |      * Sub-Category:                                 |
-            |          - detailed pattern: is kjeld happy          |
-            |          - detailed pattern: is Niels happy          |
-            |                                                      |
-            |------------------------------------------------------|
+    //        |------------------------------------------------------|
+    //        |                                                      |
+    //        |  * Category:                                         |
+    //        |      - gobal pattern: happy                          |
+    //        |                                                      |
+    //        |      * Sub-Category:                                 |
+    //        |          - detailed pattern: is kjeld happy          |
+    //        |          - detailed pattern: is Niels happy          |
+    //        |                                                      |
+    //        |------------------------------------------------------|
             
-            Category cat = new Category(this);
-            cat.addPattern("happy");
+    //        Category cat = new Category(this);
+    //        cat.addPattern("happy");
             
-            SubCategory subcat = new SubCategory(cat);
-            subcat.addPattern("is niels happy", "niels is ", (t, ic) =>
-            {
-                if (ic.facts.is_happy("niels"))
-                    Console.WriteLine(t + "happy");
-                else
-                    Console.WriteLine(t + "not happy");
-            });
-            subcat.addPattern("is kjeld happy", "kjeld is ", (t, ic) =>
-            {
-                if (ic.facts.is_happy("kjeld"))
-                    Console.WriteLine(t + "happy");
-                else
-                    Console.WriteLine(t + "not happy");
-            });
-            cat.addSubCategory(subcat);
-            categories.Add(cat);
-            */
+    //        SubCategory subcat = new SubCategory(cat);
+    //        subcat.addPattern("is niels happy", "niels is ", (t, ic) =>
+    //        {
+    //            if (ic.facts.is_happy("niels"))
+    //                Console.WriteLine(t + "happy");
+    //            else
+    //                Console.WriteLine(t + "not happy");
+    //        });
+    //        subcat.addPattern("is kjeld happy", "kjeld is ", (t, ic) =>
+    //        {
+    //            if (ic.facts.is_happy("kjeld"))
+    //                Console.WriteLine(t + "happy");
+    //            else
+    //                Console.WriteLine(t + "not happy");
+    //        });
+    //        cat.addSubCategory(subcat);
+    //        categories.Add(cat);
+    //        */
 
-        }
+    //    }
 
-        public bool isMatch(string input, out string response)
-        {
-            response = null;
-            foreach(Category c in categories)
-            {
-                if (c.isMatch(input,out response))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
+    //    public bool isMatch(string input, out string response)
+    //    {
+    //        response = null;
+    //        foreach(Category c in categories)
+    //        {
+    //            if (c.isMatch(input,out response))
+    //            {
+    //                return true;
+    //            }
+    //        }
+    //        return false;
+    //    }
+    //}
 
-    public class Category
-    {
-        public List<Pattern> patterns;
-        public List<SubCategory> subcategories;
-        public Categories parent;
+    //public class Category
+    //{
+    //    public List<Pattern> patterns;
+    //    public List<SubCategory> subcategories;
         
-        public Category(Categories p)
-        {
-            parent = p;
-            patterns = new List<Pattern>();
-            subcategories = new List<SubCategory>();
-        }
+    //    public Category()
+    //    {
+    //        patterns = new List<Pattern>();
+    //        subcategories = new List<SubCategory>();
+    //    }
 
-        public void addPattern(string r)
-        {
-            Pattern p = new Pattern(r);
-            patterns.Add(p);
-        }
+    //    public void addPattern(string r)
+    //    {
+    //        Pattern p = new Pattern(r);
+    //        patterns.Add(p);
+    //    }
         
-        public void addSubCategory(SubCategory cat)
-        {
-            subcategories.Add(cat);
-        }
+    //    public void addSubCategory(SubCategory cat)
+    //    {
+    //        subcategories.Add(cat);
+    //    }
 
-        public bool isMatch(string input, out string response)
-        {
-            response = null;
-            foreach(Pattern p in patterns)
-            {
-                if (p.isMatch(input))
-                {
-                    foreach(SubCategory sc in subcategories)
-                    {
-                        if (sc.isMatch(input, out response))
-                        { 
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-    }
+    //    public bool isMatch(string input, out string response)
+    //    {
+    //        response = null;
+    //        foreach(Pattern p in patterns)
+    //        {
+    //            if (p.isMatch(input))
+    //            {
+    //                foreach(SubCategory sc in subcategories)
+    //                {
+    //                    if (sc.isMatch(input, out response))
+    //                    { 
+    //                        return true;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        return false;
+    //    }
+    //}
 
-    public class SubCategory
-    {
-        public List<SubCatPattern> patterns;
-        public Category parent;
+    //public class SubCategory : Category
+    //{
+    //    //public List<SubCatPattern> patterns;
 
-        public SubCategory(Category p)
-        {
-            parent = p;
-            patterns = new List<SubCatPattern>();
-        }
+    //    public SubCategory()
+    //    {
+    //        //patterns = new List<SubCatPattern>();
+    //    }
 
-        public void addPattern(string r, string t, Execute ex)
-        {
-            SubCatPattern p = new SubCatPattern(this, r, t, ex);
-            patterns.Add(p);
-        }
+    //    public void addPattern(string r, string t, Execute ex = null)
+    //    {
+    //        SubCatPattern p = new SubCatPattern(r, t, ex);
+    //        patterns.Add(p);
+    //    }
 
-        public bool isMatch(string input, out string response)
-        {
-            response = null;
-            foreach(SubCatPattern p in patterns)
-            {
-                if (p.Match(input, out response))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
+    //    public bool isMatch(string input, out string response)
+    //    {
+    //        response = null;
+    //        foreach(SubCatPattern p in patterns)
+    //        {
+    //            if (p.Match(input, out response))
+    //            {
+    //                return true;
+    //            }
+    //        }
+    //        return false;
+    //    }
+    //}
 
-    public class Pattern
-    {
-        public string regex;
-        Regex RX;
+    //public class Pattern
+    //{
+    //    public string RegexPattern { get; }
         
-        public Pattern(string r)
-        {
-            regex = r;
-        }
+    //    public Pattern(string pattern)
+    //    {
+    //        RegexPattern = pattern;
+    //    }
 
-        public bool isMatch(string input)
-        {
-            if (RX == null)
-                RX = new Regex(regex);
+    //    public bool isMatch(string input)
+    //    {
+    //        return Regex.IsMatch(input, RegexPattern);
+    //    }
+    //}
 
-            if (RX.IsMatch(input))
-            {
-                return true;
-            }
-            else
-                return false;
-        }
-    }
+    //public class SubCatPattern : Pattern
+    //{
+    //    public string Template { get; private set; }
+    //    private Execute _execute;
 
-    public class SubCatPattern
-    {
-        public string regex;
-        public string template;
-        Regex RX;
-        Execute execute;
-        SubCategory parent;
+    //    public SubCatPattern(string pattern, string template, Execute execute) : base(pattern)
+    //    {
+    //        Template = template;
+    //        _execute = execute;
+    //    }
 
-        public SubCatPattern(SubCategory p ,string r, string t, Execute ex)
-        {
-            parent = p;
-            regex = r;
-            template = t;
-            execute = ex;
-        }
+    //    public bool Match(string input, out string response)
+    //    {
+    //        response = null;
 
-        public bool Match(string input, out string response)
-        {
-            response = null;
-            if (RX == null)
-                RX = new Regex(regex);
+    //        Match match = Regex.Match(input, RegexPattern);
 
-            if (RX.IsMatch(input))
-            {
-                response = Execute();
-                return true;
-            }
-            else
-                return false;
-        }
+    //        if(match.Success)
+    //        {
+    //            response = Execute(match);
+    //        }
 
-        string Execute()
-        {
-            return execute.Invoke(template, parent.parent.parent.IController);
-        }
-    }
+    //        return match.Success;
+    //    }
+
+    //    private string Execute(Match match)
+    //    {
+    //        string response = Template;
+
+    //        if(_execute != null)
+    //        {
+    //            response = _execute?.Invoke(Template, match);
+    //        }
+
+    //        return response;
+    //    }
+    //}
 
 
 }
