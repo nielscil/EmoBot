@@ -10,11 +10,11 @@ namespace Alice.Models.Categories
 {
     public class SubCategory : CategoryBase
     {
-        private List<Template> _templates = new List<Template>();
+        private Template _template;
 
-        public void AddTemplate(Template template)
+        public void SetTemplate(Template template)
         {
-            _templates.Add(template);
+            _template = template;
         }
 
         public override void Accept(IResponseFinder finder)
@@ -28,7 +28,7 @@ namespace Alice.Models.Categories
 
         private void ExecuteTemplate(IResponseFinder finder, Match match)
         {
-            string response = TemplateChooser.ChooseTemplate(_templates).Invoke(match);
+            string response = _template.GetResponse(match);
 
             if (string.IsNullOrWhiteSpace(response))
             {

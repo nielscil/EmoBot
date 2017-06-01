@@ -28,6 +28,12 @@ namespace Alice.Models.Facts
             Values = values;
         }
 
+        public Fact(string name, params string[] values)
+        {
+            Name = name;
+            Values = values;
+        }
+
         public bool Evaluate()
         {
             bool evaluation = true;

@@ -22,9 +22,9 @@ namespace Alice.Classes
             return this;
         }
 
-        public SubCategoryBuilder AddTemplate(Template template)
+        public SubCategoryBuilder AddTemplate(TemplateBuilder builder)
         {
-            _category.AddTemplate(template);
+            _category.SetTemplate(builder.Build());
             return this;
         }
 

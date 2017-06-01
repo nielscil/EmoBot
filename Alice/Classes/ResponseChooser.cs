@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace Alice.Classes
 {
-    internal static class TemplateChooser
+    internal static class ResponseChooser
     {
         private static Random _random = new Random();
 
-        public static Template ChooseTemplate(List<Template> templates)
+        public static Response Choose(List<Response> responses)
         {
-            return templates[GetIndex(templates)];
+            return responses[GetIndex(responses)];
         }
 
-        private static int GetIndex(List<Template> templates)
+        private static int GetIndex(List<Response> responses)
         {
             int index = 0;
-            if (templates.Count > 1)
+            if (responses.Count > 1)
             {
-                index = _random.Next(0, templates.Count);
+                index = _random.Next(0, responses.Count);
             }
             return index;
         }

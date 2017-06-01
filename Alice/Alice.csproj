@@ -47,10 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CategoryBuilder.cs" />
+    <Compile Include="Classes\GlobalActionResponse.cs" />
+    <Compile Include="Classes\RegexHelper.cs" />
     <Compile Include="Classes\StandardCategories.cs" />
     <Compile Include="Classes\SubCategoryBuilder.cs" />
+    <Compile Include="Classes\TemplateBuilder.cs" />
     <Compile Include="Models\CategoryManager.cs" />
-    <Compile Include="Classes\TemplateChooser.cs" />
+    <Compile Include="Classes\ResponseChooser.cs" />
     <Compile Include="Models\Categories\CategoryBase.cs" />
     <Compile Include="Models\Categories\ICategoryCollection.cs" />
     <Compile Include="Classes\SerializedFactsHelper.cs" />

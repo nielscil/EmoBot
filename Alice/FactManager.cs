@@ -12,12 +12,56 @@ using System.Threading.Tasks;
 
 namespace Alice
 {
-    internal static class FactManager
+    public static class FactManager
     {
         private static List<Fact> Facts { get; set; } = new List<Fact>();
         private static string _path;
 
-        public static void LoadFacts(string path)
+        public static void AddFact(Fact fact)
+        {
+            Fact foundFact = FindFact(fact.Name, fact.Values);
+
+            if(foundFact != null)
+            {
+                foundFact.Condition = fact.Condition;
+            }
+            else
+            {
+                Facts.Add(fact);
+            }
+        }
+
+        public static void RemoveFacts(string name)
+        {
+            for(int i = 0; i < Facts.Count;)
+            {
+                if(Facts[i].Name == name)
+                {
+                    Facts.RemoveAt(i);
+                }
+                else
+                {
+                    i++;
+                }
+            }
+        }
+
+        public static List<Fact> FindFacts(string name)
+        {
+            List<Fact> facts = new List<Fact>();
+
+            foreach(var fact in Facts)
+            {
+                if(fact.Name == name)
+                {
+                    facts.Add(fact);
+                }
+            }
+
+            return facts;
+        }
+
+        internal static void LoadFacts(string path)
         {
             if (File.Exists(path))
             {
@@ -39,7 +83,7 @@ namespace Alice
 
         }
 
-        public static bool EvaluateFact(string name,params string[] values)
+        internal static bool EvaluateFact(string name,params string[] values)
         {
             Fact fact = FindFact(name, values);
 
@@ -51,7 +95,7 @@ namespace Alice
             return false;
         }
 
-        public static void SaveFacts()
+        internal static void SaveFacts()
         {
             if(!string.IsNullOrWhiteSpace(_path))
             {
