@@ -9,6 +9,7 @@ using Alice.Models;
 using Alice.Models.Categories;
 using Alice.Models.Facts;
 using Alice.Models.Conditions;
+using Alice.Classes;
 
 namespace Alice
 {
@@ -16,11 +17,16 @@ namespace Alice
     {
         private static bool _initialized = false;
 
-        public static void Init(System.Windows.Application app)
+        public static void Init(System.Windows.Application app,bool useStandardCategories)
         {
             if(_initialized)
             {
                 throw new Exception("Chatbot already initalized");
+            }
+
+            if(useStandardCategories)
+            {
+                CategoryManager.AddCategories(new StandardCategories());
             }
 
             app.Exit += App_Exit;

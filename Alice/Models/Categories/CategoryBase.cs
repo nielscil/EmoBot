@@ -20,7 +20,7 @@ namespace Alice.Models.Categories
         {
             foreach (string pattern in _patterns)
             {
-                if (Regex.IsMatch(input, pattern))
+                if (Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase))
                 {
                     return true;
                 }
@@ -35,7 +35,7 @@ namespace Alice.Models.Categories
 
             foreach (string pattern in _patterns)
             {
-                match = Regex.Match(input, pattern);
+                match = Regex.Match(input, pattern, RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
                     return true;

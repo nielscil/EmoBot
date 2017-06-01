@@ -28,9 +28,9 @@ namespace Alice.Models.Categories
 
         private void ExecuteTemplate(IResponseFinder finder, Match match)
         {
-            string response;
+            string response = TemplateChooser.ChooseTemplate(_templates).Invoke(match);
 
-            if (!TemplateChooser.ChooseTemplate(_templates).Invoke(match, out response))
+            if (string.IsNullOrWhiteSpace(response))
             {
                 response = string.Empty;
             }

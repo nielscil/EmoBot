@@ -17,7 +17,7 @@ namespace AliceWPF
     {
         public App()
         {
-            ChatBot.Init(this);
+            ChatBot.Init(this,true);
 
             string codeBasePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
             string path = new Uri(codeBasePath).LocalPath + "\\Resources\\test.json";

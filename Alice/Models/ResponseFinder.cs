@@ -21,7 +21,7 @@ namespace Alice.Models
             {
                 _response = value;
 
-                if(_response != null)
+                if(!string.IsNullOrWhiteSpace(_response))
                 {
                     Found = true;
                 }

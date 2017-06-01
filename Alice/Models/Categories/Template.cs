@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace Alice.Models.Categories
 {
-    public delegate bool Template(Match match, out string response);
+    public delegate string Template(Match match);
 }
