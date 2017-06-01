@@ -1,4 +1,5 @@
 ﻿using Alice.Models;
+using Alice.Models.Facts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Alice.Classes
 {
-    public static class SerializedFactsHelper
+    internal static class SerializedFactsHelper
     {
         public static SerializedFacts Merge(List<SerializedFacts> mergeData)
         {

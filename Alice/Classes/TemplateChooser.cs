@@ -1,4 +1,5 @@
 ﻿using Alice.Models;
+using Alice.Models.Categories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Alice.Classes
 {
-    public static class TemplateChooser
+    internal static class TemplateChooser
     {
         private static Random _random = new Random();
 

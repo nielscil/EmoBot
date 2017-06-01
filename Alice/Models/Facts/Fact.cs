@@ -20,16 +20,12 @@ namespace Alice.Models.Facts
         public ICondition Condition { get; set; }
 
         public Fact() { }
-        public Fact(string name, params string[] values)
-        {
-            Name = name;
-            Values = values;
-        }
 
-        public Fact(string name, ICondition condition)
+        public Fact(string name, ICondition condition, params string[] values)
         {
             Name = name;
             Condition = condition;
+            Values = values;
         }
 
         public bool Evaluate()

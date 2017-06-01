@@ -16,5 +16,10 @@ namespace Alice.Models.Facts
         {
             Facts = new List<Fact>();
         }
+
+        internal SerializedFacts(List<Fact> facts)
+        {
+            Facts = facts;
+        }
     }
 }

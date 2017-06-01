@@ -10,7 +10,7 @@ namespace Alice.Models.Conditions
     public class OrCondition : ICondition
     {
         [JsonProperty("conditions")]
-        public List<ICondition> Conditions { get; set; }
+        public List<ICondition> Conditions { get; set; } = new List<ICondition>();
 
         public OrCondition() { }
         public OrCondition(List<ICondition> conditions)

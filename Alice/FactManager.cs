@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace Alice
 {
-    //TODO: think of way to save the facts!
     internal static class FactManager
-    {   
-        public static List<Fact> Facts { get; private set; }
+    {
+        private static List<Fact> Facts { get; set; } = new List<Fact>();
+        private static string _path;
 
         public static void LoadFacts(string path)
         {
@@ -24,10 +24,11 @@ namespace Alice
                 try
                 {
                     Facts = LoadFactFile(path).Facts;
+                    _path = path;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    throw new Exception("Could not parse file");
+                    throw new Exception("Could not parse file",ex);
                 }
 
             }
@@ -48,6 +49,26 @@ namespace Alice
             }
 
             return false;
+        }
+
+        public static void SaveFacts()
+        {
+            if(!string.IsNullOrWhiteSpace(_path))
+            {
+                using (var stream = new FileStream(_path, FileMode.Create))
+                using (var streamwriter = new StreamWriter(stream))
+                {
+                    streamwriter.Write(Serialize());
+                }
+            }
+        }
+
+        private static string Serialize()
+        {
+            SerializedFacts facts = new SerializedFacts(Facts);
+            return JsonConvert.SerializeObject(facts,Formatting.Indented,new JsonSerializerSettings() {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
         }
 
         private static Fact FindFact(string name,params string[] values)
@@ -74,7 +95,17 @@ namespace Alice
                 using (var stream = info.OpenRead())
                 using (var streamReader = new StreamReader(stream))
                 {
-                    return JsonConvert.DeserializeObject<SerializedFacts>(streamReader.ReadToEnd());
+                    SerializedFacts facts = JsonConvert.DeserializeObject<SerializedFacts>(streamReader.ReadToEnd(), new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto
+                    });
+
+                    if(facts == null)
+                    {
+                        facts = new SerializedFacts();
+                    }
+
+                    return facts;
                 }
             }
 

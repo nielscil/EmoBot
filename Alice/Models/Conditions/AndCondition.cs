@@ -10,7 +10,7 @@ namespace Alice.Models.Conditions
     public class AndCondition : ICondition
     {
         [JsonProperty("conditions")]
-        public List<ICondition> Conditions { get; set; }
+        public List<ICondition> Conditions { get; set; } = new List<ICondition>();
 
         public AndCondition() { }
         public AndCondition(List<ICondition> conditions)
@@ -30,5 +30,5 @@ namespace Alice.Models.Conditions
 
             return true;
         }
-    } 
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using Alice.Models;
+using Alice.Models.Categories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
