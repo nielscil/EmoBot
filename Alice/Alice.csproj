@@ -50,8 +50,8 @@
     <Compile Include="Models\CategoryBase.cs" />
     <Compile Include="Models\ICategoryCollection.cs" />
     <Compile Include="Classes\SerializedFactsHelper.cs" />
-    <Compile Include="Facts.cs" />
-    <Compile Include="InputController.cs" />
+    <Compile Include="FactManager.cs" />
+    <Compile Include="Chatbot.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\IResponseFinder.cs" />
     <Compile Include="Models\ResponseFinder.cs" />
