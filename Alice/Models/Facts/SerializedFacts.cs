@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alice.Models
+namespace Alice.Models.Facts
 {
     public class SerializedFacts
     {

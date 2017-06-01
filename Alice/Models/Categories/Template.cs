@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Alice.Models
+namespace Alice.Models.Categories
 {
     public delegate bool Template(Match match, out string response);
 }

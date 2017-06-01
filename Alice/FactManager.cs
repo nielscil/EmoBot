@@ -1,5 +1,7 @@
 ﻿using Alice.Classes;
 using Alice.Models;
+using Alice.Models.Conditions;
+using Alice.Models.Facts;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace Alice
 
         public static void LoadFacts(string path)
         {
-            if(File.Exists(path))
+            if (File.Exists(path))
             {
                 try
                 {
@@ -27,17 +29,37 @@ namespace Alice
                 {
                     throw new Exception("Could not parse file");
                 }
-                
-            }
-            else if(Directory.Exists(path))
-            {
-                Facts = LoadDirectory(path).Facts;
+
             }
             else
             {
                 throw new Exception("Could not found facts file or directory");
             }
 
+        }
+
+        public static bool EvaluateFact(string name,params string[] values)
+        {
+            Fact fact = FindFact(name, values);
+
+            if(fact != null)
+            {
+                return fact.Evaluate();
+            }
+
+            return false;
+        }
+
+        private static Fact FindFact(string name,params string[] values)
+        {
+            foreach(var fact in Facts)
+            {
+                if(fact.Name == name && fact.HasValues(values))
+                {
+                    return fact;
+                }
+            }
+            return null;
         }
 
         private static SerializedFacts LoadFactFile(string file)
@@ -58,67 +80,5 @@ namespace Alice
 
             throw new Exception("File is not a json file");
         }
-
-        private static SerializedFacts LoadDirectory(string directory)
-        {
-            DirectoryInfo info = new DirectoryInfo(directory);
-            List<SerializedFacts> facts = new List<SerializedFacts>();
-
-            if (info != null)
-            {
-                foreach(var file in info.GetFiles())
-                {
-                    if(file.Extension.ToLower() == ".json")
-                    {
-                        facts.Add(LoadFactFile(file));
-                    }
-                }
-            }
-
-            return SerializedFactsHelper.Merge(facts);
-        }
-    }
-
-    //TODO: seperate classes into seperate files
-    public class Fact
-    {
-        public string fact { get; set; }
-        public string value { get; set; }
-        public bool status { get; set; }
-        public Condition condition { get; set; }
-
-        public bool getStatus()
-        {
-            if(condition.Fact != null && condition.Value != null)
-            {
-                status = condition.execute();
-            }
-
-            return status;
-        }
-    }
-
-    public class Condition
-    {
-        [JsonProperty("fact")]
-        public string Fact { get; set; }
-        [JsonProperty("value")]
-        public string Value { get; set; }
-
-        public Condition()
-        {
-        }
-
-        public bool execute()
-        {
-            foreach(Fact fact in FactManager.Facts)
-            {
-                if (fact.fact == Fact && fact.value == Value)
-                {
-                    return fact.getStatus();
-                }
-            }
-            return false;
-        }
-    }
+    }    
 }

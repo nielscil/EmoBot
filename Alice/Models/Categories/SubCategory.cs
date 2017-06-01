@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Alice.Models
+namespace Alice.Models.Categories
 {
     public class SubCategory : CategoryBase
     {
