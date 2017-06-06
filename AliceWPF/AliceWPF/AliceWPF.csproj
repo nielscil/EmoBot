@@ -116,6 +116,7 @@
     <Compile Include="Controls\ConverstationItemControl.xaml.cs">
       <DependentUpon>ConverstationItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\IsBusyContainer.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToEmotionConverter.cs" />
     <Compile Include="Converters\NegativeBoolToVisibilityConverter.cs" />

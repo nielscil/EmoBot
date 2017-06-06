@@ -68,6 +68,20 @@ namespace AliceWPF.ViewModels
             }
         }
 
+        private bool _loading;
+        public bool Loading
+        {
+            get
+            {
+                return _loading;
+            }
+            set
+            {
+                _loading = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public string EmotionFeedback
         {
             get
@@ -78,6 +92,7 @@ namespace AliceWPF.ViewModels
 
         private async void SetupCamera()
         {
+            Loading = true;
             if (UseCamera)
             {
                 await EmotionDetector.Instance.StartAsync();
@@ -86,6 +101,7 @@ namespace AliceWPF.ViewModels
             {
                 await EmotionDetector.Instance.StopAsync();
             }
+            Loading = false;
         }
 
         public void Dispose()
@@ -106,13 +122,14 @@ namespace AliceWPF.ViewModels
 
         private void Instance_NewFrameEvent(NewFrameEventArgs args)
         {
+            
             BitmapImage bi;
             using (var bitmap = (Bitmap)args.Frame.Clone())
             {
                 bi = bitmap.ToBitmapImage();
             }
             bi.Freeze();
-            View.Dispatcher.BeginInvoke(new ThreadStart(delegate { View.CameraSource.Source = bi; }));
+            View.Dispatcher.Invoke(new ThreadStart(delegate { View.CameraSource.Source = bi; }));
         }
 
     }

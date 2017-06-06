@@ -86,7 +86,7 @@
     <Compile Include="Classes\NewEmotionDetectedEventArgs.cs" />
     <Compile Include="Classes\NewFrameEventArgs.cs" />
     <Compile Include="EmotionDetector.cs" />
-    <Compile Include="Extensions\BitmapExtensions.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Models\Camera.cs" />
     <Compile Include="Models\EmotionEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
