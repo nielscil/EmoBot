@@ -15,9 +15,10 @@ namespace Alice.Models.Categories
 
         public EmotionTemplate(GlobalTemplateAction globalAction) : base(globalAction)
         {
+            AddListsToResponseArray();
         }
 
-        private void AddListsToResponeArray()
+        private void AddListsToResponseArray()
         {
             for (int index = 0; index < _responses.Length; index++)
             {
@@ -25,11 +26,14 @@ namespace Alice.Models.Categories
             }
         }
 
-        public EmotionTemplate() : base() { }
+        public EmotionTemplate() : base()
+        {
+            AddListsToResponseArray();
+        }
 
         public void AddResponse(EmotionEnum emotion, Response response)
         {
-            _responses.Add(response);
+            _responses[(int)emotion].Add(response);
         }
 
         public override string GetResponse(Match match)
