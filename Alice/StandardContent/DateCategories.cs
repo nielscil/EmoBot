@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Alice.StandardContent
 {
-    class DateCategories
+    internal class DateCategories
     {
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Alice.StandardContent
 {
-    class StandardCategories : ICategoryCollection
+    internal class StandardCategories : ICategoryCollection
     {
         public IEnumerable<Category> GetCategories()
         {

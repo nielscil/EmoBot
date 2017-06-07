@@ -47,9 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CategoryBuilder.cs" />
+    <Compile Include="Classes\EmotionTemplateBuilder.cs" />
     <Compile Include="Classes\GlobalActionResponse.cs" />
     <Compile Include="Classes\RegexHelper.cs" />
-    <Compile Include="Classes\StandardCategories.cs" />
+    <Compile Include="Models\Categories\EmotionTemplate.cs" />
+    <Compile Include="Models\Categories\TemplateBase.cs" />
+    <Compile Include="StandardContent\DateCategories.cs" />
+    <Compile Include="StandardContent\StandardCategories.cs" />
     <Compile Include="Classes\SubCategoryBuilder.cs" />
     <Compile Include="Classes\TemplateBuilder.cs" />
     <Compile Include="Models\CategoryManager.cs" />
