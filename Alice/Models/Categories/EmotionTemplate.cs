@@ -1,8 +1,6 @@
 ﻿using Alice.Classes;
-using EmotionLib;
 using EmotionLib.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,20 +9,17 @@ using System.Threading.Tasks;
 
 namespace Alice.Models.Categories
 {
-    public delegate GlobalActionResponse GlobalTemplateAction(Match match);
-    public delegate string Response(Match match, GlobalActionResponse globalActionResponse);
-
-    public class Template : TemplateBase
+    public class EmotionTemplate : TemplateBase
     {
         private List<Response> _responses = new List<Response>();
 
-        public Template(GlobalTemplateAction globalAction) : base(globalAction)
+        public EmotionTemplate(GlobalTemplateAction globalAction) : base(globalAction)
         {
         }
 
-        public Template() : base() { }
+        public EmotionTemplate() : base() { }
 
-        public void AddResponse(Response response)
+        public void AddResponse(EmotionEnum emotion,Response response)
         {
             _responses.Add(response);
         }
@@ -37,7 +32,5 @@ namespace Alice.Models.Categories
 
             return response.Invoke(match, globalActionResponse);
         }
-
     }
-
 }

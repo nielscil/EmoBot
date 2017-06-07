@@ -10,9 +10,9 @@ namespace Alice.Models.Categories
 {
     public class SubCategory : CategoryBase
     {
-        private Template _template;
+        private TemplateBase _template;
 
-        public void SetTemplate(Template template)
+        public void SetTemplate(TemplateBase template)
         {
             _template = template;
         }

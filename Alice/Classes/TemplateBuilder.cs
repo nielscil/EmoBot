@@ -1,4 +1,5 @@
 ﻿using Alice.Models.Categories;
+using EmotionLib.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

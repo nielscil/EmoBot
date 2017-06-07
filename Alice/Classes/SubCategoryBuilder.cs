@@ -28,6 +28,12 @@ namespace Alice.Classes
             return this;
         }
 
+        public SubCategoryBuilder AddTemplate(EmotionTemplateBuilder builder)
+        {
+            _category.SetTemplate(builder.Build());
+            return this;
+        }
+
         public SubCategory Build()
         {
             return _category;
