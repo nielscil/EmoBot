@@ -32,7 +32,12 @@ namespace Alice.Models
 
         public ResponseFinder(string input)
         {
-            Input = input;
+            Input = TrimInput(input);
+        }
+
+        private string TrimInput(string input)
+        {
+            return input.Trim(' ', '?', '.', '!').ToLower();
         }
 
     }

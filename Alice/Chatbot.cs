@@ -10,6 +10,7 @@ using Alice.Models.Categories;
 using Alice.Models.Facts;
 using Alice.Models.Conditions;
 using Alice.Classes;
+using Alice.StandardContent;
 
 namespace Alice
 {
@@ -27,6 +28,7 @@ namespace Alice
             if(useStandardCategories)
             {
                 CategoryManager.AddCategories(new StandardCategories());
+                CategoryManager.AddCategories(new DateCategories());
             }
 
             app.Exit += App_Exit;

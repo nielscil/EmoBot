@@ -61,6 +61,42 @@ namespace Alice.StandardContent
                     return $"Hello {globalResponse.Get("name")}, what can you do?";
                 })
                 )).Build();
+            yield return new CategoryBuilder().AddPattern(@".*is on.*")
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("(?'name'.*) is on (?'value'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string name = RegexHelper.GetValue(match, "name");
+                    string value = RegexHelper.GetValue(match, "value");
+
+                    if(!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(value))
+                    {
+                        Fact fact = new Fact(name, value);
+                        FactManager.RemoveFacts("name");
+                        FactManager.AddFact(fact); //TODO: automatic add fact to factmanager when created ??
+
+                        response.Add("fact", fact);
+                    }
+                    else
+                    {
+                        response.Success = false;
+                    }
+
+                    return response;
+                })
+                .AddResponse((match,gr) =>
+                {
+                    if(gr.Success)
+                    {
+                        Fact fact = gr.Get<Fact>("fact");
+                        return $"Okay, {fact.Name} is on {fact.Values.First()}";
+                    }
+                    return "I can't remember that";
+                })
+                )).Build();
         }
     }
 }

@@ -8,7 +8,18 @@ namespace Alice.Classes
 {
     public class GlobalActionResponse
     {
+
         public Dictionary<string, object> Values { get; private set; } = new Dictionary<string, object>();
+
+        public bool Empty
+        {
+            get
+            {
+                return IsEmpty();
+            }
+        }
+
+        public bool Success { get; set; } = true;
 
         public void Add(string name, object obj)
         {
