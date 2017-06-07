@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +27,23 @@ namespace AliceWPF.Controls
         public ConversationControl()
         {
             InitializeComponent();
+
+            Loaded += ConversationControl_Loaded;
+        }
+
+        private void ConversationControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var dpd = DependencyPropertyDescriptor.FromProperty(ItemsControl.ItemsSourceProperty, typeof(ItemsControl));
+            if (dpd != null)
+            {
+                dpd.AddValueChanged(itemsControl, ItemsSource_Changed);
+            }
+        }
+
+        private void ItemsSource_Changed(object sender, EventArgs e)
+        {
             ObservableCollection<ConversationItem> items = itemsControl.ItemsSource as ObservableCollection<ConversationItem>;
-            if(items != null)
+            if (items != null)
             {
                 items.CollectionChanged += Items_CollectionChanged;
             }
@@ -35,11 +51,7 @@ namespace AliceWPF.Controls
 
         public void Dispose()
         {
-            ObservableCollection<ConversationItem> items = itemsControl.ItemsSource as ObservableCollection<ConversationItem>;
-            if (items != null)
-            {
-                items.CollectionChanged -= Items_CollectionChanged;
-            }          
+            Loaded -= ConversationControl_Loaded;
         }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

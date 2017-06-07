@@ -286,3 +286,10 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+#custom stuff
+
+!AliceWPF/DLL/debug/Affdex.dll
+!AliceWPF/DLL/debug/affdex-native.dll
+!AliceWPF/DLL/release/Affdex.dll
+!AliceWPF/DLL/release/affdex-native.dll

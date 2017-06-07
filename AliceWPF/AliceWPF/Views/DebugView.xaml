@@ -5,33 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:AliceWPF.Views"
+        xmlns:controls="clr-namespace:AliceWPF.Controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <UserControl.Resources>
         <ResourceDictionary>
-            <converters:BooleanToUserEmotionConverter x:Key="DebugEmotions"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibiltyConverter" />
+            <converters:NegativeBoolToVisibilityConverter x:Key="NegativeBoolToVisibilityConverter" />
+            <converters:BooleanToEmotionConverter x:Key="DebugEmotions"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <materialDesign:Card Grid.Column="0" Padding="10" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UIElement}}">
-            <StackPanel>
-                <RadioButton Content="Neutral" FontSize="18" VerticalContentAlignment="Center" 
+    <controls:IsBusyContainer IsBusy="{Binding Loading}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <materialDesign:Card Grid.Column="0" Padding="10" Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UIElement}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Row="0" x:Name="UseCamera" Content="Use Camera"/>
+                    <StackPanel Grid.Row="1" Visibility="{Binding UseCamera,Converter={StaticResource NegativeBoolToVisibilityConverter}}">
+                        <RadioButton Content="Neutral" FontSize="18" VerticalContentAlignment="Center" 
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Neutral}"/>
-                <RadioButton Content="Happy" FontSize="18" VerticalContentAlignment="Center" 
+                        <RadioButton Content="Happy" FontSize="18" VerticalContentAlignment="Center" 
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Happy}"/>
-                <RadioButton Content="Sad" FontSize="18" VerticalContentAlignment="Center"
+                        <RadioButton Content="Sad" FontSize="18" VerticalContentAlignment="Center"
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Sad}"/>
-                <RadioButton Content="Scared" FontSize="18" VerticalContentAlignment="Center"
+                        <RadioButton Content="Scared" FontSize="18" VerticalContentAlignment="Center"
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Scared}"/>
-                <RadioButton Content="Angry" FontSize="18" VerticalContentAlignment="Center"
+                        <RadioButton Content="Angry" FontSize="18" VerticalContentAlignment="Center"
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Angry}"/>
-                <Label x:Name="EmotionFeedback" FontSize="18"/>
-            </StackPanel>
-        </materialDesign:Card>
-    </Grid>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Visibility="{Binding UseCamera,Converter={StaticResource BoolToVisibiltyConverter}}">
+                        <Image x:Name="CameraSource" MaxHeight="400" MaxWidth="400" />
+                    </StackPanel>
+                    <Label Grid.Row="3" x:Name="EmotionFeedback" FontSize="18"/>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </controls:IsBusyContainer>
 </UserControl>
