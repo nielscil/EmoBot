@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Humanizer;
 
 namespace Alice.StandardContent
 {
@@ -24,6 +25,88 @@ namespace Alice.StandardContent
 
         public IEnumerable<Category> GetCategories()
         {
+            yield return new CategoryBuilder()
+                .AddPattern(".*date.*")
+                .AddPattern(".*time.*")
+                .AddSubCategory(
+                new SubCategoryBuilder()
+                .AddPattern(".*date and time.*")
+                .AddPattern(".*time and date.*")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((match, globalResponse) =>
+                {
+                    return $"It's: {DateTime.Now.ToOrdinalWords()} {DateTime.Now.ToString("HH:mm")}";
+                })))
+                .AddSubCategory(
+                new SubCategoryBuilder()
+                .AddPattern(@".*date in (?'days'[a-z0-9]*) day(s)?.*")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+                    string days = RegexHelper.GetValue(match, "days");
+                    int result = -1;
+
+                    if (response.Success = (!string.IsNullOrWhiteSpace(days) && int.TryParse(days, NumberStyles.Any, Info, out result)))
+                    {
+                        response.Add("date", DateTime.Now.AddDays(result));
+                        response.Add("singular", result == 1);
+                    }
+                    response.Add("days", days);
+
+                    return response;
+                })
+                .AddResponse((match, gr) =>
+                {
+                    if (!gr.Success)
+                    {
+                        return $"I can't calculate the date in {gr.Get<string>("days")} days";
+                    }
+                    string signular = gr.Get<bool>("singular") ? "day" : "days";
+
+                    return $"In {gr.Get<string>("days")} {signular} it's {gr.Get<DateTime>("date").ToString("dd-MM-yyyy")}";
+                })))
+                .AddSubCategory(
+                new SubCategoryBuilder()
+                .AddPattern(".*date tomorrow*")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((match, globalResponse) =>
+                {
+                    return $"It's tomorrow {DateTime.Now.AddDays(1).ToOrdinalWords()}";
+                })))
+                .AddSubCategory(
+                new SubCategoryBuilder()
+                .AddPattern(".*date yesterday*")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((match, globalResponse) =>
+                {
+                    return $"It was yesterday {DateTime.Now.AddDays(-1).ToOrdinalWords()}";
+                })))
+                .AddSubCategory(
+                new SubCategoryBuilder()
+                .AddPattern(".*date day after tomorrow*")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((match, globalResponse) =>
+                {
+                    return $"It's the day after tomorrow {DateTime.Now.AddDays(2).ToOrdinalWords()}";
+                })))
+                .AddSubCategory(
+                new SubCategoryBuilder()
+                .AddPattern(".*date.*")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((match, globalResponse) =>
+                {
+                    return $"It's today {DateTime.Now.ToOrdinalWords()}";
+                })))
+                .AddSubCategory(
+                new SubCategoryBuilder()
+                .AddPattern(".*time.*")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((match, globalResponse) =>
+                {
+                    return $"It's: {DateTime.Now.ToString("HH:mm:ss")}";
+                })))
+                .Build();
             yield return new CategoryBuilder()
                 .AddPattern(".*day.*")
                 .AddPattern(".*tomorrow.*")
@@ -48,9 +131,7 @@ namespace Alice.StandardContent
                         {
                             response.Add("diff", date - DateTime.Now);
                         }
-
                     }
-
                     return response;
                 })
                 .AddResponse((match,gr) =>
@@ -63,11 +144,11 @@ namespace Alice.StandardContent
                 }
                 )))
                 .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern(".*day.*")
+                .AddPattern(".*day[^s].*")
                 .AddTemplate(new TemplateBuilder()
                 .AddResponse((match, globalResponse) =>
                 {
-                    return $"Today it is {DateTime.Now.ToString("dddd",Info)}";
+                    return $"Today it is {DateTime.Now.ToString("dddd")}";
                 }
                 )))
                 .AddSubCategory(
@@ -76,7 +157,7 @@ namespace Alice.StandardContent
                 .AddTemplate(new TemplateBuilder()
                 .AddResponse((match, globalResponse) =>
                 {
-                    return $"Tomorrow it is {DateTime.Now.Date.AddDays(1).ToString("dddd",Info)}";
+                    return $"Tomorrow it is {DateTime.Now.Date.AddDays(1).ToString("dddd")}";
                 })))
                 .AddSubCategory(
                 new SubCategoryBuilder()
@@ -84,7 +165,7 @@ namespace Alice.StandardContent
                 .AddTemplate(new TemplateBuilder()
                 .AddResponse((match, globalResponse) =>
                 {
-                    return $"Yesterday it was {DateTime.Now.Date.AddDays(-1).ToString("dddd", Info)}";
+                    return $"Yesterday it was {DateTime.Now.Date.AddDays(-1).ToString("dddd")}";
                 })))
                 .Build();
             yield return new CategoryBuilder()
@@ -110,35 +191,6 @@ namespace Alice.StandardContent
                 .AddResponse((match, globalResponse) =>
                 {
                     return $"This is {DateTime.Now.ToString("yyyy")}";
-                })))
-                .Build();
-            yield return new CategoryBuilder()
-                .AddPattern(".*date.*")
-                .AddPattern(".*time.*")
-                .AddSubCategory(
-                new SubCategoryBuilder()
-                .AddPattern(".*date and time.*")
-                .AddPattern(".*time and date.*")
-                .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
-                {
-                    return $"It's: {DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
-                .AddPattern(".*date.*")
-                .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
-                {
-                    return $"It's today: {DateTime.Now.ToString("dd-MM-yyyy")}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
-                .AddPattern(".*time.*")
-                .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
-                {
-                    return $"It's: {DateTime.Now.ToString("HH:mm:ss")}";
                 })))
                 .Build();
         }

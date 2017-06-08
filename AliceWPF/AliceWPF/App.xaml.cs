@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Alice;
 using System.IO;
+using System.Globalization;
 
 namespace AliceWPF
 {
@@ -19,6 +20,7 @@ namespace AliceWPF
     {
         public App()
         {
+            SetCultureInfo();
             ChatBot.Init(this,true);
 
             string codeBasePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
@@ -27,6 +29,13 @@ namespace AliceWPF
 
             StartEmotionDector();
             Exit += App_Exit;
+        }
+
+        private void SetCultureInfo()
+        {
+            CultureInfo info = CultureInfo.GetCultureInfoByIetfLanguageTag("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = info;
+            CultureInfo.DefaultThreadCurrentUICulture = info;
         }
 
         private async void App_Exit(object sender, ExitEventArgs e)

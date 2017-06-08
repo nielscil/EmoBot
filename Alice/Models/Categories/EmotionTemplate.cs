@@ -15,20 +15,12 @@ namespace Alice.Models.Categories
 
         public EmotionTemplate(GlobalTemplateAction globalAction) : base(globalAction)
         {
-            AddListsToResponseArray();
-        }
-
-        private void AddListsToResponseArray()
-        {
-            for (int index = 0; index < _responses.Length; index++)
-            {
-                _responses[index] = new List<Response>();
-            }
+            InitalizeResponses();
         }
 
         public EmotionTemplate() : base()
         {
-            AddListsToResponseArray();
+            InitalizeResponses();
         }
 
         public void AddResponse(EmotionEnum emotion, Response response)
@@ -42,6 +34,14 @@ namespace Alice.Models.Categories
             Response response = ResponseChooser.Choose(_responses[(int)EmotionLib.EmotionDetector.Instance.Emotion]);
 
             return response.Invoke(match, globalActionResponse);
+        }
+
+        private void InitalizeResponses()
+        {
+            for (int index = 0; index < _responses.Length; index++)
+            {
+                _responses[index] = new List<Response>();
+            }
         }
     }
 }

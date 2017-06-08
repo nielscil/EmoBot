@@ -10,7 +10,7 @@ namespace Alice.Models
     {
         public string Input { get; private set; }
 
-        private string _response;
+        private string _response = string.Empty;
         public string Response
         {
             get
@@ -19,11 +19,10 @@ namespace Alice.Models
             }
             set
             {
-                _response = value;
-
-                if(!string.IsNullOrWhiteSpace(_response))
+                if(!string.IsNullOrWhiteSpace(value))
                 {
                     Found = true;
+                    _response = AddPunctuation(value);
                 }
             }
         }
@@ -38,6 +37,15 @@ namespace Alice.Models
         private string TrimInput(string input)
         {
             return input.Trim(' ', '?', '.', '!').ToLower();
+        }
+
+        private string AddPunctuation(string input)
+        {
+            if(!input.EndsWith("?") && !input.EndsWith("!") && !input.EndsWith("."))
+            {
+                input += ".";
+            }
+            return input;
         }
 
     }

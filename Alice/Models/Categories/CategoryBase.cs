@@ -9,7 +9,7 @@ namespace Alice.Models.Categories
 {
     public abstract class CategoryBase
     {
-        private List<string> _patterns = new List<string>();
+        protected List<string> _patterns = new List<string>();
 
         public void AddPattern(string pattern)
         {

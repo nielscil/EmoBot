@@ -18,7 +18,7 @@ namespace Alice.Models.Categories
 
         public override void Accept(IResponseFinder finder)
         {
-            if(IsMatchingPatterns(finder.Input))
+            if(_patterns.Count == 0 || IsMatchingPatterns(finder.Input))
             {
                 foreach(var subCategory in _subCategories)
                 {
