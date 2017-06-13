@@ -56,13 +56,28 @@ namespace Alice
             }
         }
 
-        public static List<Fact> FindFacts(string name)
+        public static List<Fact> FindFacts(string name,bool evaluate = false)
         {
             List<Fact> facts = new List<Fact>();
 
             foreach(var fact in Facts)
             {
-                if(fact.Name == name)
+                if(fact.Name == name && (!evaluate || fact.Evaluate()))
+                {
+                    facts.Add(fact);
+                }
+            }
+
+            return facts;
+        }
+
+        public static List<Fact> FindFactsWithGivenValues(string name, bool evaluate = false, params string[] values)
+        {
+            List<Fact> facts = new List<Fact>();
+
+            foreach (var fact in Facts)
+            {
+                if (fact.Name == name && (values.Length == 0 || fact.CheckGivenValues(values)) && (!evaluate || fact.Evaluate()))
                 {
                     facts.Add(fact);
                 }
@@ -111,7 +126,6 @@ namespace Alice
         internal static bool EvaluateFact(string name,params string[] values)
         {
             Fact fact = FindFact(name, values);
-
             if(fact != null)
             {
                 return fact.Evaluate();

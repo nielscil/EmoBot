@@ -190,7 +190,7 @@ namespace Alice.StandardContent
                 }))).Build();
             yield return new CategoryBuilder()
                 .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern("What is (?'item1'.*)")
+                .AddPattern("What has ((a|an) )?(?'item1'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -200,27 +200,84 @@ namespace Alice.StandardContent
 
                     if (!string.IsNullOrWhiteSpace(item1))
                     {
-                        Fact fact = FactManager.FindFacts(item1).FirstOrDefault();
-                        if (fact != null)
+                        List<Fact> facts = FactManager.FindFactsWithGivenValues(item1,true,"has",null);
+                        if (facts.Count > 0)
                         {
-                            response.Add("fact", fact);
+                            response.Add("facts", facts);
                         }
 
-                        response.Success = fact != null;
+                        response.Success = facts.Count > 0;
                     }
 
                     return response;
                 })
                 .AddResponse((match, gr) =>
                 {
-                    if (!gr.Success)
+                    if (gr.Success)
                     {
-                        return $"I don't know what that is";
+                        List<Fact> facts = gr.Get<List<Fact>>("facts");
+                        string response = string.Empty;
+                        for (int i = 0; i < facts.Count; i++)
+                        {
+                            response += facts[i].Values[1];
+
+                            if (i + 2 == facts.Count)
+                                response += " and ";
+                            else if (i + 1 != facts.Count)
+                                response += ", ";
+                        }
+                        if (!string.IsNullOrWhiteSpace(response))
+                        {
+                            return "Well, according to me " + response;
+                        }
                     }
-                    Fact fact = gr.Get<Fact>("fact");
-                    return $"{fact.Name} is {fact.Values.First()}";
+                    return $"I don't know";
+                }))).Build();
+            yield return new CategoryBuilder()
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("What is ((a|an) )?(?'item1'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+
+                    if (!string.IsNullOrWhiteSpace(item1))
+                    {
+                        List<Fact> facts = FactManager.FindFacts(item1, true);
+                        if (facts.Count > 0)
+                        {
+                            response.Add("facts", facts);
+                        }
+
+                        response.Success = facts.Count > 0;
+                    }
+
+                    return response;
                 })
-                ))
+                .AddResponse((match, gr) =>
+                {
+                    if(gr.Success)
+                    {
+                        List<Fact> facts = gr.Get<List<Fact>>("facts");
+                        string response = string.Empty;
+                        for(int i = 0; i < facts.Count; i++)
+                        {
+                            response += facts[i].Values.First();
+
+                            if (i + 2 == facts.Count)
+                                response += " and ";
+                            else if(i + 1 != facts.Count)
+                                response += ", ";
+                        }
+                        if(!string.IsNullOrWhiteSpace(response))
+                        {
+                            return "Well, according to me " + response;
+                        } 
+                    }
+                    return $"I don't know";
+                })))
                 .AddSubCategory(new SubCategoryBuilder()
                 .AddPattern("If (?'item1'.*) is (?'item2'.*) then (?'item3'.*) is (?'item4'.*)")
                 .AddTemplate(new TemplateBuilder()
@@ -230,7 +287,7 @@ namespace Alice.StandardContent
 
                     string item1 = RegexHelper.GetValue(match, "item1");
                     string item2 = RegexHelper.GetValue(match, "item2");
-                    string item3 = RegexHelper.GetValue(match, "item3");
+                    string item3 = RegexHelper.GetValue(match, "item3").Trim();
                     string item4 = RegexHelper.GetValue(match, "item4");
 
                     bool firstConditionSuccess = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
@@ -239,18 +296,13 @@ namespace Alice.StandardContent
 
                     if (response.Success)
                     {
-                        if(item3 == "he" || item3 == "she")
+                        if(item3 == "he" || item3 == "she" || item3 == "it")
                         {
                             item3 = item1;
                         }
-
-                        FactManager.RemoveFacts(item1);
-                        Fact fact = new Fact(item4, new Condition(item2, item1), item3);
+                        Fact fact = new Fact(item3, new Condition(item1, item2), item2);
                         FactManager.AddFact(fact);
                     }
-
-                    response.Add("item1", item1);
-                    response.Add("item2", item2);
 
                     return response;
                 })
@@ -259,7 +311,36 @@ namespace Alice.StandardContent
                     return $"Alright";
                 })))
                 .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern(".*If (?'item1'.*) is (?'item2'.*)")
+                .AddPattern("Can.*If (?'item1'.*) has (?'item2'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+                    string item2 = RegexHelper.GetValue(match, "item2");
+
+                    response.Success = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
+
+                    bool evaluate = response.Success && (FactManager.EvaluateFact(item1, "has", item2) || new DynamicForeachCondition(item1, new Condition(null, item2), "has", null).Evaluate());
+                    response.Add("evaluated", evaluate);
+
+                    response.Add("item1", item1);
+                    response.Add("item2", item2);
+
+                    return response;
+                })
+                .AddResponse((match, gr) =>
+                {
+                    if (!gr.Success)
+                    {
+                        return $"I don't know if {gr.Get("item1")} has {gr.Get("item2")}";
+                    }
+                    string format = gr.Get<bool>("evaluated") ? "Yes, {0} has {1}!" : "No, {0} hasn't got {1}";
+                    return string.Format(format, gr.Get("item1"), gr.Get("item2"));
+                })))
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("Can.*If (?'item1'.*) is (?'item2'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -273,7 +354,7 @@ namespace Alice.StandardContent
 
                     if (response.Success)
                     {
-                        response.Add("evaluated", FactManager.EvaluateFact(item2, item1));
+                        response.Add("evaluated", FactManager.EvaluateFact(item1, item2));
                     }
 
                     response.Add("item1", item1);
@@ -291,7 +372,7 @@ namespace Alice.StandardContent
                     return string.Format(format, gr.Get("item1"), gr.Get("item2"));
                 })))
                 .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern("No ((a|an) )?(?'item1'.*) is not( (a|an))? (?'item2'.*)")
+                .AddPattern("No (?'item1'.*) is not (?'item2'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -304,11 +385,8 @@ namespace Alice.StandardContent
 
                     if (response.Success)
                     {
-                        FactManager.RemoveFact(item2, item1);
+                        FactManager.RemoveFact(item1,item2);
                     }
-
-                    response.Add("item1", item1);
-                    response.Add("item2", item2);
 
                     return response;
                 })
@@ -317,7 +395,7 @@ namespace Alice.StandardContent
                     return $"Alright";
                 })))
                 .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern("((a|an) )?(?'item1'.*) is( (a|an))? (?'item2'.*) when( (a|an))? (?item3'.*) has( (a|an))? (?'item4'.*)")
+                .AddPattern("(?'item1'.*) has (?'item2'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -325,7 +403,30 @@ namespace Alice.StandardContent
 
                     string item1 = RegexHelper.GetValue(match, "item1");
                     string item2 = RegexHelper.GetValue(match, "item2");
-                    string item3 = RegexHelper.GetValue(match, "item3");
+
+                    response.Success = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
+
+                    if (response.Success)
+                    {
+                        FactManager.AddFact(new Fact(item1, "has", item2));
+                    }
+
+                    return response;
+                })
+                .AddResponse((match, gr) =>
+                {
+                    return $"Alright";
+                })))
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("(?'item1'.*) is (?'item2'.*) when (?'item3'.*) has (?'item4'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+                    string item2 = RegexHelper.GetValue(match, "item2");
+                    string item3 = RegexHelper.GetValue(match, "item3").Trim();
                     string item4 = RegexHelper.GetValue(match, "item4");
 
                     bool firstConditionSuccess = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
@@ -334,11 +435,11 @@ namespace Alice.StandardContent
 
                     if (response.Success)
                     {
-                        if(item3 == "he" || item3 == "she")
+                        if(item3 == "he" || item3 == "she" || item3 == "it")
                         {
                             item3 = item1;
                         }
-                        FactManager.AddFact(new Fact("has", new Condition(item4, item3), item1, item2));
+                        FactManager.AddFact(new Fact(item1, new OrCondition(new Condition(item3, "has", item4),new DynamicForeachCondition(item3, new Condition(null,item4),"has",null)), item2));
                     }
 
                     return response;
@@ -348,7 +449,7 @@ namespace Alice.StandardContent
                     return $"Alright";
                 })))
                 .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern("((a|an) )?(?'item1'.*) is( (a|an))? (?'item2'.*)")
+                .AddPattern("((a|an) )?(?'item1'.*) is (?'item2'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -361,11 +462,8 @@ namespace Alice.StandardContent
 
                     if(response.Success)
                     {
-                        FactManager.AddFact(new Fact(item2, item1));
+                        FactManager.AddFact(new Fact(item1, item2));
                     }
-
-                    response.Add("item1", item1);
-                    response.Add("item2", item2);
 
                     return response;
                 })
