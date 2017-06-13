@@ -1,5 +1,6 @@
 ﻿using Alice.Classes;
 using Alice.Models.Categories;
+using Alice.Models.Conditions;
 using Alice.Models.Facts;
 using EmotionLib.Models;
 using Humanizer;
@@ -189,7 +190,76 @@ namespace Alice.StandardContent
                 }))).Build();
             yield return new CategoryBuilder()
                 .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern("The (?'item1'.*) is (?'item2'.*)")
+                .AddPattern("What is (?'item1'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+
+                    if (!string.IsNullOrWhiteSpace(item1))
+                    {
+                        Fact fact = FactManager.FindFacts(item1).FirstOrDefault();
+                        if (fact != null)
+                        {
+                            response.Add("fact", fact);
+                        }
+
+                        response.Success = fact != null;
+                    }
+
+                    return response;
+                })
+                .AddResponse((match, gr) =>
+                {
+                    if (!gr.Success)
+                    {
+                        return $"I don't know what that is";
+                    }
+                    Fact fact = gr.Get<Fact>("fact");
+                    return $"{fact.Name} is {fact.Values.First()}";
+                })
+                ))
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("If (?'item1'.*) is (?'item2'.*) then (?'item3'.*) is (?'item4'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+                    string item2 = RegexHelper.GetValue(match, "item2");
+                    string item3 = RegexHelper.GetValue(match, "item3");
+                    string item4 = RegexHelper.GetValue(match, "item4");
+
+                    bool firstConditionSuccess = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
+                    bool secondConditionSuccess = !string.IsNullOrWhiteSpace(item3) && !string.IsNullOrWhiteSpace(item4);
+                    response.Success = firstConditionSuccess && secondConditionSuccess;                  
+
+                    if (response.Success)
+                    {
+                        if(item3 == "he" || item3 == "she")
+                        {
+                            item3 = item1;
+                        }
+
+                        FactManager.RemoveFacts(item1);
+                        Fact fact = new Fact(item4, new Condition(item2, item1), item3);
+                        FactManager.AddFact(fact);
+                    }
+
+                    response.Add("item1", item1);
+                    response.Add("item2", item2);
+
+                    return response;
+                })
+                .AddResponse((match, gr) =>
+                {
+                    return $"Alright";
+                })))
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern(".*If (?'item1'.*) is (?'item2'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -200,6 +270,12 @@ namespace Alice.StandardContent
 
                     response.Success = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
 
+
+                    if (response.Success)
+                    {
+                        response.Add("evaluated", FactManager.EvaluateFact(item2, item1));
+                    }
+
                     response.Add("item1", item1);
                     response.Add("item2", item2);
 
@@ -207,15 +283,95 @@ namespace Alice.StandardContent
                 })
                 .AddResponse((match, gr) =>
                 {
-                    return $"Oh, {gr.Get("item1")} is {gr.Get("item2")}";
+                    if (!gr.Success)
+                    {
+                        return $"I don't know if {gr.Get("item1")} is {gr.Get("item2")}";
+                    }
+                    string format = gr.Get<bool>("evaluated") ? "Yes, {0} is {1}!" : "No, {0} isn't {1}";
+                    return string.Format(format, gr.Get("item1"), gr.Get("item2"));
+                })))
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("No ((a|an) )?(?'item1'.*) is not( (a|an))? (?'item2'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+                    string item2 = RegexHelper.GetValue(match, "item2");
+
+                    response.Success = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
+
+                    if (response.Success)
+                    {
+                        FactManager.RemoveFact(item2, item1);
+                    }
+
+                    response.Add("item1", item1);
+                    response.Add("item2", item2);
+
+                    return response;
                 })
                 .AddResponse((match, gr) =>
                 {
-                    return $"What specifically brings {gr.Get("item2")} to mind?";
+                    return $"Alright";
+                })))
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("((a|an) )?(?'item1'.*) is( (a|an))? (?'item2'.*) when( (a|an))? (?item3'.*) has( (a|an))? (?'item4'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+                    string item2 = RegexHelper.GetValue(match, "item2");
+                    string item3 = RegexHelper.GetValue(match, "item3");
+                    string item4 = RegexHelper.GetValue(match, "item4");
+
+                    bool firstConditionSuccess = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
+                    bool secondConditionSuccess = !string.IsNullOrWhiteSpace(item3) && !string.IsNullOrWhiteSpace(item4);
+                    response.Success = firstConditionSuccess && secondConditionSuccess;
+
+                    if (response.Success)
+                    {
+                        if(item3 == "he" || item3 == "she")
+                        {
+                            item3 = item1;
+                        }
+                        FactManager.AddFact(new Fact("has", new Condition(item4, item3), item1, item2));
+                    }
+
+                    return response;
                 })
                 .AddResponse((match, gr) =>
                 {
-                    return $"Is {gr.Get("item1")} also {gr.Get("item1")}";
+                    return $"Alright";
+                })))
+                .AddSubCategory(new SubCategoryBuilder()
+                .AddPattern("((a|an) )?(?'item1'.*) is( (a|an))? (?'item2'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+
+                    string item1 = RegexHelper.GetValue(match, "item1");
+                    string item2 = RegexHelper.GetValue(match, "item2");
+
+                    response.Success = !string.IsNullOrWhiteSpace(item1) && !string.IsNullOrWhiteSpace(item2);
+
+                    if(response.Success)
+                    {
+                        FactManager.AddFact(new Fact(item2, item1));
+                    }
+
+                    response.Add("item1", item1);
+                    response.Add("item2", item2);
+
+                    return response;
+                })
+                .AddResponse((match, gr) =>
+                {
+                    return $"Alright";
                 })
                 )).Build();
         }

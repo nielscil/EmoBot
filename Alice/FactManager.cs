@@ -46,6 +46,16 @@ namespace Alice
             }
         }
 
+        public static void RemoveFact(string name,params string[] values)
+        {
+            Fact fact = FindFact(name, values);
+
+            if(fact != null)
+            {
+                Facts.Remove(fact);
+            }
+        }
+
         public static List<Fact> FindFacts(string name)
         {
             List<Fact> facts = new List<Fact>();
@@ -60,6 +70,21 @@ namespace Alice
 
             return facts;
         }
+
+        public static List<Fact> FindFactsByValue(params string[] values)
+        {
+            List<Fact> facts = new List<Fact>();
+
+            foreach (var fact in Facts)
+            {
+                if (fact.Values.Length == values.Length && fact.HasValues(values))
+                {
+                    facts.Add(fact);
+                }
+            }
+
+            return facts;
+    }
 
         internal static void LoadFacts(string path)
         {
@@ -115,7 +140,7 @@ namespace Alice
             });
         }
 
-        private static Fact FindFact(string name,params string[] values)
+        public static Fact FindFact(string name,params string[] values)
         {
             foreach(var fact in Facts)
             {

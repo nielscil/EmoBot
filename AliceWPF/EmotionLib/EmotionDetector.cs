@@ -123,11 +123,8 @@ namespace EmotionLib
             {
                 lock(_emotionLock)
                 {
-                    if(_emotion != value)
-                    {
-                        _newEmotionDetectedEvent?.Invoke(new Classes.NewEmotionDetectedEventArgs(_emotion, value));
-                        _emotion = value;                       
-                    }
+                    SendEvent(_emotion, value);
+                    _emotion = value;
                 }
             }
         }
@@ -291,10 +288,10 @@ namespace EmotionLib
         private int _frameCount = 0;
         public void onImageResults(Dictionary<int, Face> faces, Frame frame)
         {
-            EmotionEnum emotion = EmotionEnum.Neutral;
-
             if(faces != null & faces.Count > 0)
             {
+                EmotionEnum emotion = EmotionEnum.Neutral;
+
                 //faces becomes, for a strange reason, null between the check and the next call, so catch the error...
                 try
                 {
@@ -303,14 +300,14 @@ namespace EmotionLib
                     emotion = GetEmotionValue(faces, faceID);
                 }
                 catch{}
-            }
 
-            _frameEmotions[(int)emotion]++;
-            _frameCount++;
+                _frameEmotions[(int)emotion]++;
+                _frameCount++;
 
-            if(_frameCount == 15)
-            {
-                CalculateEmotion();
+                if (_frameCount == 10)
+                {
+                    CalculateEmotion();
+                }
             }
 
         }
@@ -388,6 +385,7 @@ namespace EmotionLib
 
         #region FaceListener
 
+        private int _faceCount = 0;
         private object _faceIdsLock = new object();
         private List<int> _faceIds = new List<int>();
         public void onFaceFound(float timestamp, int faceId)
@@ -395,6 +393,7 @@ namespace EmotionLib
             lock(_faceIdsLock)
             {
                 _faceIds.Add(faceId);
+                _faceCount++;
             }
         }
 
@@ -403,6 +402,12 @@ namespace EmotionLib
             lock(_faceIdsLock)
             {
                 _faceIds.Remove(faceId);
+                _faceCount--;
+
+                if(_faceCount == 0)
+                {
+                    Emotion = EmotionEnum.None;
+                }
             }
         }
 
@@ -450,6 +455,14 @@ namespace EmotionLib
             }
 
             return val;
+        }
+
+        private void SendEvent(EmotionEnum oldValue, EmotionEnum newValue)
+        {
+            if(oldValue != newValue)
+            {
+                _newEmotionDetectedEvent?.Invoke(new Classes.NewEmotionDetectedEventArgs(oldValue, newValue));
+            }
         }
 
         private float _timestamp;
