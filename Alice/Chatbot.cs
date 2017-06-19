@@ -11,13 +11,14 @@ using Alice.Models.Facts;
 using Alice.Models.Conditions;
 using Alice.Classes;
 using Alice.StandardContent;
+using AIMLbot;
 
 namespace Alice
 {
     public static class ChatBot
     {
         private static bool _initialized = false;
-
+             
         public static void Init(System.Windows.Application app,bool useStandardCategories)
         {
             if(_initialized)
@@ -29,6 +30,7 @@ namespace Alice
             {
                 CategoryManager.AddCategories(new StandardCategories());
                 CategoryManager.AddCategories(new DateCategories());
+                CategoryManager.InitAiml();
             }
 
             app.Exit += App_Exit;
@@ -53,18 +55,6 @@ namespace Alice
             CheckInitialized();
 
             FactManager.LoadFacts(path);
-
-            //Fact fact = new Fact("working",null, "joris");
-            //FactManager.Facts.Add(fact);
-            //fact = new Fact("happy", new Condition("working", "joris"), "kjeld");
-            //FactManager.Facts.Add(fact);
-            //fact = new Fact("happy", new Condition("working", "kjeld"), "joris");
-            //FactManager.Facts.Add(fact);
-            //var and = new AndCondition();
-            //and.Conditions.Add(new Condition("working", "joris"));
-            //and.Conditions.Add(new NotCondition(new Condition("working", "kjeld")));
-            //fact = new Fact("happy",and,"niels");
-            //FactManager.Facts.Add(fact);
         }
 
         public static void SetDefaultResponse(string response)
@@ -94,5 +84,7 @@ namespace Alice
                 return finder.Response;
             });
         }
+
+
     }
 }
