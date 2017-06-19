@@ -116,10 +116,6 @@ namespace Alice
                 }
 
             }
-            else
-            {
-                throw new Exception("Could not found facts file or directory");
-            }
 
         }
 

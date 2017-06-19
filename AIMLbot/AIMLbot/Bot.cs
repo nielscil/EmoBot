@@ -377,8 +377,7 @@ namespace AIMLbot
         public void loadSettings()
         {
             // try a safe default setting for the settings xml file
-            string dir = Path.GetDirectoryName(typeof(Bot).Assembly.Location);
-            string path = Path.Combine(new Uri(dir).LocalPath, Path.Combine("ConfigurationFiles", "Settings.xml"));
+            string path = Path.Combine(Environment.CurrentDirectory, Path.Combine("Resources", Path.Combine("ConfigurationFiles", "Settings.xml")));
             this.loadSettings(path);          
         }
 

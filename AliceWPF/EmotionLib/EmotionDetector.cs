@@ -363,7 +363,7 @@ namespace EmotionLib
 
         private void WriteValues(Emotions emotions)
         {
-            Console.WriteLine($"Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
+            Debug.WriteLine($"Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
         }
 
         #endregion
