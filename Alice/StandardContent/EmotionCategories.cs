@@ -8,12 +8,7 @@ using Alice.Models.Categories;
 using Alice.Models.Facts;
 using EmotionLib.Models;
 using Humanizer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Alice.StandardContent
 {
@@ -116,7 +111,7 @@ namespace Alice.StandardContent
                     {
                         return "Whoah, did I say something wrong?";
                     }
-                    return $"{globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I feel oncomfortable with your anger. What's wrong?";
+                    return $"{globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I feel uncomfortable with your anger. What's wrong?";
                 })
                 .AddResponse(EmotionEnum.Fear, (match, globalResponse) =>
                 {
@@ -140,7 +135,7 @@ namespace Alice.StandardContent
                     {
                         return "Hello, I believe this is the first time we meet. I think it's best to start with a smile";
                     }
-                    return $"Hi {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautifull with a smile on your face";
+                    return $"Hi {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautiful with a smile on your face";
                 })
                 .AddResponse(EmotionEnum.Disgust, (match, globalResponse) =>
                 {
@@ -148,7 +143,7 @@ namespace Alice.StandardContent
                     {
                         return "You look disgusted, do I have someting between my teeth?";
                     }
-                    return $"Hi {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautifull with a smile on your face";
+                    return $"Hi {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautiful with a smile on your face";
                 })
                 )).Build();     
             yield return new CategoryBuilder().AddPattern(@".*is on.*")

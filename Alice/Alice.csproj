@@ -57,6 +57,7 @@
     <Compile Include="Models\Categories\TemplateBase.cs" />
     <Compile Include="Models\Conditions\DynamicForeachCondition.cs" />
     <Compile Include="StandardContent\DateCategories.cs" />
+    <Compile Include="StandardContent\EmotionCategories.cs" />
     <Compile Include="StandardContent\StandardCategories.cs" />
     <Compile Include="Classes\SubCategoryBuilder.cs" />
     <Compile Include="Classes\TemplateBuilder.cs" />

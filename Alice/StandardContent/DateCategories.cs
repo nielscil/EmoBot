@@ -28,6 +28,7 @@ namespace Alice.StandardContent
             yield return new CategoryBuilder()
                 .AddPattern(".*date.*")
                 .AddPattern(".*time.*")
+                .AddPattern(".*late.*")
                 .AddSubCategory(
                 new SubCategoryBuilder()
                 .AddPattern(".*date and time.*")
@@ -101,10 +102,11 @@ namespace Alice.StandardContent
                 .AddSubCategory(
                 new SubCategoryBuilder()
                 .AddPattern(".*time.*")
+                .AddPattern(".*late it is")
                 .AddTemplate(new TemplateBuilder()
                 .AddResponse((match, globalResponse) =>
                 {
-                    return $"It's: {DateTime.Now.ToString("HH:mm:ss")}";
+                    return $"It's: {DateTime.Now.ToString("HH:mm")}";
                 })))
                 .Build();
             yield return new CategoryBuilder()
