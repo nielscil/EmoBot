@@ -210,6 +210,7 @@ namespace EmotionLib
                     _detector.stop();
                     _videoCaptureDevice.SignalToStop();
                     _videoCaptureDevice.WaitForStop();
+                    Initialized = false;
                 });
                 
             }
