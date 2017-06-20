@@ -58,7 +58,7 @@
     <Compile Include="Models\Categories\InputResponseCollection.cs" />
     <Compile Include="Models\Categories\Matcher.cs" />
     <Compile Include="Models\Categories\TemplateBase.cs" />
-    <Compile Include="Models\InputResponseManager.cs" />
+    <Compile Include="InputResponseManager.cs" />
     <Compile Include="StandardContent\DateCategories.cs" />
     <Compile Include="StandardContent\StandardCategories.cs" />
     <Compile Include="Classes\TemplateBuilder.cs" />
