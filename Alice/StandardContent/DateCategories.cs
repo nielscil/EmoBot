@@ -11,7 +11,7 @@ using Humanizer;
 
 namespace Alice.StandardContent
 {
-    internal class DateCategories : ICategoryCollection
+    internal class DateCategories : IInputResponseCollection
     {
         private CultureInfo Info
         {
@@ -23,7 +23,7 @@ namespace Alice.StandardContent
 
         private readonly string[] parsableDates = new string[] { "MMMM" , "dd-MM-yyyy", "dd-MM", "d MMMM", "dd MMMM", "dd MMMM yyyy", "MMMM yyyy" }; //TODO: add more formats?
 
-        public IEnumerable<Category> GetCategories()
+        public IEnumerable<InputResponse> GetInputResponses()
         {
             yield return new CategoryBuilder()
                 .AddPattern(".*date.*")

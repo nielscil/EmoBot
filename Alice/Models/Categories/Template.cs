@@ -31,7 +31,6 @@ namespace Alice.Models.Categories
 
         public override string GetResponse(InputResponseData finder)
         {
-            finder.globalAction = _globalAction;
             GlobalActionResponse globalActionResponse = _globalAction?.Invoke(finder);
 
             Response response = ResponseChooser.Choose(_responses);

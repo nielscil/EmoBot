@@ -16,10 +16,13 @@ namespace Alice.Models.Categories
             _template = template;
         }
 
-        private void getResponse(InputResponseData finder)
+        public void GetResponse(InputResponseData finder)
         {
-            if (isMatch(finder.input))
+            if (isMatch(finder))
+            {
                 ExecuteTemplate(finder);
+            }
+                
         }
 
         private void ExecuteTemplate(InputResponseData finder)
@@ -38,15 +41,10 @@ namespace Alice.Models.Categories
     public class InputResponseData
     {
         public string input { get; private set; }
-        private string _response = string.Empty;
         public bool found { get; private set; }
-        public MatchData matchData { get; set; }
-        public GlobalTemplateAction globalAction { get; set; }
-        public InputResponseData(string _input)
-        {
-            input = trimInput(_input);
-        }
+        public Match Match { get; set; }
 
+        private string _response = string.Empty;
         public string response
         {
             get
@@ -61,6 +59,11 @@ namespace Alice.Models.Categories
                     _response = AddPunctuation(value);
                 }
             }
+        }
+
+        public InputResponseData(string _input)
+        {
+            input = trimInput(_input);
         }
 
         private string trimInput(string input)

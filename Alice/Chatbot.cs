@@ -73,7 +73,7 @@ namespace Alice
             InputResponseManager.DefaultResponse = response;
         }
 
-        public static void addInputResponses(InputResponseCollection collection)
+        public static void addInputResponses(IInputResponseCollection collection)
         {
             CheckInitialized();
 

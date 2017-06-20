@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Alice.Models.Categories
 {
-    public interface InputResponseCollection
+    public interface IInputResponseCollection
     {
         IEnumerable<InputResponse> GetInputResponses();
     }

@@ -10,50 +10,29 @@ namespace Alice.Models.Categories
     public abstract class Matcher
     {
         protected List<string> patternsToMatch = new List<string>();
-        MatchData matchData = null;
+        protected List<Tuple<int, string>> previousResponsePatternsToMatch = new List<Tuple<int, string>>();
 
         public void addPattern(string pattern)
         {
             patternsToMatch.Add(pattern);
         }
 
-        public bool isMatch(string input)
+        public void AddPreviousResponsePattern(int dept, string pattern)
         {
-            matchData = new MatchData(input, patternsToMatch);
-            return matchData.isMatch;
+            previousResponsePatternsToMatch.Add(new Tuple<int, string>(dept, pattern));
         }
 
-        public bool isMatchToPrevious(string input)
+        public bool isMatch(InputResponseData inputResponseData)
         {
-            matchData = new MatchData(InputResponseManager.historyInputResponses.Last().response, patternsToMatch);
-            return matchData.isMatch;
-        }
-    }
-
-    public class MatchData
-    {
-        private List<string> patternsToMatch;
-        public string input;
-        public bool isMatch = false;
-        public Match match = null;
-
-        public MatchData(string _input, List<string> _patternsToMatch)
-        {
-            input = _input;
-            patternsToMatch = _patternsToMatch;
-            isMatch = generateData();
-        }
-
-        private bool generateData()
-        {
-            foreach(string pattern in patternsToMatch)
+            foreach (var pattern in patternsToMatch)
             {
-                match = Regex.Match(input, pattern);
-
-                if (match.Success)
+                Match match = Regex.Match(inputResponseData.input, pattern);
+                if (match.Success && InputResponseManager.IsMatchingPreviousResponses(previousResponsePatternsToMatch))
+                {
+                    inputResponseData.Match = match;
                     return true;
+                }
             }
-
             return false;
         }
     }

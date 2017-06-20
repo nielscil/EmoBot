@@ -9,34 +9,40 @@ namespace Alice.Classes
 {
     public class InputResponseBuilder
     {
-        private InputResponse inputResponse;
+        private InputResponse _inputResponse;
 
         public InputResponseBuilder()
         {
-            inputResponse = new InputResponse();
+            _inputResponse = new InputResponse();
         }
 
         public InputResponseBuilder AddPattern(string pattern)
         {
-            inputResponse.addPattern(pattern);
+            _inputResponse.addPattern(pattern);
+            return this;
+        }
+
+        public InputResponseBuilder AddPreviousResponse(int dept,string pattern)
+        {
+            _inputResponse.AddPreviousResponsePattern(dept, pattern);
             return this;
         }
 
         public InputResponseBuilder AddTemplate(TemplateBuilder builder)
         {
-            inputResponse.SetTemplate(builder.Build());
+            _inputResponse.SetTemplate(builder.Build());
             return this;
         }
 
         public InputResponseBuilder AddTemplate(EmotionTemplateBuilder builder)
         {
-            inputResponse.SetTemplate(builder.Build());
+            _inputResponse.SetTemplate(builder.Build());
             return this;
         }
 
         public InputResponse Build()
         {
-            return inputResponse;
+            return _inputResponse;
         }
     }
 }
