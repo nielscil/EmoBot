@@ -23,6 +23,6 @@ namespace Alice.Models.Categories
             _globalAction = globalAction;
         }
 
-        public abstract string GetResponse(Match match);
+        public abstract string GetResponse(InputResponseData IRData);
     }
 }

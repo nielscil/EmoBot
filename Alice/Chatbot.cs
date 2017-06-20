@@ -27,8 +27,7 @@ namespace Alice
 
             if(useStandardCategories)
             {
-                CategoryManager.AddCategories(new StandardCategories());
-                CategoryManager.AddCategories(new DateCategories());
+                InputResponseManager.addInputResponses(new DateCategories());
             }
 
             app.Exit += App_Exit;
@@ -71,14 +70,14 @@ namespace Alice
         {
             CheckInitialized();
 
-            CategoryManager.DefaultResponse = response;
+            InputResponseManager.DefaultResponse = response;
         }
 
-        public static void AddCategories(ICategoryCollection collection)
+        public static void addInputResponses(InputResponseCollection collection)
         {
             CheckInitialized();
 
-            CategoryManager.AddCategories(collection);
+            InputResponseManager.addInputResponses(collection);
         }
 
         public static async Task<string> GetResponse(string input)
@@ -87,11 +86,11 @@ namespace Alice
 
             return await Task.Run(() =>
             {
-                ResponseFinder finder = new ResponseFinder(input);
+                InputResponseData finder = new InputResponseData(input);
 
-                CategoryManager.GetResponse(finder);
+                InputResponseManager.GetResponse(finder);
 
-                return finder.Response;
+                return finder.response;
             });
         }
     }

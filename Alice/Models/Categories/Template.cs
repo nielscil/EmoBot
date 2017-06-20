@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Alice.Models.Categories
 {
-    public delegate GlobalActionResponse GlobalTemplateAction(Match match);
-    public delegate string Response(Match match, GlobalActionResponse globalActionResponse);
+    public delegate GlobalActionResponse GlobalTemplateAction(InputResponseData finder);
+    public delegate string Response(InputResponseData finder, GlobalActionResponse globalActionResponse);
 
     public class Template : TemplateBase
     {
@@ -29,13 +29,14 @@ namespace Alice.Models.Categories
             _responses.Add(response);
         }
 
-        public override string GetResponse(Match match)
+        public override string GetResponse(InputResponseData finder)
         {
-            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(match);
+            finder.globalAction = _globalAction;
+            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(finder);
 
             Response response = ResponseChooser.Choose(_responses);
 
-            return response.Invoke(match, globalActionResponse);
+            return response.Invoke(finder, globalActionResponse);
         }
 
     }

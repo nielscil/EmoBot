@@ -28,12 +28,12 @@ namespace Alice.Models.Categories
             _responses[(int)emotion].Add(response);
         }
 
-        public override string GetResponse(Match match)
+        public override string GetResponse(InputResponseData finder)
         {
-            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(match);
+            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(finder);
             Response response = ResponseChooser.Choose(_responses[(int)EmotionLib.EmotionDetector.Instance.Emotion]);
 
-            return response.Invoke(match, globalActionResponse);
+            return response.Invoke(finder, globalActionResponse);
         }
 
         private void InitalizeResponses()
