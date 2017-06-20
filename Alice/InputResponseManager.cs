@@ -13,10 +13,7 @@ namespace Alice
     {
         public static string DefaultResponse { get; set; } = "\"Huh??!\" - Kjeld";
 
-        internal static List<InputResponseData> PreviousResponseData { get; private set; }
-
         private static List<InputResponse> inputResponses = new List<InputResponse>();
-
         private static List<InputResponseData> historyInputResponses = new List<InputResponseData>();
 
         public static void addInputResponses(IInputResponseCollection collection)
@@ -26,8 +23,6 @@ namespace Alice
 
         internal static void GetResponse(InputResponseData finder)
         {
-            PreviousResponseData = null;
-
             foreach(var item in inputResponses)
             {
                 if (!finder.found)
@@ -48,9 +43,9 @@ namespace Alice
             historyInputResponses.Add(finder);
         }
 
-        internal static bool IsMatchingPreviousResponses(List<Tuple<int,string>> previousResponses)
+        internal static bool IsMatchingPreviousResponses(List<Tuple<int,string>> previousResponses, out List<InputResponseData> data)
         {
-            List<InputResponseData> data = new List<InputResponseData>();
+            data = new List<InputResponseData>();
             foreach(var previousResponse in previousResponses)
             {
                 int index = historyInputResponses.Count - previousResponse.Item1 + 1;
@@ -70,8 +65,6 @@ namespace Alice
                 }
 
             }
-
-            PreviousResponseData = data;
             return true;
         }
     }

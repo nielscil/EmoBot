@@ -43,6 +43,7 @@ namespace Alice.Models.Categories
         public string input { get; private set; }
         public bool found { get; private set; }
         public Match Match { get; set; }
+        public List<InputResponseData> PreviousResponseData { get; set; }
 
         private string _response = string.Empty;
         public string response

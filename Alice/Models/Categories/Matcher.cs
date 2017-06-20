@@ -27,9 +27,12 @@ namespace Alice.Models.Categories
             foreach (var pattern in patternsToMatch)
             {
                 Match match = Regex.Match(inputResponseData.input, pattern);
-                if (match.Success && InputResponseManager.IsMatchingPreviousResponses(previousResponsePatternsToMatch))
+                List<InputResponseData> data;
+
+                if (match.Success && InputResponseManager.IsMatchingPreviousResponses(previousResponsePatternsToMatch, out data))
                 {
                     inputResponseData.Match = match;
+                    inputResponseData.PreviousResponseData = data;
                     return true;
                 }
             }
