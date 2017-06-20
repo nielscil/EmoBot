@@ -22,6 +22,12 @@ namespace Alice.Models.Categories
             matchData = new MatchData(input, patternsToMatch);
             return matchData.isMatch;
         }
+
+        public bool isMatchToPrevious(string input)
+        {
+            matchData = new MatchData(InputResponseManager.historyInputResponses.Last().response, patternsToMatch);
+            return matchData.isMatch;
+        }
     }
 
     public class MatchData
