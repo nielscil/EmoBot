@@ -50,15 +50,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\EmotionTemplateBuilder.cs" />
-    <Compile Include="Classes\GlobalActionResponse.cs" />
+    <Compile Include="Models\Conditions\DynamicForeachCondition.cs" />
+    <Compile Include="Models\InputResponses\GlobalActionResponse.cs" />
     <Compile Include="Classes\InputResponseBuilder.cs" />
     <Compile Include="Classes\RegexHelper.cs" />
-    <Compile Include="Models\Categories\EmotionTemplate.cs" />
-    <Compile Include="Models\Categories\InputResponse.cs" />
-    <Compile Include="Models\Categories\InputResponseCollection.cs" />
-    <Compile Include="Models\Categories\TemplateBase.cs" />
+    <Compile Include="Models\InputResponses\EmotionTemplate.cs" />
+    <Compile Include="Models\InputResponses\InputResponse.cs" />
+    <Compile Include="Models\InputResponses\IInputResponseCollection.cs" />
+    <Compile Include="Models\InputResponses\InputResponseData.cs" />
+    <Compile Include="Models\InputResponses\TemplateBase.cs" />
     <Compile Include="InputResponseManager.cs" />
     <Compile Include="StandardContent\DateCategories.cs" />
+    <Compile Include="StandardContent\EmotionCategories.cs" />
     <Compile Include="StandardContent\StandardCategories.cs" />
     <Compile Include="Classes\TemplateBuilder.cs" />
     <Compile Include="Classes\ResponseChooser.cs" />
@@ -72,7 +75,7 @@
     <Compile Include="Models\Conditions\OrCondition.cs" />
     <Compile Include="Models\Facts\Fact.cs" />
     <Compile Include="Models\Facts\SerializedFacts.cs" />
-    <Compile Include="Models\Categories\Template.cs" />
+    <Compile Include="Models\InputResponses\Template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

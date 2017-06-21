@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Alice.Models.Facts;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,9 @@ namespace Alice.Models.Conditions
             Condition = condition;
         }
 
-        public bool Evaluate()
+        public bool Evaluate(params string[] values)
         {
-            return !Condition.Evaluate();
+            return !Condition.Evaluate(values);
         }
     }
 }

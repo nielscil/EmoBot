@@ -34,7 +34,7 @@ namespace Alice.Models.Facts
             Values = values;
         }
 
-        public bool Evaluate()
+        public bool Evaluate(params string[] values)
         {
             bool evaluation = true;
 
@@ -54,6 +54,41 @@ namespace Alice.Models.Facts
             }
 
             return false;
+        }
+
+        public bool CheckGivenValues(params string[] values)
+        {
+            if(Values.Length >= values.Length)
+            {
+                for(int i = 0; i < values.Length; i++)
+                {
+                    if(values[i] != null && Values[i] != values[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public string[] GetSpecificValues(params string[] values)
+        {
+            if(values.Length <= Values.Length)
+            {
+                List<string> strings = new List<string>();
+
+                for(int i= 0; i< values.Length; i++)
+                {
+                    if(values[i] == null)
+                    {
+                        strings.Add(Values[i]);
+                    }
+                }
+
+                return strings.ToArray();
+            }
+            return new string[0];
         }
     }
 }

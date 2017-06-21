@@ -91,10 +91,11 @@ namespace Alice.StandardContent
                 })).Build();
             yield return new InputResponseBuilder()
                 .AddPattern(".*time.*")
+                .AddPattern(".*late it is")
                 .AddTemplate(new TemplateBuilder()
                 .AddResponse((i) =>
                 {
-                    return $"It's: {DateTime.Now.ToString("HH:mm:ss")}";
+                    return $"It's: {DateTime.Now.ToString("HH:mm")}";
                 })).Build();
             yield return new InputResponseBuilder()
                 .AddPattern(@".*days until (?'date'.*)")

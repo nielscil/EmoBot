@@ -39,7 +39,7 @@ namespace Alice.Models.InputResponses
 
         private string TrimInput(string input)
         {
-            return input.Trim(' ', '?', '.', '!').ToLower();
+            return input.Trim(' ', '?', '.', '!').ToLower().Replace(",","").Replace(".","");
         }
 
         private string AddPunctuation(string input)

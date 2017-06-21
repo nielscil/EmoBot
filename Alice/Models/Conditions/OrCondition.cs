@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Alice.Models.Facts;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,16 @@ namespace Alice.Models.Conditions
         public List<ICondition> Conditions { get; set; } = new List<ICondition>();
 
         public OrCondition() { }
-        public OrCondition(List<ICondition> conditions)
+        public OrCondition(params ICondition[] conditions)
         {
-            Conditions = conditions;
+            Conditions = conditions.ToList();
         }
 
-        public bool Evaluate()
+        public bool Evaluate(params string[] values)
         {
             foreach (var item in Conditions)
             {
-                if (item.Evaluate())
+                if (item.Evaluate(values))
                 {
                     return true;
                 }
