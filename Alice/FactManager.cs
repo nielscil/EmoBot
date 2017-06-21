@@ -74,13 +74,7 @@ namespace Alice
                 {
                     throw new Exception("Could not parse file",ex);
                 }
-
             }
-            else
-            {
-                throw new Exception("Could not found facts file or directory");
-            }
-
         }
 
         internal static bool EvaluateFact(string name,params string[] values)

@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Alice.Models.Categories;
+using Alice.Models.InputResponses;
 
 namespace Alice.Classes
 {
     public static class RegexHelper
     {
-        public static string GetValue(InputResponseData finder,string groupName)
+        public static string GetValue(InputResponseData inputResponseData,string groupName)
         {
-            var group = finder.Match.Groups[groupName];
+            var group = inputResponseData.Match.Groups[groupName];
             if (group != null && group.Success)
             {
                 return group.Value;

@@ -79,14 +79,25 @@ namespace AliceWPF.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(Input))
             {
-                string input = Input;
-                Input = string.Empty;
-                Conversation.Add(new ConversationItem(SenderEnum.User, input));
-                Loading = true;
-                string botResponse = await ChatBot.GetResponse(input);
-                Conversation.Add(new ConversationItem(SenderEnum.Bot, botResponse));
-                Loading = false;
+                string input = AddUserInput();
+                await GetBotResponse(input);
             }
+        }
+
+        private string AddUserInput()
+        {
+            string input = Input;
+            Input = string.Empty;
+            Conversation.Add(new ConversationItem(SenderEnum.User, input));
+            Loading = true;
+            return input;
+        }
+
+        private async Task GetBotResponse(string input)
+        {
+            string botResponse = await ChatBot.GetResponse(input);
+            Conversation.Add(new ConversationItem(SenderEnum.Bot, botResponse));
+            Loading = false;
         }
     }
 }

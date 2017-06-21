@@ -21,13 +21,9 @@ namespace AliceWPF
         public App()
         {
             SetCultureInfo();
-            ChatBot.Init(this,true);
-
-            string codeBasePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-            string path = new Uri(codeBasePath).LocalPath + "\\Resources\\test.json";
-            ChatBot.LoadFacts(path);
-
+            InitializeChatBot();
             StartEmotionDector();
+
             Exit += App_Exit;
         }
 
@@ -38,20 +34,29 @@ namespace AliceWPF
             CultureInfo.DefaultThreadCurrentUICulture = info;
         }
 
-        private async void App_Exit(object sender, ExitEventArgs e)
+        private void InitializeChatBot()
         {
-            Exit -= App_Exit;
-
-            if(EmotionDetector.Instance.IsRunning)
-            {
-                await EmotionDetector.Instance.StopAsync();
-            }
+            ChatBot.Init(this, true);
+            string codeBasePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            string path = new Uri(codeBasePath).LocalPath + "\\Resources\\facts.json";
+            ChatBot.LoadFacts(path);
         }
 
         private void StartEmotionDector()
         {
             List<Camera> cameras = CameraHelper.GetCameras();
             EmotionDetector.Instance.Camera = cameras[0];
+        }
+
+
+        private async void App_Exit(object sender, ExitEventArgs e)
+        {
+            Exit -= App_Exit;
+
+            if (EmotionDetector.Instance.IsRunning)
+            {
+                await EmotionDetector.Instance.StopAsync();
+            }
         }
     }
 }

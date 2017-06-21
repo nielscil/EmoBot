@@ -1,5 +1,5 @@
 ﻿using Alice.Classes;
-using Alice.Models.Categories;
+using Alice.Models.InputResponses;
 using Alice.Models.Facts;
 using System;
 using System.Collections.Generic;
@@ -25,20 +25,15 @@ namespace Alice.StandardContent
 
         public IEnumerable<InputResponse> GetInputResponses()
         {
-            yield return new CategoryBuilder()
-                .AddPattern(".*date.*")
-                .AddPattern(".*time.*")
-                .AddSubCategory(
-                new SubCategoryBuilder()
+            yield return new InputResponseBuilder()
                 .AddPattern(".*date and time.*")
                 .AddPattern(".*time and date.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"It's: {DateTime.Now.ToOrdinalWords()} {DateTime.Now.ToString("HH:mm")}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(@".*date in (?'days'[a-z0-9]*) day(s)?.*")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -56,143 +51,127 @@ namespace Alice.StandardContent
 
                     return response;
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
-                    if (!gr.Success)
+                    if (!i.GlobalActionResponse.Success)
                     {
-                        return $"I can't calculate the date in {gr.Get<string>("days")} days";
+                        return $"I can't calculate the date in {i.GlobalActionResponse.Get<string>("days")} days";
                     }
-                    string signular = gr.Get<bool>("singular") ? "day" : "days";
+                    string signular = i.GlobalActionResponse.Get<bool>("singular") ? "day" : "days";
 
-                    return $"In {gr.Get<string>("days")} {signular} it's {gr.Get<DateTime>("date").ToString("dd-MM-yyyy")}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
-                .AddPattern(".*date tomorrow*")
+                    return $"In {i.GlobalActionResponse.Get<string>("days")} {signular} it's {i.GlobalActionResponse.Get<DateTime>("date").ToString("dd-MM-yyyy")}";
+                })).Build();
+            yield return new InputResponseBuilder()
+                 .AddPattern(".*date tomorrow*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"It's tomorrow {DateTime.Now.AddDays(1).ToOrdinalWords()}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*date yesterday*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"It was yesterday {DateTime.Now.AddDays(-1).ToOrdinalWords()}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*date day after tomorrow*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"It's the day after tomorrow {DateTime.Now.AddDays(2).ToOrdinalWords()}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*date.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"It's today {DateTime.Now.ToOrdinalWords()}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*time.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"It's: {DateTime.Now.ToString("HH:mm:ss")}";
-                })))
-                .Build();
-            yield return new CategoryBuilder()
-                .AddPattern(".*day.*")
-                .AddPattern(".*tomorrow.*")
-                .AddPattern(".*yesterday.*")
-                .AddSubCategory(new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(@".*days until (?'date'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
                     var response = new GlobalActionResponse();
-                    DateTime date;
-
-                    if(DateTime.TryParseExact(RegexHelper.GetValue(match,"date"), parsableDates, Info, DateTimeStyles.None, out date))
+                    DateTime dateTime;
+                    string date = RegexHelper.GetValue(match, "date");
+                    if (DateTime.TryParseExact(date, parsableDates, Info, DateTimeStyles.None, out dateTime))
                     {
-                        response.Add("diff", date - DateTime.Now);
+                        response.Add("diff", dateTime - DateTime.Now);
                     }
                     else // maybe its a fact?
                     {
-                        Fact fact = FactManager.FindFacts(RegexHelper.GetValue(match, "date")).FirstOrDefault();
+                        Fact fact = FactManager.FindFacts(date).FirstOrDefault();
 
-                        if(fact != null && DateTime.TryParseExact(fact.Values.First(), parsableDates, Info, DateTimeStyles.None, out date))
+                        if (fact != null && DateTime.TryParseExact(fact.Values.First(), parsableDates, Info, DateTimeStyles.None, out dateTime))
                         {
-                            response.Add("diff", date - DateTime.Now);
+                            response.Add("diff", dateTime - DateTime.Now);
                         }
                     }
+                    response.Add("date", date);
                     return response;
                 })
-                .AddResponse((match,gr) =>
+                .AddResponse((i) =>
                 {
-                    if(gr.Empty)
+                    if (i.GlobalActionResponse.Empty)
                     {
-                        return $"I can't calculate the days until {RegexHelper.GetValue(match, "date")}";
+                        return $"I can't calculate the days until {i.GlobalActionResponse.Get("date")}";
                     }
-                    return $"There are {gr.Get<TimeSpan>("diff").Days} days till {RegexHelper.GetValue(match, "date")}";
+                    return $"There are {i.GlobalActionResponse.Get<TimeSpan>("diff").Days} days till {i.GlobalActionResponse.Get("date")}";
                 }
-                )))
-                .AddSubCategory(new SubCategoryBuilder()
+                )).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*day[^s].*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"Today it is {DateTime.Now.ToString("dddd")}";
                 }
-                )))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                )).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*tomorrow.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"Tomorrow it is {DateTime.Now.Date.AddDays(1).ToString("dddd")}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*yesterday.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"Yesterday it was {DateTime.Now.Date.AddDays(-1).ToString("dddd")}";
-                })))
-                .Build();
-            yield return new CategoryBuilder()
-                .AddPattern(".*year.*")
-                .AddSubCategory(new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*next year.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match,gr) =>
+                .AddResponse((i) =>
                 {
                     return $"Next year it is {DateTime.Now.Year + 1}";
-                })))
-                .AddSubCategory(new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*last year.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
                     return $"Last year it was {DateTime.Now.Year - 1}";
-                })))
-                .AddSubCategory(
-                new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(".*year.*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, globalResponse) =>
+                .AddResponse((i) =>
                 {
                     return $"This is {DateTime.Now.ToString("yyyy")}";
-                })))
-                .Build();
+                })).Build();
         }
     }
 }

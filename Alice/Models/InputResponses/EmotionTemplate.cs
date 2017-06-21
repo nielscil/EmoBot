@@ -1,4 +1,5 @@
 ﻿using Alice.Classes;
+using EmotionLib;
 using EmotionLib.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Alice.Models.Categories
+namespace Alice.Models.InputResponses
 {
     public class EmotionTemplate : TemplateBase
     {
@@ -18,9 +19,8 @@ namespace Alice.Models.Categories
             InitalizeResponses();
         }
 
-        public EmotionTemplate() : base()
+        public EmotionTemplate() : this(null)
         {
-            InitalizeResponses();
         }
 
         public void AddResponse(EmotionEnum emotion, Response response)
@@ -28,12 +28,12 @@ namespace Alice.Models.Categories
             _responses[(int)emotion].Add(response);
         }
 
-        public override string GetResponse(InputResponseData finder)
+        public override string GetResponse(InputResponseData inputResponseData)
         {
-            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(finder);
-            Response response = ResponseChooser.Choose(_responses[(int)EmotionLib.EmotionDetector.Instance.Emotion]);
+            inputResponseData.GlobalActionResponse = _globalAction?.Invoke(inputResponseData);
+            Response response = ResponseChooser.Choose(_responses[(int)EmotionDetector.Instance.Emotion]);
 
-            return response.Invoke(finder, globalActionResponse);
+            return response.Invoke(inputResponseData);
         }
 
         private void InitalizeResponses()

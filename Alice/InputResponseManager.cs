@@ -1,5 +1,5 @@
 ﻿using Alice.Models;
-using Alice.Models.Categories;
+using Alice.Models.InputResponses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +13,21 @@ namespace Alice
     {
         public static string DefaultResponse { get; set; } = "\"Huh??!\" - Kjeld";
 
-        private static List<InputResponse> inputResponses = new List<InputResponse>();
-        private static List<InputResponseData> historyInputResponses = new List<InputResponseData>();
+        private static List<InputResponse> _inputResponses = new List<InputResponse>();
+        private static List<InputResponseData> _history = new List<InputResponseData>();
 
-        public static void addInputResponses(IInputResponseCollection collection)
+        public static void AddInputResponses(IInputResponseCollection collection)
         {
-            inputResponses.AddRange(collection.GetInputResponses());
+            _inputResponses.AddRange(collection.GetInputResponses());
         }
 
-        internal static void GetResponse(InputResponseData finder)
+        internal static void GetResponse(InputResponseData inputResponseData)
         {
-            foreach(var item in inputResponses)
+            foreach(var item in _inputResponses)
             {
-                if (!finder.found)
+                if (!inputResponseData.Found)
                 {
-                    item.GetResponse(finder);
+                    item.GetResponse(inputResponseData);
                 }
                 else
                 {
@@ -35,12 +35,12 @@ namespace Alice
                 }
             }
 
-            if(!finder.found)
+            if(!inputResponseData.Found)
             {
-                finder.response = DefaultResponse;
+                inputResponseData.response = DefaultResponse;
             }
 
-            historyInputResponses.Add(finder);
+            _history.Add(inputResponseData);
         }
 
         internal static bool IsMatchingPreviousResponses(List<Tuple<int,string>> previousResponses, out List<InputResponseData> data)
@@ -48,13 +48,13 @@ namespace Alice
             data = new List<InputResponseData>();
             foreach(var previousResponse in previousResponses)
             {
-                int index = historyInputResponses.Count - previousResponse.Item1 + 1;
+                int index = _history.Count - previousResponse.Item1 + 1;
                 if(index < 0)
                 {
                     return false;
                 }
 
-                var inputResponse = historyInputResponses[index];
+                var inputResponse = _history[index];
                 if(Regex.IsMatch(inputResponse.response,previousResponse.Item2))
                 {
                     data.Add(inputResponse);

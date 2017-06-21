@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Alice.Models.Categories
+namespace Alice.Models.InputResponses
 {
     public abstract class TemplateBase
     {
@@ -23,6 +23,6 @@ namespace Alice.Models.Categories
             _globalAction = globalAction;
         }
 
-        public abstract string GetResponse(InputResponseData IRData);
+        public abstract string GetResponse(InputResponseData inputResponseData);
     }
 }

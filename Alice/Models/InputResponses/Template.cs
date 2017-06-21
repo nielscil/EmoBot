@@ -9,10 +9,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Alice.Models.Categories
+namespace Alice.Models.InputResponses
 {
-    public delegate GlobalActionResponse GlobalTemplateAction(InputResponseData finder);
-    public delegate string Response(InputResponseData finder, GlobalActionResponse globalActionResponse);
+    public delegate GlobalActionResponse GlobalTemplateAction(InputResponseData inputResponseData);
+    public delegate string Response(InputResponseData inputResponseData);
 
     public class Template : TemplateBase
     {
@@ -29,13 +29,13 @@ namespace Alice.Models.Categories
             _responses.Add(response);
         }
 
-        public override string GetResponse(InputResponseData finder)
+        public override string GetResponse(InputResponseData inputResponseData)
         {
-            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(finder);
+            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(inputResponseData);
 
             Response response = ResponseChooser.Choose(_responses);
 
-            return response.Invoke(finder, globalActionResponse);
+            return response.Invoke(inputResponseData);
         }
 
     }

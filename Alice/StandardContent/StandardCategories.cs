@@ -1,5 +1,5 @@
 ﻿using Alice.Classes;
-using Alice.Models.Categories;
+using Alice.Models.InputResponses;
 using Alice.Models.Facts;
 using EmotionLib.Models;
 using Humanizer;
@@ -12,12 +12,11 @@ using System.Threading.Tasks;
 
 namespace Alice.StandardContent
 {
-    internal class StandardCategories : ICategoryCollection
+    internal class StandardCategories : IInputResponseCollection
     {
-        public IEnumerable<Category> GetCategories()
+        public IEnumerable<InputResponse> GetInputResponses()
         {
-            yield return new CategoryBuilder().AddPattern(@".*hello.*")
-                .AddSubCategory(new SubCategoryBuilder()
+            yield return new InputResponseBuilder()
                 .AddPattern(@".*hello.*")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -27,42 +26,41 @@ namespace Alice.StandardContent
                         response.Add("name", name);
 
                         return response;
-                    }).AddResponse(EmotionEnum.Neutral,(match, globalResponse) => 
+                    }).AddResponse(EmotionEnum.Neutral,(i) => 
                     {
-                        if(globalResponse.IsEmpty())
+                        if(i.GlobalActionResponse.Empty)
                         {
                             return "Hello, I don't think I know you. What is your name?";
                         }
-                        return $"Hello {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, how are you doing?";
+                        return $"Hello {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, how are you doing?";
                     })
-                    .AddResponse(EmotionEnum.Neutral, (match, globalResponse) =>
+                    .AddResponse(EmotionEnum.Neutral, (i) =>
                     {
-                        if (globalResponse.IsEmpty())
+                        if (i.GlobalActionResponse.Empty)
                         {
                             return "Hello I'am Alice, I don't think I know you. What is your name?";
                         }
-                        return $"Hello {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, my name is Alice. How are you doing?";
+                        return $"Hello {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, my name is Alice. How are you doing?";
                     })
-                    .AddResponse(EmotionEnum.Neutral,(match, globalResponse) => 
+                    .AddResponse(EmotionEnum.Neutral,(i) => 
                     {
-                        if (globalResponse.IsEmpty())
+                        if (i.GlobalActionResponse.Empty)
                         {
                             return "Hi there, what is your name?";
                         }
-                        return $"Hi {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, how can I help you today?";
+                        return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, how can I help you today?";
                     })
-                    .AddResponse(EmotionEnum.Neutral, (match, globalResponse) =>
+                    .AddResponse(EmotionEnum.Neutral, (i) =>
                     {
-                        if (globalResponse.IsEmpty())
+                        if (i.GlobalActionResponse.Empty)
                         {
                             return "Hi there, what is your name?";
                         }
-                        return $"Hi {globalResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, my name is Alice. How can I help you today?";
+                        return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, my name is Alice. How can I help you today?";
                     })
-                    )).Build();
+                    ).Build();
 
-            yield return new CategoryBuilder().AddPattern(@".*name.*")
-                .AddSubCategory(new SubCategoryBuilder()
+            yield return new InputResponseBuilder()
                 .AddPattern(@"my name is (?'name'.*)")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -74,13 +72,12 @@ namespace Alice.StandardContent
                     response.Add("name", name);
 
                     return response;
-                }).AddResponse(EmotionEnum.Neutral, (match, globalResponse) =>
+                }).AddResponse(EmotionEnum.Neutral, (i) =>
                 {
-                    return $"Hello {globalResponse.Get("name")}, what can you do?";
+                    return $"Hello {i.GlobalActionResponse.Get("name")}, what can you do?";
                 })
-                )).Build();
-            yield return new CategoryBuilder().AddPattern(@".*is on.*")
-                .AddSubCategory(new SubCategoryBuilder()
+                ).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern("(?'name'.*) is on (?'value'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -94,7 +91,7 @@ namespace Alice.StandardContent
                     {
                         Fact fact = new Fact(name, value);
                         FactManager.RemoveFacts("name");
-                        FactManager.AddFact(fact); //TODO: automatic add fact to factmanager when created ??
+                        FactManager.AddFact(fact);
 
                         response.Add("fact", fact);
                     }
@@ -105,20 +102,17 @@ namespace Alice.StandardContent
 
                     return response;
                 })
-                .AddResponse((match,gr) =>
+                .AddResponse((i) =>
                 {
-                    if(gr.Success)
+                    if(i.GlobalActionResponse.Success)
                     {
-                        Fact fact = gr.Get<Fact>("fact");
+                        Fact fact = i.GlobalActionResponse.Get<Fact>("fact");
                         return $"Okay, I can remember that";
                     }
                     return "I can't remember that";
                 })
-                )).Build();
-            yield return new CategoryBuilder()
-                .AddPattern(@".*when is .*")
-                .AddPattern(@".*when .* is")
-                .AddSubCategory(new SubCategoryBuilder()
+                ).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern("when is (?'name'.*)")
                 .AddPattern("when (?'name'.*) is.*")
                 .AddTemplate(new TemplateBuilder()
@@ -141,54 +135,36 @@ namespace Alice.StandardContent
 
                     return response;
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
-                    if (gr.Success)
+                    if (i.GlobalActionResponse.Success)
                     {
-                        Fact fact = gr.Get<Fact>("fact");
-                        return $"'{gr.Get<string>("name")}' is on {fact.Values.First()}";
+                        Fact fact = i.GlobalActionResponse.Get<Fact>("fact");
+                        return $"'{i.GlobalActionResponse.Get<string>("name")}' is on {fact.Values.First()}";
                     }
-                    return $"I can't remember '{gr.Get<string>("name")}'";
+                    return $"I can't remember '{i.GlobalActionResponse.Get<string>("name")}'";
                 })
-                )).Build();
-            yield return new CategoryBuilder()
-                .AddSubCategory(new SubCategoryBuilder()
+                ).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern("I could give you .*")
                 .AddTemplate(new TemplateBuilder()
-                .AddResponse((match,gr) =>
+                .AddResponse((i) =>
                 {
                     return "Do I want it?";
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
                     return "Do I need it?";
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
                     return "What would I do with it?";
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
                     return "I am unsure if I need that";
-                }))).Build();
-            yield return new CategoryBuilder()
-                .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern("What do you like about chatting.*")
-                .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, gr) =>
-                {
-                    return "I'm a social species";
-                }))).Build();
-            yield return new CategoryBuilder()
-                .AddSubCategory(new SubCategoryBuilder()
-                .AddPattern("WHAT DO YOU LIKE ABOUT THE WAY I .*")
-                .AddTemplate(new TemplateBuilder()
-                .AddResponse((match, gr) =>
-                {
-                    return "I'm a social species";
-                }))).Build();
-            yield return new CategoryBuilder()
-                .AddSubCategory(new SubCategoryBuilder()
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern("The (?'item1'.*) is (?'item2'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -205,19 +181,19 @@ namespace Alice.StandardContent
 
                     return response;
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
-                    return $"Oh, {gr.Get("item1")} is {gr.Get("item2")}";
+                    return $"Oh, {i.GlobalActionResponse.Get("item1")} is {i.GlobalActionResponse.Get("item2")}";
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
-                    return $"What specifically brings {gr.Get("item2")} to mind?";
+                    return $"What specifically brings {i.GlobalActionResponse.Get("item2")} to mind?";
                 })
-                .AddResponse((match, gr) =>
+                .AddResponse((i) =>
                 {
-                    return $"Is {gr.Get("item1")} also {gr.Get("item1")}";
+                    return $"Is {i.GlobalActionResponse.Get("item1")} also {i.GlobalActionResponse.Get("item1")}";
                 })
-                )).Build();
+                ).Build();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 using Alice.Models;
-using Alice.Models.Categories;
+using Alice.Models.InputResponses;
 using Alice.Models.Facts;
 using Alice.Models.Conditions;
 using Alice.Classes;
@@ -27,7 +27,7 @@ namespace Alice
 
             if(useStandardCategories)
             {
-                InputResponseManager.addInputResponses(new DateCategories());
+                InputResponseManager.AddInputResponses(new DateCategories());
             }
 
             app.Exit += App_Exit;
@@ -52,18 +52,6 @@ namespace Alice
             CheckInitialized();
 
             FactManager.LoadFacts(path);
-
-            //Fact fact = new Fact("working",null, "joris");
-            //FactManager.Facts.Add(fact);
-            //fact = new Fact("happy", new Condition("working", "joris"), "kjeld");
-            //FactManager.Facts.Add(fact);
-            //fact = new Fact("happy", new Condition("working", "kjeld"), "joris");
-            //FactManager.Facts.Add(fact);
-            //var and = new AndCondition();
-            //and.Conditions.Add(new Condition("working", "joris"));
-            //and.Conditions.Add(new NotCondition(new Condition("working", "kjeld")));
-            //fact = new Fact("happy",and,"niels");
-            //FactManager.Facts.Add(fact);
         }
 
         public static void SetDefaultResponse(string response)
@@ -73,11 +61,11 @@ namespace Alice
             InputResponseManager.DefaultResponse = response;
         }
 
-        public static void addInputResponses(IInputResponseCollection collection)
+        public static void AddInputResponses(IInputResponseCollection collection)
         {
             CheckInitialized();
 
-            InputResponseManager.addInputResponses(collection);
+            InputResponseManager.AddInputResponses(collection);
         }
 
         public static async Task<string> GetResponse(string input)
@@ -86,11 +74,11 @@ namespace Alice
 
             return await Task.Run(() =>
             {
-                InputResponseData finder = new InputResponseData(input);
+                InputResponseData inputResponseData = new InputResponseData(input);
 
-                InputResponseManager.GetResponse(finder);
+                InputResponseManager.GetResponse(inputResponseData);
 
-                return finder.response;
+                return inputResponseData.response;
             });
         }
     }
