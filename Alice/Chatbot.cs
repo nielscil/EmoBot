@@ -29,6 +29,7 @@ namespace Alice
             {
                 CategoryManager.AddCategories(new StandardCategories());
                 CategoryManager.AddCategories(new DateCategories());
+                CategoryManager.AddCategories(new EmotionCategories());
             }
 
             app.Exit += App_Exit;

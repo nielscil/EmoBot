@@ -363,7 +363,7 @@ namespace EmotionLib
 
         private void WriteValues(Emotions emotions)
         {
-            Console.WriteLine($"{DateTime.Now.Ticks} | Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
+            Debug.WriteLine($"{DateTime.Now.Ticks} | Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
         }
 
         #endregion
@@ -418,34 +418,22 @@ namespace EmotionLib
             EmotionEnum val = EmotionEnum.Neutral;
             float exactVal = 0f;
 
-            if (emotions.Anger > exactVal && emotions.Anger > 1f)
+            if (emotions.Anger > exactVal && emotions.Anger > 5f)
             {
                 val = EmotionEnum.Anger;
                 exactVal = emotions.Anger;
             }
 
-            if (emotions.Fear > exactVal && emotions.Fear > 1f)
-            {
-                val = EmotionEnum.Fear;
-                exactVal = emotions.Fear;
-            }
-
-            if (emotions.Joy > exactVal && emotions.Joy > 1f)
+            if (emotions.Joy > exactVal && emotions.Joy > 0.8f)
             {
                 val = EmotionEnum.Happy;
                 exactVal = emotions.Joy;
             }
 
-            if (emotions.Sadness > exactVal && emotions.Sadness > 1f)
+            if (emotions.Sadness > exactVal && emotions.Sadness > 0.8f)
             {
                 val = EmotionEnum.Sad;
                 exactVal = emotions.Sadness;
-            }
-
-            if (emotions.Disgust > exactVal && emotions.Disgust > 1f)
-            {
-                val = EmotionEnum.Disgust;
-                exactVal = emotions.Disgust;
             }
 
             if (emotions.Surprise > exactVal && emotions.Surprise > 1f)
@@ -454,6 +442,17 @@ namespace EmotionLib
                 exactVal = emotions.Sadness;
             }
 
+            if (emotions.Fear > exactVal && emotions.Fear > 20f)
+            {
+                val = EmotionEnum.Fear;
+                exactVal = emotions.Fear;
+            }
+
+            if (emotions.Disgust > exactVal && emotions.Disgust > 60f)
+            {
+                val = EmotionEnum.Disgust;
+                exactVal = emotions.Disgust;
+            }
             return val;
         }
 
