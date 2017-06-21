@@ -363,7 +363,7 @@ namespace EmotionLib
 
         private void WriteValues(Emotions emotions)
         {
-            Debug.WriteLine($"{DateTime.Now.Ticks} | Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
+            Console.WriteLine($"Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
         }
 
         #endregion
@@ -423,20 +423,28 @@ namespace EmotionLib
                 val = EmotionEnum.Anger;
                 exactVal = emotions.Anger;
             }
+            if (emotions.Fear > exactVal && emotions.Fear > 10f)
+            {
+                val = EmotionEnum.Fear;
+                exactVal = emotions.Fear;
+            }
 
-            if (emotions.Joy > exactVal && emotions.Joy > 0.8f)
+            if (emotions.Joy > exactVal && emotions.Joy > 10f)
             {
                 val = EmotionEnum.Happy;
                 exactVal = emotions.Joy;
             }
-
-            if (emotions.Sadness > exactVal && emotions.Sadness > 0.8f)
+            if (emotions.Sadness > exactVal && emotions.Sadness > 10f)
             {
                 val = EmotionEnum.Sad;
                 exactVal = emotions.Sadness;
             }
-
-            if (emotions.Surprise > exactVal && emotions.Surprise > 1f)
+            if (emotions.Disgust > exactVal && emotions.Disgust > 10f)
+            {
+                val = EmotionEnum.Disgust;
+                exactVal = emotions.Disgust;
+            }
+            if (emotions.Surprise > exactVal && emotions.Surprise > 10f)
             {
                 val = EmotionEnum.Suprise;
                 exactVal = emotions.Sadness;
