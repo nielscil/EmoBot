@@ -88,7 +88,7 @@
     <Compile Include="EmotionDetector.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Models\Camera.cs" />
-    <Compile Include="Models\EmotionEnum.cs" />
+    <Compile Include="Models\Emotion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Classifier\haarcascade\004_lbp_15stage.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
