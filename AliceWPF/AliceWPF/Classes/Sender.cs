@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alice.Models.Categories
+namespace AliceWPF.Classes
 {
-    public interface ICategoryCollection
+    public enum Sender
     {
-        IEnumerable<Category> GetCategories();
+        Bot,
+        User
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Alice.Classes;
+using EmotionLib;
 using EmotionLib.Models;
 using System;
 using System.Collections.Generic;
@@ -7,33 +8,32 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Alice.Models.Categories
+namespace Alice.Models.InputResponses
 {
     public class EmotionTemplate : TemplateBase
     {
-        private List<Response>[] _responses = new List<Response>[Enum.GetNames(typeof(EmotionEnum)).Length];
+        private List<Response>[] _responses = new List<Response>[Enum.GetNames(typeof(Emotion)).Length];
 
         public EmotionTemplate(GlobalTemplateAction globalAction) : base(globalAction)
         {
             InitalizeResponses();
         }
 
-        public EmotionTemplate() : base()
+        public EmotionTemplate() : this(null)
         {
-            InitalizeResponses();
         }
 
-        public void AddResponse(EmotionEnum emotion, Response response)
+        public void AddResponse(Emotion emotion, Response response)
         {
             _responses[(int)emotion].Add(response);
         }
 
-        public override string GetResponse(Match match)
+        public override string GetResponse(InputResponseData inputResponseData)
         {
-            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(match);
-            Response response = ResponseChooser.Choose(_responses[(int)EmotionLib.EmotionDetector.Instance.Emotion]);
+            inputResponseData.GlobalActionResponse = _globalAction?.Invoke(inputResponseData);
+            Response response = ResponseChooser.Choose(_responses[(int)EmotionDetector.Instance.Emotion]);
 
-            return response.Invoke(match, globalActionResponse);
+            return response.Invoke(inputResponseData);
         }
 
         private void InitalizeResponses()

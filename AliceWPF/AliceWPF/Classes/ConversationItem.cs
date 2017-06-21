@@ -10,10 +10,10 @@ namespace AliceWPF.Classes
 {
     public class ConversationItem
     {
-        public SenderEnum Sender { get; private set; }
+        public Sender Sender { get; private set; }
         public string Content { get; private set; }
 
-        public ConversationItem(SenderEnum sender, string content)
+        public ConversationItem(Sender sender, string content)
         {
             Sender = sender;
             Content = content;

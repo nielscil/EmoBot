@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Alice.Models
+namespace Alice.Models.InputResponses
 {
-    public sealed class ResponseFinder : IResponseFinder
+    public class InputResponseData
     {
         public string Input { get; private set; }
+        public bool Found { get; private set; }
+        public Match Match { get; set; }
+        public List<InputResponseData> PreviousResponseData { get; set; }
+        public GlobalActionResponse GlobalActionResponse { get; set; }
 
         private string _response = string.Empty;
         public string Response
@@ -19,7 +24,7 @@ namespace Alice.Models
             }
             set
             {
-                if(!string.IsNullOrWhiteSpace(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
                     Found = true;
                     _response = AddPunctuation(value);
@@ -27,11 +32,9 @@ namespace Alice.Models
             }
         }
 
-        public bool Found { get; private set; }
-
-        public ResponseFinder(string input)
+        public InputResponseData(string input)
         {
-            Input = TrimInput(input);
+            this.Input = TrimInput(input);
         }
 
         private string TrimInput(string input)
@@ -41,12 +44,11 @@ namespace Alice.Models
 
         private string AddPunctuation(string input)
         {
-            if(!input.EndsWith("?") && !input.EndsWith("!") && !input.EndsWith("."))
+            if (!input.EndsWith("?") && !input.EndsWith("!") && !input.EndsWith("."))
             {
                 input += ".";
             }
             return input;
         }
-
     }
 }

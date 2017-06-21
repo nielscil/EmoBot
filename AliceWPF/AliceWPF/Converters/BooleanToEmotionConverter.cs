@@ -29,15 +29,15 @@ namespace AliceWPF.Converters
                 switch (parameter.ToString())
                 {
                     case "Happy":
-                        return EmotionEnum.Happy;
+                        return Emotion.Happy;
                     case "Sad":
-                        return EmotionEnum.Sad;
+                        return Emotion.Sad;
                     case "Scared":
-                        return EmotionEnum.Fear;
+                        return Emotion.Fear;
                     case "Angry":
-                        return EmotionEnum.Anger;
+                        return Emotion.Anger;
                     default:
-                        return EmotionEnum.Neutral;
+                        return Emotion.Neutral;
                 }
             }
             return null;

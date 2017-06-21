@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 using Alice.Models;
-using Alice.Models.Categories;
+using Alice.Models.InputResponses;
 using Alice.Models.Facts;
 using Alice.Models.Conditions;
 using Alice.Classes;
@@ -28,9 +28,10 @@ namespace Alice
 
             if(useStandardCategories)
             {
-                CategoryManager.AddCategories(new StandardCategories());
-                CategoryManager.AddCategories(new DateCategories());
-                CategoryManager.InitAiml();
+                InputResponseManager.AddInputResponses(new DateResponses());
+                InputResponseManager.AddInputResponses(new StandardResponses());
+                InputResponseManager.AddInputResponses(new EmotionResponses());
+                InputResponseManager.InitAiml();
             }
 
             app.Exit += App_Exit;
@@ -61,14 +62,14 @@ namespace Alice
         {
             CheckInitialized();
 
-            CategoryManager.DefaultResponse = response;
+            InputResponseManager.DefaultResponse = response;
         }
 
-        public static void AddCategories(ICategoryCollection collection)
+        public static void AddInputResponses(IInputResponseCollection collection)
         {
             CheckInitialized();
 
-            CategoryManager.AddCategories(collection);
+            InputResponseManager.AddInputResponses(collection);
         }
 
         public static async Task<string> GetResponse(string input)
@@ -77,11 +78,11 @@ namespace Alice
 
             return await Task.Run(() =>
             {
-                ResponseFinder finder = new ResponseFinder(input);
+                InputResponseData inputResponseData = new InputResponseData(input);
 
-                CategoryManager.GetResponse(finder);
+                InputResponseManager.GetResponse(inputResponseData);
 
-                return finder.Response;
+                return inputResponseData.Response;
             });
         }
 

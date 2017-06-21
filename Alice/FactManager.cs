@@ -114,9 +114,7 @@ namespace Alice
                 {
                     throw new Exception("Could not parse file",ex);
                 }
-
             }
-
         }
 
         internal static bool EvaluateFact(string name,params string[] values)

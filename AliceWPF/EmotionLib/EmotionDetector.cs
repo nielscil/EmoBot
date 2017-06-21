@@ -109,8 +109,8 @@ namespace EmotionLib
         }
 
         private object _emotionLock = new object();
-        private EmotionEnum _emotion;
-        public EmotionEnum Emotion
+        private Emotion _emotion;
+        public Emotion Emotion
         {
             get
             {
@@ -207,6 +207,7 @@ namespace EmotionLib
                     _detector.stop();
                     _videoCaptureDevice.SignalToStop();
                     _videoCaptureDevice.WaitForStop();
+                    Initialized = false;
                 });
                 
             }
@@ -290,7 +291,7 @@ namespace EmotionLib
         {
             if(faces != null & faces.Count > 0)
             {
-                EmotionEnum emotion = EmotionEnum.Neutral;
+                Emotion emotion = Emotion.Neutral;
 
                 //faces becomes, for a strange reason, null between the check and the next call, so catch the error...
                 try
@@ -332,9 +333,9 @@ namespace EmotionLib
             return face;
         }
 
-        private EmotionEnum GetEmotionValue(Dictionary<int, Face> faces, int face)
+        private Emotion GetEmotionValue(Dictionary<int, Face> faces, int face)
         {
-            EmotionEnum val = EmotionEnum.Neutral;
+            Emotion val = Emotion.Neutral;
 
             if (face != -1)
             {
@@ -354,7 +355,7 @@ namespace EmotionLib
         { 
             int maxVal = _frameEmotions.Max();
 
-            Emotion =  (EmotionEnum)_frameEmotions.ToList().IndexOf(maxVal);
+            Emotion =  (Emotion)_frameEmotions.ToList().IndexOf(maxVal);
 
             Array.Clear(_frameEmotions, 0, _frameEmotions.Length);
 
@@ -406,58 +407,65 @@ namespace EmotionLib
 
                 if(_faceCount == 0)
                 {
-                    Emotion = EmotionEnum.None;
+                    Emotion = Emotion.None;
                 }
             }
         }
 
         #endregion
 
-        private EmotionEnum GetFrameValue(Emotions emotions)
+        private Emotion GetFrameValue(Emotions emotions)
         {
-            EmotionEnum val = EmotionEnum.Neutral;
+            Emotion val = Emotion.Neutral;
             float exactVal = 0f;
 
             if (emotions.Anger > exactVal && emotions.Anger > 5f)
             {
-                val = EmotionEnum.Anger;
+                val = Emotion.Anger;
                 exactVal = emotions.Anger;
             }
-
             if (emotions.Fear > exactVal && emotions.Fear > 10f)
             {
-                val = EmotionEnum.Fear;
+                val = Emotion.Fear;
                 exactVal = emotions.Fear;
             }
 
             if (emotions.Joy > exactVal && emotions.Joy > 10f)
             {
-                val = EmotionEnum.Happy;
+                val = Emotion.Happy;
                 exactVal = emotions.Joy;
             }
-
             if (emotions.Sadness > exactVal && emotions.Sadness > 10f)
             {
-                val = EmotionEnum.Sad;
+                val = Emotion.Sad;
                 exactVal = emotions.Sadness;
             }
-
             if (emotions.Disgust > exactVal && emotions.Disgust > 10f)
             {
-                val = EmotionEnum.Disgust;
+                val = Emotion.Disgust;
                 exactVal = emotions.Disgust;
             }
-
             if (emotions.Surprise > exactVal && emotions.Surprise > 10f)
             {
-                val = EmotionEnum.Suprise;
+                val = Emotion.Suprise;
                 exactVal = emotions.Sadness;
             }
 
+            if (emotions.Fear > exactVal && emotions.Fear > 20f)
+            {
+                val = Emotion.Fear;
+                exactVal = emotions.Fear;
+            }
+
+            if (emotions.Disgust > exactVal && emotions.Disgust > 60f)
+            {
+                val = Emotion.Disgust;
+                exactVal = emotions.Disgust;
+            }
             return val;
         }
 
-        private void SendEvent(EmotionEnum oldValue, EmotionEnum newValue)
+        private void SendEvent(Emotion oldValue, Emotion newValue)
         {
             if(oldValue != newValue)
             {

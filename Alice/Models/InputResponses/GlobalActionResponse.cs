@@ -1,37 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alice.Classes
+namespace Alice.Models.InputResponses
 {
     public class GlobalActionResponse
     {
 
-        public Dictionary<string, object> Values { get; private set; } = new Dictionary<string, object>();
+        private Dictionary<string, object> _values;
+        private ReadOnlyDictionary<string, object> _readOnlyValues;
+        public ReadOnlyDictionary<string, object> Values
+        {
+            get
+            {
+                return _readOnlyValues;
+            }
+        }
 
         public bool Empty
         {
             get
             {
-                return IsEmpty();
+                return Values.Count == 0;
             }
         }
 
         public bool Success { get; set; } = true;
 
+        public GlobalActionResponse()
+        {
+            _values = new Dictionary<string, object>();
+            _readOnlyValues = new ReadOnlyDictionary<string, object>(_values);
+        }
+
         public void Add(string name, object obj)
         {
             if(obj != null)
             {
-                Values.Add(name, obj);
+                _values.Add(name, obj);
             }
-        }
-
-        public bool IsEmpty()
-        {
-            return Values.Count == 0;
         }
 
         public object Get(string name)
