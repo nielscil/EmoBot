@@ -147,25 +147,6 @@ namespace Alice.StandardContent
                 })
                 ).Build();
             yield return new InputResponseBuilder()
-                .AddPattern("I could give you .*")
-                .AddTemplate(new TemplateBuilder()
-                .AddResponse((i) =>
-                {
-                    return "Do I want it?";
-                })
-                .AddResponse((i) =>
-                {
-                    return "Do I need it?";
-                })
-                .AddResponse((i) =>
-                {
-                    return "What would I do with it?";
-                })
-                .AddResponse((i) =>
-                {
-                    return "I am unsure if I need that";
-                })).Build();
-            yield return new InputResponseBuilder()
                 .AddPattern("What has ((a|an) )?(?'item1'.*)")
                 .AddTemplate(new TemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
