@@ -11,7 +11,7 @@ using Alice.Models.InputResponses;
 
 namespace Alice.StandardContent
 {
-    internal class EmotionCategories : IInputResponseCollection
+    internal class EmotionResponses : IInputResponseCollection
     {
         private Random random = new Random();
         private string GetTimeOfDay()

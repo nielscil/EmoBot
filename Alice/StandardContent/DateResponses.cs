@@ -11,7 +11,7 @@ using Humanizer;
 
 namespace Alice.StandardContent
 {
-    internal class DateCategories : IInputResponseCollection
+    internal class DateResponses : IInputResponseCollection
     {
         private CultureInfo Info
         {

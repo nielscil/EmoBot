@@ -27,9 +27,9 @@ namespace Alice
 
             if(useStandardCategories)
             {
-                InputResponseManager.AddInputResponses(new DateCategories());
-                InputResponseManager.AddInputResponses(new StandardCategories());
-                InputResponseManager.AddInputResponses(new EmotionCategories());
+                InputResponseManager.AddInputResponses(new DateResponses());
+                InputResponseManager.AddInputResponses(new StandardResponses());
+                InputResponseManager.AddInputResponses(new EmotionResponses());
             }
 
             app.Exit += App_Exit;
