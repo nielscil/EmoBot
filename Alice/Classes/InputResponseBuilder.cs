@@ -18,7 +18,7 @@ namespace Alice.Classes
 
         public InputResponseBuilder AddPattern(string pattern)
         {
-            _inputResponse.addPattern(pattern);
+            _inputResponse.AddPattern(pattern);
             return this;
         }
 

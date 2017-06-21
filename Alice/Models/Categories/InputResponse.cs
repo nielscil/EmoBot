@@ -9,29 +9,29 @@ namespace Alice.Models.Categories
 {
     public class InputResponse
     {
-        private List<string> patternsToMatch = new List<string>();
-        List<Tuple<int, string>> previousResponsePatternsToMatch = new List<Tuple<int, string>>();
+        private List<string> _patternsToMatch = new List<string>();
+        private List<Tuple<int, string>> _previousResponsePatternsToMatch = new List<Tuple<int, string>>();
 
         private TemplateBase _template;
 
-        public void addPattern(string pattern)
+        public void AddPattern(string pattern)
         {
-            patternsToMatch.Add(pattern);
+            _patternsToMatch.Add(pattern);
         }
 
         public void AddPreviousResponsePattern(int dept, string pattern)
         {
-            previousResponsePatternsToMatch.Add(new Tuple<int, string>(dept, pattern));
+            _previousResponsePatternsToMatch.Add(new Tuple<int, string>(dept, pattern));
         }
 
-        public bool isMatch(InputResponseData inputResponseData)
+        public bool IsMatch(InputResponseData inputResponseData)
         {
-            foreach (var pattern in patternsToMatch)
+            foreach (var pattern in _patternsToMatch)
             {
                 Match match = Regex.Match(inputResponseData.input, pattern);
                 List<InputResponseData> data;
 
-                if (match.Success && InputResponseManager.IsMatchingPreviousResponses(previousResponsePatternsToMatch, out data))
+                if (match.Success && InputResponseManager.IsMatchingPreviousResponses(_previousResponsePatternsToMatch, out data))
                 {
                     inputResponseData.Match = match;
                     inputResponseData.PreviousResponseData = data;
@@ -48,7 +48,7 @@ namespace Alice.Models.Categories
 
         public void GetResponse(InputResponseData finder)
         {
-            if (isMatch(finder))
+            if (IsMatch(finder))
             {
                 ExecuteTemplate(finder);
             }
@@ -92,9 +92,9 @@ namespace Alice.Models.Categories
             }
         }
 
-        public InputResponseData(string _input)
+        public InputResponseData(string input)
         {
-            input = trimInput(_input);
+            this.input = trimInput(input);
         }
 
         private string trimInput(string input)
