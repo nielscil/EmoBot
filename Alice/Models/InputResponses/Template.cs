@@ -31,7 +31,7 @@ namespace Alice.Models.InputResponses
 
         public override string GetResponse(InputResponseData inputResponseData)
         {
-            GlobalActionResponse globalActionResponse = _globalAction?.Invoke(inputResponseData);
+            inputResponseData.GlobalActionResponse = _globalAction?.Invoke(inputResponseData);
 
             Response response = ResponseChooser.Choose(_responses);
 

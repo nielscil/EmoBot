@@ -60,9 +60,9 @@
     <Compile Include="Models\InputResponses\InputResponseData.cs" />
     <Compile Include="Models\InputResponses\TemplateBase.cs" />
     <Compile Include="InputResponseManager.cs" />
-    <Compile Include="StandardContent\DateCategories.cs" />
-    <Compile Include="StandardContent\EmotionCategories.cs" />
-    <Compile Include="StandardContent\StandardCategories.cs" />
+    <Compile Include="StandardContent\DateResponses.cs" />
+    <Compile Include="StandardContent\EmotionResponses.cs" />
+    <Compile Include="StandardContent\StandardResponses.cs" />
     <Compile Include="Classes\TemplateBuilder.cs" />
     <Compile Include="Classes\ResponseChooser.cs" />
     <Compile Include="Classes\SerializedFactsHelper.cs" />
