@@ -14,6 +14,7 @@ namespace EmotionLib.Models
         Fear,
         Suprise,
         Sad,
-        Disgust
+        Disgust,
+        None
     }
 }

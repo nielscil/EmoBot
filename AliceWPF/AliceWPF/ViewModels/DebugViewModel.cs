@@ -114,10 +114,6 @@ namespace AliceWPF.ViewModels
         {
             //TODO: use oldvalue for something?
             SelectedEmotion = args.NewValue;
-            if(Debugger.IsAttached)
-            {
-                Console.WriteLine($"Changed value to {SelectedEmotion}");
-            }
         }
 
         private void Instance_NewFrameEvent(NewFrameEventArgs args)

@@ -1,4 +1,5 @@
-﻿using AliceWPF.Classes;
+﻿using Alice;
+using AliceWPF.Classes;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
@@ -74,13 +75,29 @@ namespace AliceWPF.ViewModels
             DebugViewModel = new DebugViewModel();
         }
 
-        public void SendContent()
+        public async Task SendContent()
         {
             if (!string.IsNullOrWhiteSpace(Input))
             {
-                Conversation.Add(new ConversationItem(SenderEnum.User, Input));
-                Input = string.Empty;
+                string input = AddUserInput();
+                await GetBotResponse(input);
             }
+        }
+
+        private string AddUserInput()
+        {
+            string input = Input;
+            Input = string.Empty;
+            Conversation.Add(new ConversationItem(SenderEnum.User, input));
+            Loading = true;
+            return input;
+        }
+
+        private async Task GetBotResponse(string input)
+        {
+            string botResponse = await ChatBot.GetResponse(input);
+            Conversation.Add(new ConversationItem(SenderEnum.Bot, botResponse));
+            Loading = false;
         }
     }
 }

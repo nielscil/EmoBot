@@ -123,11 +123,8 @@ namespace EmotionLib
             {
                 lock(_emotionLock)
                 {
-                    if(_emotion != value)
-                    {
-                        _newEmotionDetectedEvent?.Invoke(new Classes.NewEmotionDetectedEventArgs(_emotion, value));
-                        _emotion = value;                       
-                    }
+                    SendEvent(_emotion, value);
+                    _emotion = value;
                 }
             }
         }
@@ -292,10 +289,10 @@ namespace EmotionLib
         private int _frameCount = 0;
         public void onImageResults(Dictionary<int, Face> faces, Frame frame)
         {
-            EmotionEnum emotion = EmotionEnum.Neutral;
-
             if(faces != null & faces.Count > 0)
             {
+                EmotionEnum emotion = EmotionEnum.Neutral;
+
                 //faces becomes, for a strange reason, null between the check and the next call, so catch the error...
                 try
                 {
@@ -304,14 +301,14 @@ namespace EmotionLib
                     emotion = GetEmotionValue(faces, faceID);
                 }
                 catch{}
-            }
 
-            _frameEmotions[(int)emotion]++;
-            _frameCount++;
+                _frameEmotions[(int)emotion]++;
+                _frameCount++;
 
-            if(_frameCount == 15)
-            {
-                CalculateEmotion();
+                if (_frameCount == 10)
+                {
+                    CalculateEmotion();
+                }
             }
 
         }
@@ -367,7 +364,7 @@ namespace EmotionLib
 
         private void WriteValues(Emotions emotions)
         {
-            Console.WriteLine($"{DateTime.Now.Ticks} | Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
+            Console.WriteLine($"Anger: {emotions.Anger} | Fear: {emotions.Fear} | Happy: {emotions.Joy} | Sad: {emotions.Sadness} | Suprise: {emotions.Surprise} | Disgust: {emotions.Disgust} |");
         }
 
         #endregion
@@ -389,6 +386,7 @@ namespace EmotionLib
 
         #region FaceListener
 
+        private int _faceCount = 0;
         private object _faceIdsLock = new object();
         private List<int> _faceIds = new List<int>();
         public void onFaceFound(float timestamp, int faceId)
@@ -396,6 +394,7 @@ namespace EmotionLib
             lock(_faceIdsLock)
             {
                 _faceIds.Add(faceId);
+                _faceCount++;
             }
         }
 
@@ -404,6 +403,12 @@ namespace EmotionLib
             lock(_faceIdsLock)
             {
                 _faceIds.Remove(faceId);
+                _faceCount--;
+
+                if(_faceCount == 0)
+                {
+                    Emotion = EmotionEnum.None;
+                }
             }
         }
 
@@ -414,43 +419,58 @@ namespace EmotionLib
             EmotionEnum val = EmotionEnum.Neutral;
             float exactVal = 0f;
 
-            if (emotions.Anger > exactVal && emotions.Anger > 1f)
+            if (emotions.Anger > exactVal && emotions.Anger > 5f)
             {
                 val = EmotionEnum.Anger;
                 exactVal = emotions.Anger;
             }
-
-            if (emotions.Fear > exactVal && emotions.Fear > 1f)
+            if (emotions.Fear > exactVal && emotions.Fear > 10f)
             {
                 val = EmotionEnum.Fear;
                 exactVal = emotions.Fear;
             }
 
-            if (emotions.Joy > exactVal && emotions.Joy > 1f)
+            if (emotions.Joy > exactVal && emotions.Joy > 10f)
             {
                 val = EmotionEnum.Happy;
                 exactVal = emotions.Joy;
             }
-
-            if (emotions.Sadness > exactVal && emotions.Sadness > 1f)
+            if (emotions.Sadness > exactVal && emotions.Sadness > 10f)
             {
                 val = EmotionEnum.Sad;
                 exactVal = emotions.Sadness;
             }
-
-            if (emotions.Disgust > exactVal && emotions.Disgust > 1f)
+            if (emotions.Disgust > exactVal && emotions.Disgust > 10f)
             {
                 val = EmotionEnum.Disgust;
                 exactVal = emotions.Disgust;
             }
-
-            if (emotions.Surprise > exactVal && emotions.Surprise > 1f)
+            if (emotions.Surprise > exactVal && emotions.Surprise > 10f)
             {
                 val = EmotionEnum.Suprise;
                 exactVal = emotions.Sadness;
             }
 
+            if (emotions.Fear > exactVal && emotions.Fear > 20f)
+            {
+                val = EmotionEnum.Fear;
+                exactVal = emotions.Fear;
+            }
+
+            if (emotions.Disgust > exactVal && emotions.Disgust > 60f)
+            {
+                val = EmotionEnum.Disgust;
+                exactVal = emotions.Disgust;
+            }
             return val;
+        }
+
+        private void SendEvent(EmotionEnum oldValue, EmotionEnum newValue)
+        {
+            if(oldValue != newValue)
+            {
+                _newEmotionDetectedEvent?.Invoke(new Classes.NewEmotionDetectedEventArgs(oldValue, newValue));
+            }
         }
 
         private float _timestamp;
