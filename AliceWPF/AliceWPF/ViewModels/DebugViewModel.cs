@@ -38,8 +38,8 @@ namespace AliceWPF.ViewModels
             }
         }
 
-        private EmotionEnum _selectedEmotion;
-        public EmotionEnum SelectedEmotion
+        private Emotion _selectedEmotion;
+        public Emotion SelectedEmotion
         {
             get
             {

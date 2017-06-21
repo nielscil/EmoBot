@@ -23,7 +23,7 @@ namespace Alice.Classes
             return this;
         }
 
-        public EmotionTemplateBuilder AddResponse(EmotionEnum emotion,Response response)
+        public EmotionTemplateBuilder AddResponse(Emotion emotion,Response response)
         {
             _template.AddResponse(emotion, response);
             return this;

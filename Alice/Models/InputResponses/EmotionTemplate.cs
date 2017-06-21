@@ -12,7 +12,7 @@ namespace Alice.Models.InputResponses
 {
     public class EmotionTemplate : TemplateBase
     {
-        private List<Response>[] _responses = new List<Response>[Enum.GetNames(typeof(EmotionEnum)).Length];
+        private List<Response>[] _responses = new List<Response>[Enum.GetNames(typeof(Emotion)).Length];
 
         public EmotionTemplate(GlobalTemplateAction globalAction) : base(globalAction)
         {
@@ -23,7 +23,7 @@ namespace Alice.Models.InputResponses
         {
         }
 
-        public void AddResponse(EmotionEnum emotion, Response response)
+        public void AddResponse(Emotion emotion, Response response)
         {
             _responses[(int)emotion].Add(response);
         }
