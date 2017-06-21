@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AliceWPF.Classes
 {
-    public enum SenderEnum
+    public enum Sender
     {
         Bot,
         User

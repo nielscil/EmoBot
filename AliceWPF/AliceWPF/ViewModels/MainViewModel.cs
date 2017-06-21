@@ -88,7 +88,7 @@ namespace AliceWPF.ViewModels
         {
             string input = Input;
             Input = string.Empty;
-            Conversation.Add(new ConversationItem(SenderEnum.User, input));
+            Conversation.Add(new ConversationItem(Sender.User, input));
             Loading = true;
             return input;
         }
@@ -96,7 +96,7 @@ namespace AliceWPF.ViewModels
         private async Task GetBotResponse(string input)
         {
             string botResponse = await ChatBot.GetResponse(input);
-            Conversation.Add(new ConversationItem(SenderEnum.Bot, botResponse));
+            Conversation.Add(new ConversationItem(Sender.Bot, botResponse));
             Loading = false;
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmotionLib.Models
 {
-    public enum EmotionEnum
+    public enum Emotion
     {
         Neutral,
         Happy,

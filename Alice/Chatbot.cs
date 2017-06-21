@@ -80,7 +80,7 @@ namespace Alice
 
                 InputResponseManager.GetResponse(inputResponseData);
 
-                return inputResponseData.response;
+                return inputResponseData.Response;
             });
         }
     }

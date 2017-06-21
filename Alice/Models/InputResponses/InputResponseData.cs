@@ -16,7 +16,7 @@ namespace Alice.Models.InputResponses
         public GlobalActionResponse GlobalActionResponse { get; set; }
 
         private string _response = string.Empty;
-        public string response
+        public string Response
         {
             get
             {

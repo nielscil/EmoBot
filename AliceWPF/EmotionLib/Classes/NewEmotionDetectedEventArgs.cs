@@ -9,10 +9,10 @@ namespace EmotionLib.Classes
 {
     public sealed class NewEmotionDetectedEventArgs : EventArgs
     {
-        public EmotionEnum OldValue { get; private set; }
-        public EmotionEnum NewValue { get; private set; }
+        public Emotion OldValue { get; private set; }
+        public Emotion NewValue { get; private set; }
 
-        internal NewEmotionDetectedEventArgs(EmotionEnum oldValue, EmotionEnum newValue)
+        internal NewEmotionDetectedEventArgs(Emotion oldValue, Emotion newValue)
         {
             OldValue = oldValue;
             NewValue = newValue;

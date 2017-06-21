@@ -64,7 +64,7 @@ namespace Alice.Models.InputResponses
                 response = string.Empty;
             }
 
-            inputResponseData.response = response;
+            inputResponseData.Response = response;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace AliceWPF.Controls
 
         private void SetCardAlignment(Card card, ConversationItem item)
         {
-            if(item.Sender == SenderEnum.Bot)
+            if(item.Sender == Sender.Bot)
             {
                 card.HorizontalAlignment = HorizontalAlignment.Left;
                 card.Background = FindResource("PrimaryHueMidBrush") as Brush;

@@ -27,7 +27,7 @@ namespace Alice.StandardContent
                         response.Add("name", name);
 
                         return response;
-                    }).AddResponse(EmotionEnum.Neutral,(i) => 
+                    }).AddResponse(Emotion.Neutral,(i) => 
                     {
                         if(i.GlobalActionResponse.Empty)
                         {
@@ -35,7 +35,7 @@ namespace Alice.StandardContent
                         }
                         return $"Hello {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, how are you doing?";
                     })
-                    .AddResponse(EmotionEnum.Neutral, (i) =>
+                    .AddResponse(Emotion.Neutral, (i) =>
                     {
                         if (i.GlobalActionResponse.Empty)
                         {
@@ -43,7 +43,7 @@ namespace Alice.StandardContent
                         }
                         return $"Hello {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, my name is Alice. How are you doing?";
                     })
-                    .AddResponse(EmotionEnum.Neutral,(i) => 
+                    .AddResponse(Emotion.Neutral,(i) => 
                     {
                         if (i.GlobalActionResponse.Empty)
                         {
@@ -51,7 +51,7 @@ namespace Alice.StandardContent
                         }
                         return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, how can I help you today?";
                     })
-                    .AddResponse(EmotionEnum.Neutral, (i) =>
+                    .AddResponse(Emotion.Neutral, (i) =>
                     {
                         if (i.GlobalActionResponse.Empty)
                         {
@@ -73,7 +73,7 @@ namespace Alice.StandardContent
                     response.Add("name", name);
 
                     return response;
-                }).AddResponse(EmotionEnum.Neutral, (i) =>
+                }).AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"Hello {i.GlobalActionResponse.Get("name")}, what can you do?";
                 })

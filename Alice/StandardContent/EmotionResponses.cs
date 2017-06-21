@@ -47,12 +47,12 @@ namespace Alice.StandardContent
 
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     //TODO: check if name is set
                     return $"Hello {i.GlobalActionResponse.Get("name")}, what can you do?";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -63,7 +63,7 @@ namespace Alice.StandardContent
                         return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}";
                     }
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -71,7 +71,7 @@ namespace Alice.StandardContent
                     }
                     return $"{i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I feel oncomfortable with your anger. What's wrong?";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -79,7 +79,7 @@ namespace Alice.StandardContent
                     }
                     return $"Relax {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, it's just me";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -87,7 +87,7 @@ namespace Alice.StandardContent
                     }
                     return $"Whoah {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, relax, it's me.";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -95,7 +95,7 @@ namespace Alice.StandardContent
                     }
                     return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautifull with a smile on your face";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -117,11 +117,11 @@ namespace Alice.StandardContent
 
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"Hello {i.GlobalActionResponse.Get("name")}, what can you do?";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -132,7 +132,7 @@ namespace Alice.StandardContent
                         return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}";
                     }
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -140,7 +140,7 @@ namespace Alice.StandardContent
                     }
                     return $"{i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I feel uncomfortable with your anger. What's wrong?";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -148,7 +148,7 @@ namespace Alice.StandardContent
                     }
                     return $"Relax {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, it's just me";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -156,7 +156,7 @@ namespace Alice.StandardContent
                     }
                     return $"Whoah {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, relax, it's me.";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -164,7 +164,7 @@ namespace Alice.StandardContent
                     }
                     return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautiful with a smile on your face";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
@@ -183,32 +183,32 @@ namespace Alice.StandardContent
 
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"Really? I can't see it";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     return $"That's nice to hear! What makes you happy?";
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     return $"You aren't looking really happy";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     return $"You aren't looking really happy";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     return $"What makes you so happy then?";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     // Get some happy facts or something?
                     return $"You don't seem so happy";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     return $"You are?";
                 })).Build();
@@ -226,32 +226,32 @@ namespace Alice.StandardContent
                     response.Add("happy", happy);
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"Thanks, I'll note that";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     return $"That's so nice to hear! Do you have more examples?";
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     return $"Are you sure?";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     return $"You don't seem happy about that.";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     return $"Whoah, nice to hear!";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     // Get some happy facts or something?
                     return $"You don't seem so happy";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     return $"You are?";
                 })).Build();
@@ -269,31 +269,31 @@ namespace Alice.StandardContent
                     response.Add("sad", happy);
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"I'm sorry to hear that. What can cheer you up?";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     return $"You seem pretty happy about it actually. Is it really making you sad?";
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     return $"Does it upsets you a lot?";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     return $"And that's something you're sad about or fear?";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     return $"And why are you suprised by that?";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     return $"I'm sorry to hear that. What can cheer you up?";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     return $"I'm sorry to hear that. What can cheer you up?";
                 })).Build();
@@ -310,31 +310,31 @@ namespace Alice.StandardContent
                     FactManager.AddFact(new Fact("happy", name));
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     return $"You seem happier already!";
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })).Build();
@@ -349,7 +349,7 @@ namespace Alice.StandardContent
                     //TODO: get happy facts??
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     if (i.GlobalActionResponse.Get<Fact>("happy").Values.Length == 0)
                     {
@@ -357,7 +357,7 @@ namespace Alice.StandardContent
                     }
                     return $"We can talk about {i.GlobalActionResponse.Get<Fact>("happy").Values[random.Next(0, FactManager.FindFacts("happy").Capacity - 1)].Transform(To.TitleCase)}?";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     if (i.GlobalActionResponse.Get<Fact>("happy").Values.Length == 0)
                     {
@@ -365,7 +365,7 @@ namespace Alice.StandardContent
                     }
                     return $"You seem happy already! But if you want, we can talk about {i.GlobalActionResponse.Get<Fact>("happy").Values[random.Next(0, FactManager.FindFacts("happy").Capacity - 1)].Transform(To.TitleCase)}?";
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     if (i.GlobalActionResponse.Get<Fact>("happy").Values.Length == 0)
                     {
@@ -373,7 +373,7 @@ namespace Alice.StandardContent
                     }
                     return $"I remember you like {i.GlobalActionResponse.Get<Fact>("happy").Values[random.Next(0, FactManager.FindFacts("happy").Capacity - 1)].Transform(To.TitleCase)}, correct?";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     if (i.GlobalActionResponse.Get<Fact>("happy").Values.Length == 0)
                     {
@@ -381,11 +381,11 @@ namespace Alice.StandardContent
                     }
                     return $"I remember you like {i.GlobalActionResponse.Get<Fact>("happy").Values[random.Next(0, FactManager.FindFacts("happy").Capacity - 1)].Transform(To.TitleCase)}, correct?";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     if (i.GlobalActionResponse.Get<Fact>("happy").Values.Length == 0)
                     {
@@ -393,7 +393,7 @@ namespace Alice.StandardContent
                     }
                     return $"I remember you like {i.GlobalActionResponse.Get<Fact>("happy").Values[random.Next(0, FactManager.FindFacts("happy").Capacity - 1)].Transform(To.TitleCase)}, correct?";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     if (i.GlobalActionResponse.Get<Fact>("happy").Values.Length == 0)
                     {
@@ -416,31 +416,31 @@ namespace Alice.StandardContent
                     FactManager.AddFact(new Fact("happy", name));
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     return $"You seem happier already!";
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })).Build();
@@ -457,31 +457,31 @@ namespace Alice.StandardContent
                     FactManager.AddFact(new Fact("happy", name));
                     return response;
                 })
-                .AddResponse(EmotionEnum.Neutral, (i) =>
+                .AddResponse(Emotion.Neutral, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Happy, (i) =>
+                .AddResponse(Emotion.Happy, (i) =>
                 {
                     return $"You seem happier already!";
                 })
-                .AddResponse(EmotionEnum.Anger, (i) =>
+                .AddResponse(Emotion.Anger, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Fear, (i) =>
+                .AddResponse(Emotion.Fear, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Suprise, (i) =>
+                .AddResponse(Emotion.Suprise, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Sad, (i) =>
+                .AddResponse(Emotion.Sad, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })
-                .AddResponse(EmotionEnum.Disgust, (i) =>
+                .AddResponse(Emotion.Disgust, (i) =>
                 {
                     return $"Thanks, I'll remember that.";
                 })).Build();

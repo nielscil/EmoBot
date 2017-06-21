@@ -37,7 +37,7 @@ namespace Alice
 
             if(!inputResponseData.Found)
             {
-                inputResponseData.response = DefaultResponse;
+                inputResponseData.Response = DefaultResponse;
             }
 
             _history.Add(inputResponseData);
@@ -55,7 +55,7 @@ namespace Alice
                 }
 
                 var inputResponse = _history[index];
-                if(Regex.IsMatch(inputResponse.response,previousResponse.Item2))
+                if(Regex.IsMatch(inputResponse.Response,previousResponse.Item2))
                 {
                     data.Add(inputResponse);
                 }
