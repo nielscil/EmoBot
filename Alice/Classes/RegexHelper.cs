@@ -12,7 +12,7 @@ namespace Alice.Classes
     {
         public static string GetValue(InputResponseData finder,string groupName)
         {
-            var group = finder.matchData.match.Groups[groupName];
+            var group = finder.Match.Groups[groupName];
             if (group != null && group.Success)
             {
                 return group.Value;
