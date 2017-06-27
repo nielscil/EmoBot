@@ -1,4 +1,5 @@
 ﻿using AIMLbot;
+using Alice.Classes;
 using Alice.Models;
 using Alice.Models.InputResponses;
 using System;
@@ -64,26 +65,43 @@ namespace Alice
         internal static bool IsMatchingPreviousResponses(List<Tuple<int,string>> previousResponses, out List<InputResponseData> data)
         {
             data = new List<InputResponseData>();
-            foreach(var previousResponse in previousResponses)
+            var dictonary = previousResponses.ToSortedDictonary();
+
+            foreach(var item in dictonary)
             {
-                int index = _history.Count - previousResponse.Item1 + 1;
-                if(index < 0)
+                List<InputResponseData> thisData;
+                bool isMatching = IsOneMatchingPreviousResponses(item.Key, item.Value, out thisData);
+                if(isMatching)
                 {
-                    return false;
+                    data.AddRange(thisData);
+                    continue;
                 }
 
-                var inputResponse = _history[index];
-                if(Regex.IsMatch(inputResponse.Response,previousResponse.Item2))
-                {
-                    data.Add(inputResponse);
-                }
-                else
-                {
-                    return false;
-                }
-
+                return false;
             }
+
             return true;
+        }
+
+        private static bool IsOneMatchingPreviousResponses(int depth, List<string> input, out List<InputResponseData> data)
+        {
+            data = new List<InputResponseData>();
+            int index = _history.Count - depth + 1;
+
+            if (index > 0)
+            {
+                foreach (string item in input)
+                {
+                    var inputResponse = _history[index];
+                    if (Regex.IsMatch(inputResponse.Response, item))
+                    {
+                        data.Add(inputResponse);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static void GetAIMLResponse(InputResponseData inputResponseData)

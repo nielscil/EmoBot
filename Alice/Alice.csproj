@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\EmotionTemplateBuilder.cs" />
+    <Compile Include="Classes\ListExtentions.cs" />
     <Compile Include="Models\Conditions\DynamicForeachCondition.cs" />
     <Compile Include="Models\InputResponses\GlobalActionResponse.cs" />
     <Compile Include="Classes\InputResponseBuilder.cs" />
