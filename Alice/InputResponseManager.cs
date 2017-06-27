@@ -1,4 +1,5 @@
-﻿using Alice.Models;
+﻿using AIMLbot;
+using Alice.Models;
 using Alice.Models.InputResponses;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,9 @@ namespace Alice
     internal static class InputResponseManager
     {
         public static string DefaultResponse { get; set; } = "\"Huh??!\" - Kjeld";
-
+        private static Bot _aimlBot;
+        private static User _aimlUser;
+        private static bool _useAiml = false;
         private static List<InputResponse> _inputResponses = new List<InputResponse>();
         private static List<InputResponseData> _history = new List<InputResponseData>();
 
@@ -20,6 +23,16 @@ namespace Alice
         {
             _inputResponses.AddRange(collection.GetInputResponses());
         }
+
+        internal static void InitAiml()
+        {
+            _aimlBot = new Bot();
+            _aimlBot.loadSettings();
+            _aimlBot.loadAIMLFromFiles();
+            _aimlUser = new User("currentUser", _aimlBot);
+            _useAiml = true;
+        }
+
 
         internal static void GetResponse(InputResponseData inputResponseData)
         {
@@ -35,7 +48,12 @@ namespace Alice
                 }
             }
 
-            if(!inputResponseData.Found)
+            if (!inputResponseData.Found && _useAiml)
+            {
+                GetAIMLResponse(inputResponseData);
+            }
+
+            if (!inputResponseData.Found)
             {
                 inputResponseData.Response = DefaultResponse;
             }
@@ -66,6 +84,14 @@ namespace Alice
 
             }
             return true;
+        }
+
+        private static void GetAIMLResponse(InputResponseData inputResponseData)
+        {
+            Request request = new Request(inputResponseData.Input, _aimlUser, _aimlBot);
+            Result result = _aimlBot.Chat(request);
+
+            inputResponseData.Response = result.Output;
         }
     }
 }

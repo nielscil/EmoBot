@@ -11,13 +11,14 @@ using Alice.Models.Facts;
 using Alice.Models.Conditions;
 using Alice.Classes;
 using Alice.StandardContent;
+using AIMLbot;
 
 namespace Alice
 {
     public static class ChatBot
     {
         private static bool _initialized = false;
-
+             
         public static void Init(System.Windows.Application app,bool useStandardCategories)
         {
             if(_initialized)
@@ -30,6 +31,7 @@ namespace Alice
                 InputResponseManager.AddInputResponses(new DateResponses());
                 InputResponseManager.AddInputResponses(new StandardResponses());
                 InputResponseManager.AddInputResponses(new EmotionResponses());
+                InputResponseManager.InitAiml();
             }
 
             app.Exit += App_Exit;
@@ -83,5 +85,7 @@ namespace Alice
                 return inputResponseData.Response;
             });
         }
+
+
     }
 }

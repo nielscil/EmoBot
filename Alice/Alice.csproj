@@ -94,6 +94,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AIMLbot\AIMLbot\AIMLbot.csproj">
+      <Project>{9c87d82c-0e27-4995-a2cb-72bcb84ef2e2}</Project>
+      <Name>AIMLbot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AliceWPF\EmotionLib\EmotionLib.csproj">
       <Project>{a80bf9e5-9889-49f8-ab9f-2c98f9a1dee9}</Project>
       <Name>EmotionLib</Name>
