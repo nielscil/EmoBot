@@ -50,6 +50,11 @@ namespace AliceWPF.ViewModels
                 _selectedEmotion = value;
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange("EmotionFeedback");
+                if (!UseCamera)
+                {
+                    // Set camera emotion to selected emotion
+                    EmotionDetector.Instance.Emotion = value;
+                }
             }
         }
 
@@ -113,7 +118,10 @@ namespace AliceWPF.ViewModels
         private void Instance_NewEmotionDetectedEvent(NewEmotionDetectedEventArgs args)
         {
             //TODO: use oldvalue for something?
-            SelectedEmotion = args.NewValue;
+            if (UseCamera)
+            {
+                SelectedEmotion = args.NewValue;
+            }
         }
 
         private void Instance_NewFrameEvent(NewFrameEventArgs args)
