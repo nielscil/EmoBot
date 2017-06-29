@@ -12,7 +12,7 @@ namespace Alice.Models.InputResponses
 {
     public class EmotionTemplate : TemplateBase
     {
-        private List<Response>[] _responses = new List<Response>[Enum.GetNames(typeof(Emotion)).Length];
+        private List<Response>[] _responses = new List<Response>[Enum.GetNames(typeof(Emotion)).Length - 1];
 
         public EmotionTemplate(GlobalTemplateAction globalAction) : base(globalAction)
         {
@@ -25,18 +25,25 @@ namespace Alice.Models.InputResponses
 
         public void AddResponse(Emotion emotion, Response response)
         {
+            if(emotion == Emotion.None)
+            {
+                emotion = Emotion.Neutral;
+            }
+
             _responses[(int)emotion].Add(response);
         }
 
         public override string GetResponse(InputResponseData inputResponseData)
         {
             inputResponseData.GlobalActionResponse = _globalAction?.Invoke(inputResponseData);
-            Emotion tempEmotion = EmotionDetector.Instance.Emotion;
-            if (tempEmotion == Emotion.None)
+            var emotion = EmotionDetector.Instance.Emotion;
+
+            if (emotion == Emotion.None)
             {
-                tempEmotion = Emotion.Neutral;
+                emotion = Emotion.Neutral;
             }
-            Response response = ResponseChooser.Choose(_responses[(int)tempEmotion]);
+
+            var response = ResponseChooser.Choose(_responses[(int)emotion]);
             return response?.Invoke(inputResponseData);
         }
 
