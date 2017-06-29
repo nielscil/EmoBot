@@ -14,7 +14,12 @@ namespace Alice.Classes
 
         public static Response Choose(List<Response> responses)
         {
-            return responses[GetIndex(responses)];
+            int responseIndex = GetIndex(responses);
+            if (responseIndex < responses.Count)
+            {
+                return responses[GetIndex(responses)];
+            }
+            return null;
         }
 
         private static int GetIndex(List<Response> responses)

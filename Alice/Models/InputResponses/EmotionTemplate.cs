@@ -31,9 +31,13 @@ namespace Alice.Models.InputResponses
         public override string GetResponse(InputResponseData inputResponseData)
         {
             inputResponseData.GlobalActionResponse = _globalAction?.Invoke(inputResponseData);
-            Response response = ResponseChooser.Choose(_responses[(int)EmotionDetector.Instance.Emotion]);
-
-            return response.Invoke(inputResponseData);
+            Emotion tempEmotion = EmotionDetector.Instance.Emotion;
+            if (tempEmotion == Emotion.None)
+            {
+                tempEmotion = Emotion.Neutral;
+            }
+            Response response = ResponseChooser.Choose(_responses[(int)tempEmotion]);
+            return response?.Invoke(inputResponseData);
         }
 
         private void InitalizeResponses()

@@ -38,44 +38,103 @@ namespace Alice.StandardContent
         {
             yield return new InputResponseBuilder()
                 .AddPattern(@".*hello.*")
+                .AddPattern(@".*hi.*")
+                .AddPattern(@".*hey.*")
+                .AddPattern(@".*hallo.*")
+                .AddPattern(@".*wazzaaap.*")
+                .AddPattern(@".*hé!.*")
+                .AddPattern(@".*hoi.*")
+                .AddPattern(@".*plaklona.*")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
                     var response = new GlobalActionResponse();
-                    Fact name = FactManager.FindFacts("name").FirstOrDefault();
-                    response.Add("name", name);
-
                     return response;
                 })
                 .AddResponse(Emotion.Neutral, (i) =>
                 {
-                    //TODO: check if name is set
-                    return $"Hello {i.GlobalActionResponse.Get("name")}, what can you do?";
+                    return $"Well hi there! What is your name?";
+                })
+                .AddResponse(Emotion.Happy, (i) =>
+                {
+                    return $"Do you look happy today! What is your name?";
+                })
+                .AddResponse(Emotion.Anger, (i) =>
+                {
+                    return $"Uhmm, what's your name?";
+                })
+                .AddResponse(Emotion.Fear, (i) =>
+                {
+                    return $"Hi there, I'm Alice. What is your name?";
+                })
+                .AddResponse(Emotion.Suprise, (i) =>
+                {
+                    return $"Well hello there! What is your name?";
+                })
+                .AddResponse(Emotion.Sad, (i) =>
+                {
+                    return $"Don't be so sad. What is your name?";
+                })
+                .AddResponse(Emotion.Disgust, (i) =>
+                {
+                    return $"Hi there. What is your name?";
+                })).Build();
+            
+            yield return new InputResponseBuilder()
+                .AddPreviousResponse(0, $"Well hi there! What is your name?")
+                .AddPreviousResponse(0, $"Do you look happy today! What is your name?")
+                .AddPreviousResponse(0, $"Uhmm, what's your name?")
+                .AddPreviousResponse(0, $"Hi there, I'm Alice. What is your name?")
+                .AddPreviousResponse(0, $"Well hello there! What is your name")
+                .AddPreviousResponse(0, $"Don't be so sad. What is your name?")
+                .AddPreviousResponse(0, $"Hi there. What is your name?")
+                //Kan dit allemaal veel simpeler door .AddPreviousResponse(0, $".*name?") misschien?
+                .AddPattern(@".*")
+                .AddTemplate(new EmotionTemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+                    string name = RegexHelper.GetValue(match, "name");
+                    FactManager.RemoveFacts("name");
+                    FactManager.AddFact(new Fact("name", name));
+                    response.Add("name", name);
+                    return response;
+                })
+                .AddResponse(Emotion.Neutral, (i) =>
+                {
+                    if (i.GlobalActionResponse.Empty)
+                    {
+                        return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
+                    }
+                    else
+                    {
+                        return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}. How are you feeling today.";
+                    }
                 })
                 .AddResponse(Emotion.Happy, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
-                        return "Do you look happy today! What is your name?";
+                        return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
                     else
                     {
-                        return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}";
+                        return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}. Good to see you again! You look very happy, why is that?";
                     }
                 })
                 .AddResponse(Emotion.Anger, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
-                        return "Whoah, did I do something wrong?";
+                        return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
-                    return $"{i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I feel oncomfortable with your anger. What's wrong?";
+                    return $"{i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}. You look kind of angry. What's wrong?";
                 })
                 .AddResponse(Emotion.Fear, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
-                        return "Don't be scared, I won't bite. What is your name?";
+                        return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
                     return $"Relax {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, it's just me";
                 })
@@ -83,7 +142,7 @@ namespace Alice.StandardContent
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
-                        return "Whoah! I believe this is the first time we meet. I think it's best to start with a smile";
+                        return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
                     return $"Whoah {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, relax, it's me.";
                 })
@@ -91,20 +150,27 @@ namespace Alice.StandardContent
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
-                        return "Hello, I believe this is the first time we meet. I think it's best to start with a smile";
+                        return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
-                    return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautifull with a smile on your face";
+                    return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, what's with the long face";
                 })
                 .AddResponse(Emotion.Disgust, (i) =>
                 {
                     if (i.GlobalActionResponse.Empty)
                     {
-                        return "You look disgusted, do I have someting between my teeth?";
+                        return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
                     return $"What's the problem, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}?";
                 })).Build();
 
             yield return new InputResponseBuilder()
+                .AddPreviousResponse(0, $"{ GetTimeOfDay()}, I don't think we've met before.What's your name?")
+                .AddPreviousResponse(0, $"Do you look happy today! What is your name?")
+                .AddPreviousResponse(0, $"Whoah, Hi, did I do something wrong?")
+                .AddPreviousResponse(0, $"Don't be scared, I won't bite. What is your name ?")
+                .AddPreviousResponse(0, $"Whoah! I believe this is the first time we meet. I think it's best to start with a smile")
+                .AddPreviousResponse(0, $"Hello, I believe this is the first time we meet. I think it's best to start with a smile")
+                .AddPreviousResponse(0, $"You look disgusted, do I have someting between my teeth?")
                 .AddPattern(@"my name is (?'name'.*)")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -114,7 +180,6 @@ namespace Alice.StandardContent
                     FactManager.RemoveFacts("name");
                     FactManager.AddFact(new Fact("name", name));
                     response.Add("name", name);
-
                     return response;
                 })
                 .AddResponse(Emotion.Neutral, (i) =>
@@ -488,4 +553,3 @@ namespace Alice.StandardContent
         }
     }
 }
-

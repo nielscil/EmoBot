@@ -35,7 +35,7 @@ namespace Alice.Models.InputResponses
 
             Response response = ResponseChooser.Choose(_responses);
 
-            return response.Invoke(inputResponseData);
+            return response?.Invoke(inputResponseData);
         }
 
     }

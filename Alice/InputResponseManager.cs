@@ -86,7 +86,7 @@ namespace Alice
         private static bool IsOneMatchingPreviousResponses(int depth, List<string> input, out List<InputResponseData> data)
         {
             data = new List<InputResponseData>();
-            int index = _history.Count - depth + 1;
+            int index = _history.Count - (depth + 1);
 
             if (index > 0)
             {
