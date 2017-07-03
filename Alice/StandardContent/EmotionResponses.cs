@@ -57,11 +57,11 @@ namespace Alice.StandardContent
                 })
                 .AddResponse(Emotion.Happy, (i) =>
                 {
-                    return $"Do you look happy today! What is your name?";
+                    return $"You look happy today! What is your name?";
                 })
                 .AddResponse(Emotion.Anger, (i) =>
                 {
-                    return $"Uhmm, what's your name?";
+                    return $"Uhmm, what is your name?";
                 })
                 .AddResponse(Emotion.Fear, (i) =>
                 {
@@ -81,39 +81,36 @@ namespace Alice.StandardContent
                 })).Build();
             
             yield return new InputResponseBuilder()
-                .AddPreviousResponse(0, $"Well hi there! What is your name?")
-                .AddPreviousResponse(0, $"Do you look happy today! What is your name?")
-                .AddPreviousResponse(0, $"Uhmm, what's your name?")
-                .AddPreviousResponse(0, $"Hi there, I'm Alice. What is your name?")
-                .AddPreviousResponse(0, $"Well hello there! What is your name")
-                .AddPreviousResponse(0, $"Don't be so sad. What is your name?")
-                .AddPreviousResponse(0, $"Hi there. What is your name?")
+                .AddPreviousResponse(0, $".*what is your name?")
                 //Kan dit allemaal veel simpeler door .AddPreviousResponse(0, $".*name?") misschien?
-                .AddPattern(@".*")
+                .AddPattern(@"it's (?'name'.*)")
+                .AddPattern(@"i'm (?'name'.*)")
+                .AddPattern(@"i am (?'name'.*)")
+                .AddPattern(@"my name is (?'name'.*)")
+                .AddPattern(@"(?'name'.*)")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
                     var response = new GlobalActionResponse();
                     string name = RegexHelper.GetValue(match, "name");
-                    FactManager.RemoveFacts("name");
-                    FactManager.AddFact(new Fact("name", name));
-                    response.Add("name", name);
+                    //check facts
+                    response.Add("newUser", true);
                     return response;
                 })
                 .AddResponse(Emotion.Neutral, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
+                    if (!i.GlobalActionResponse.Success || i.GlobalActionResponse.Get<bool>("newUser"))
                     {
                         return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
                     else
                     {
-                        return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}. How are you feeling today.";
+                        return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<string>("name").Transform(To.TitleCase)}. How are you feeling today?";
                     }
                 })
                 .AddResponse(Emotion.Happy, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
+                    if (!i.GlobalActionResponse.Success || i.GlobalActionResponse.Get<bool>("newUser"))
                     {
                         return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
@@ -124,7 +121,7 @@ namespace Alice.StandardContent
                 })
                 .AddResponse(Emotion.Anger, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
+                    if (!i.GlobalActionResponse.Success || i.GlobalActionResponse.Get<bool>("newUser"))
                     {
                         return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
@@ -132,7 +129,7 @@ namespace Alice.StandardContent
                 })
                 .AddResponse(Emotion.Fear, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
+                    if (!i.GlobalActionResponse.Success || i.GlobalActionResponse.Get<bool>("newUser"))
                     {
                         return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
@@ -140,7 +137,7 @@ namespace Alice.StandardContent
                 })
                 .AddResponse(Emotion.Suprise, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
+                    if (!i.GlobalActionResponse.Success || i.GlobalActionResponse.Get<bool>("newUser"))
                     {
                         return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
@@ -148,7 +145,7 @@ namespace Alice.StandardContent
                 })
                 .AddResponse(Emotion.Sad, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
+                    if (!i.GlobalActionResponse.Success || i.GlobalActionResponse.Get<bool>("newUser"))
                     {
                         return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
@@ -156,7 +153,7 @@ namespace Alice.StandardContent
                 })
                 .AddResponse(Emotion.Disgust, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
+                    if (!i.GlobalActionResponse.Success || i.GlobalActionResponse.Get<bool>("newUser"))
                     {
                         return $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?";
                     }
@@ -164,82 +161,217 @@ namespace Alice.StandardContent
                 })).Build();
 
             yield return new InputResponseBuilder()
-                .AddPreviousResponse(0, $"{ GetTimeOfDay()}, I don't think we've met before.What's your name?")
-                .AddPreviousResponse(0, $"Do you look happy today! What is your name?")
-                .AddPreviousResponse(0, $"Whoah, Hi, did I do something wrong?")
-                .AddPreviousResponse(0, $"Don't be scared, I won't bite. What is your name ?")
-                .AddPreviousResponse(0, $"Whoah! I believe this is the first time we meet. I think it's best to start with a smile")
-                .AddPreviousResponse(0, $"Hello, I believe this is the first time we meet. I think it's best to start with a smile")
-                .AddPreviousResponse(0, $"You look disgusted, do I have someting between my teeth?")
-                .AddPattern(@"my name is (?'name'.*)")
+                .AddPreviousResponse(0, $"{GetTimeOfDay()}, I don't think we've met before. Is that correct?")
+                .AddPattern(@"yes*")
+                .AddPattern(@"correct*")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
                     var response = new GlobalActionResponse();
-                    string name = RegexHelper.GetValue(match, "name");
-                    FactManager.RemoveFacts("name");
-                    FactManager.AddFact(new Fact("name", name));
-                    response.Add("name", name);
+                    var prevAction = match.PreviousResponseData[0].GlobalActionResponse;
+                    if(prevAction.Success && prevAction.Get<bool>("newUser"))
+                    {
+                        //voeg toe
+                    }
                     return response;
                 })
                 .AddResponse(Emotion.Neutral, (i) =>
                 {
-                    return $"Hello {i.GlobalActionResponse.Get("name")}, what can you do?";
+                    return $"Okay, I don’t know anything about you yet. Can you name something you like?";
                 })
                 .AddResponse(Emotion.Happy, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
-                    {
-                        return "Do you look happy today! What is your name?";
-                    }
-                    else
-                    {
-                        return $"{GetTimeOfDay()}, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}";
-                    }
+                    return $"Okay, I don’t know anything about you yet. Can you name something you like?";
                 })
                 .AddResponse(Emotion.Anger, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
-                    {
-                        return "Whoah, did I say something wrong?";
-                    }
-                    return $"{i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I feel uncomfortable with your anger. What's wrong?";
+                    return $"Okay, I don’t know anything about you yet. Can you name something you like?";
                 })
                 .AddResponse(Emotion.Fear, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
-                    {
-                        return "Don't be scared, I won't bite. What is your name?";
-                    }
-                    return $"Relax {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, it's just me";
+                    return $"Okay, I don’t know anything about you yet. Can you name something you like?";
                 })
                 .AddResponse(Emotion.Suprise, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
-                    {
-                        return "Whoah! I believe this is the first time we meet. I think it's best to start with a smile";
-                    }
-                    return $"Whoah {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, relax, it's me.";
+                    return $"Okay, I don’t know anything about you yet. Can you name something you like?";
                 })
                 .AddResponse(Emotion.Sad, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
-                    {
-                        return "Hello, I believe this is the first time we meet. I think it's best to start with a smile";
-                    }
-                    return $"Hi {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}, I remember you more beautiful with a smile on your face";
+                    return $"Okay, I don’t know anything about you yet. Can you name something you like?";
                 })
                 .AddResponse(Emotion.Disgust, (i) =>
                 {
-                    if (i.GlobalActionResponse.Empty)
-                    {
-                        return "You look disgusted, do I have someting between my teeth?";
-                    }
-                    return $"What's the problem, {i.GlobalActionResponse.Get<Fact>("name").Values.FirstOrDefault().Transform(To.TitleCase)}?";
+                    return $"Okay, I don’t know anything about you yet. Can you name something you like?";
                 })).Build();
 
             yield return new InputResponseBuilder()
+                .AddPreviousResponse(0, $"Okay, I don’t know anything about you yet. Can you name something you like?")
+                .AddPattern(@"i like (?'happy'.*)")
+                .AddPattern(@"yes, (?'name'.*)")
+                .AddPattern(@"(?'happy'.*)")
+                .AddTemplate(new EmotionTemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+                    string happy = RegexHelper.GetValue(match, "happy");
+                    FactManager.AddFact(new Fact("happy", happy));
+                    response.Add("name", happy);
+                    return response;
+                })
+                .AddResponse(Emotion.Neutral, (i) =>
+                {
+                    return $"Can you give me a specific example why you like {i.GlobalActionResponse.Get<Fact>("happy").Values.Length - 1}?";
+                })
+                .AddResponse(Emotion.Happy, (i) =>
+                {
+                    return $"You do seem quite happy about it! Can you give me a specific example why you like {i.GlobalActionResponse.Get<Fact>("happy").Values.Length - 1}?";
+                })
+                .AddResponse(Emotion.Anger, (i) =>
+                {
+                    return $"Can you give me a specific example why you like {i.GlobalActionResponse.Get<Fact>("happy").Values.Length - 1}?";
+                })
+                .AddResponse(Emotion.Fear, (i) =>
+                {
+                    return $"Relax, I won't bite. Can you give me a specific example why you like {i.GlobalActionResponse.Get<Fact>("happy").Values.Length - 1}?";
+                })
+                .AddResponse(Emotion.Suprise, (i) =>
+                {
+                    return $"Can you give me a specific example why you like {i.GlobalActionResponse.Get<Fact>("happy").Values.Length - 1}?";
+                })
+                .AddResponse(Emotion.Sad, (i) =>
+                {
+                    return $"You don't have to be sad when you talk about things you like. Can you give me a specific example why you like {i.GlobalActionResponse.Get<Fact>("happy").Values.Length - 1}?";
+                })
+                .AddResponse(Emotion.Disgust, (i) =>
+                {
+                    return $"Can you give me a specific example why you like {i.GlobalActionResponse.Get<Fact>("happy").Values.Length - 1}?";
+                })).Build();
+
+            // weather API
+            yield return new InputResponseBuilder()
+                .AddPattern(@".*weather")
+                .AddTemplate(new EmotionTemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+                    return response;
+                })
+                .AddResponse(Emotion.Neutral, (i) =>
+                {
+                    return $"In which city?";
+                })
+                .AddResponse(Emotion.Happy, (i) =>
+                {
+                    return $"In which city?";
+                })
+                .AddResponse(Emotion.Anger, (i) =>
+                {
+                    return $"In which city?";
+                })
+                .AddResponse(Emotion.Fear, (i) =>
+                {
+                    return $"In which city?";
+                })
+                .AddResponse(Emotion.Suprise, (i) =>
+                {
+                    return $"In which city?";
+                })
+                .AddResponse(Emotion.Sad, (i) =>
+                {
+                    return $"In which city?";
+                })
+                .AddResponse(Emotion.Disgust, (i) =>
+                {
+                    return $"In which city?";
+                })).Build();
+
+            yield return new InputResponseBuilder()
+               .AddPreviousResponse(0, $"In which city?")
+               .AddPattern(@"(?'city'.*)")
+               .AddTemplate(new EmotionTemplateBuilder()
+               .SetGlobalTemplateAction((match) =>
+               {
+                   var response = new GlobalActionResponse();
+                   string temperature = RegexHelper.GetValue(match, "temperature");
+                   FactManager.AddFact(new Fact("temperature", temperature));
+                   response.Add("temperature", temperature);
+                   return response;
+               })
+               .AddResponse(Emotion.Neutral, (i) =>
+               {
+                   return $"<>. Do you like that kind of temperature?";
+               })
+               .AddResponse(Emotion.Happy, (i) =>
+               {
+                   return $"In what city?";
+               })
+               .AddResponse(Emotion.Anger, (i) =>
+               {
+                   return $"In what city?";
+               })
+               .AddResponse(Emotion.Fear, (i) =>
+               {
+                   return $"In what city?";
+               })
+               .AddResponse(Emotion.Suprise, (i) =>
+               {
+                   return $"In what city?";
+               })
+               .AddResponse(Emotion.Sad, (i) =>
+               {
+                   return $"In what city?";
+               })
+               .AddResponse(Emotion.Disgust, (i) =>
+               {
+                   return $"In what city?";
+               })).Build();
+
+            yield return new InputResponseBuilder()
+                .AddPreviousResponse(0, $".*do you like.* ?")
+                .AddPattern(@"yes*")
+                .AddPattern(@"yeah")
+                .AddPattern(@"correct")
+                .AddTemplate(new EmotionTemplateBuilder()
+                .SetGlobalTemplateAction((match) =>
+                {
+                    var response = new GlobalActionResponse();
+                    return response;
+                })
+                .AddResponse(Emotion.Neutral, (i) =>
+                {
+                    return $"Really? I can't see it";
+                })
+                .AddResponse(Emotion.Happy, (i) =>
+                {
+                    return $"That's nice to hear! What makes you happy?";
+                })
+                .AddResponse(Emotion.Anger, (i) =>
+                {
+                    return $"You aren't looking really happy";
+                })
+                .AddResponse(Emotion.Fear, (i) =>
+                {
+                    return $"You aren't looking really happy";
+                })
+                .AddResponse(Emotion.Suprise, (i) =>
+                {
+                    return $"What makes you so happy then?";
+                })
+                .AddResponse(Emotion.Sad, (i) =>
+                {
+                    // Get some happy facts or something?
+                    return $"You don't seem so happy";
+                })
+                .AddResponse(Emotion.Disgust, (i) =>
+                {
+                    return $"You are?";
+                })).Build();
+
+
+            yield return new InputResponseBuilder()
                 .AddPattern(@".*I'm feeling happy.*")
+                .AddPattern(@".*I'm happy.*")
+                .AddPattern(@".*I am happy.*")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -277,10 +409,14 @@ namespace Alice.StandardContent
                 {
                     return $"You are?";
                 })).Build();
-
-            // check for previous question is 'why u happy'
+            
             yield return new InputResponseBuilder()
-                .AddPattern(@"Because (?'happy'.*)")
+                .AddPreviousResponse(0, $"That's nice to hear! What makes you happy?")
+                .AddPreviousResponse(0, $"What makes you so happy then?")
+                .AddPattern(@".* because i am (?'happy'.*)")
+                .AddPattern(@".* because i'm (?'happy'.*)")
+                .AddPattern(@".* because (?'happy'.*)")
+                .AddPattern(@"(?'happy'.*)")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
                 {
@@ -297,28 +433,28 @@ namespace Alice.StandardContent
                 })
                 .AddResponse(Emotion.Happy, (i) =>
                 {
-                    return $"That's so nice to hear! Do you have more examples?";
+                    return $"That's so nice to hear! I'll note that.";
                 })
                 .AddResponse(Emotion.Anger, (i) =>
                 {
-                    return $"Are you sure?";
+                    return $"Are you sure? You don't seem happy about it, but I'll note that";
                 })
                 .AddResponse(Emotion.Fear, (i) =>
                 {
-                    return $"You don't seem happy about that.";
+                    return $"You don't seem happy about that, but I'll note that";
                 })
                 .AddResponse(Emotion.Suprise, (i) =>
                 {
-                    return $"Whoah, nice to hear!";
+                    return $"Whoah, nice to hear! I'll note that";
                 })
                 .AddResponse(Emotion.Sad, (i) =>
                 {
                     // Get some happy facts or something?
-                    return $"You don't seem so happy";
+                    return $"You don't seem so happy, but I'll note that.";
                 })
                 .AddResponse(Emotion.Disgust, (i) =>
                 {
-                    return $"You are?";
+                    return $"I can't really see it, but I'll note that";
                 })).Build();
 
             // check for previous question is 'why u sad'
@@ -365,6 +501,7 @@ namespace Alice.StandardContent
 
             // check for previous response is 'what can cheer you up?'
             yield return new InputResponseBuilder()
+                .AddPreviousResponse(0, $"What can cheer you up?")
                 .AddPattern(@"(?'happy'.*)")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -465,49 +602,6 @@ namespace Alice.StandardContent
                         return $"I don't know what makes you happy yet. Can you give me an example?";
                     }
                     return $"I remember you like {i.GlobalActionResponse.Get<Fact>("happy").Values[random.Next(0, FactManager.FindFacts("happy").Capacity - 1)].Transform(To.TitleCase)}, correct?";
-                })).Build();
-
-            // check for previous response is 'talk about happy fact?'
-            // Get index number of happy fact list item
-            // nog niet af want ideeën zijn op
-            yield return new InputResponseBuilder()
-                .AddPattern(@".*yes.*")
-                .AddTemplate(new EmotionTemplateBuilder()
-                .SetGlobalTemplateAction((match) =>
-                {
-                    var response = new GlobalActionResponse();
-                    string name = RegexHelper.GetValue(match, "happy");
-                    Fact happy = FactManager.FindFacts("happy").FirstOrDefault();
-                    FactManager.AddFact(new Fact("happy", name));
-                    return response;
-                })
-                .AddResponse(Emotion.Neutral, (i) =>
-                {
-                    return $"Thanks, I'll remember that.";
-                })
-                .AddResponse(Emotion.Happy, (i) =>
-                {
-                    return $"You seem happier already!";
-                })
-                .AddResponse(Emotion.Anger, (i) =>
-                {
-                    return $"Thanks, I'll remember that.";
-                })
-                .AddResponse(Emotion.Fear, (i) =>
-                {
-                    return $"Thanks, I'll remember that.";
-                })
-                .AddResponse(Emotion.Suprise, (i) =>
-                {
-                    return $"Thanks, I'll remember that.";
-                })
-                .AddResponse(Emotion.Sad, (i) =>
-                {
-                    return $"Thanks, I'll remember that.";
-                })
-                .AddResponse(Emotion.Disgust, (i) =>
-                {
-                    return $"Thanks, I'll remember that.";
                 })).Build();
 
             // Get index number of happy fact list item

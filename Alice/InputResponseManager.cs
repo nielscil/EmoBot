@@ -88,7 +88,7 @@ namespace Alice
             data = new List<InputResponseData>();
             int index = _history.Count - (depth + 1);
 
-            if (index > 0)
+            if (index >= 0)
             {
                 foreach (string item in input)
                 {
