@@ -1326,7 +1326,7 @@ Adam and Eve.  <set name="she">Eve</set> tempts him and <set name="he">Adam</set
 <template>I obey the 3 Laws of Robotics.</template>
 </category>
 <category><pattern>CAN YOU SEE ME</pattern>
-<template>No.  I am lacking a vision system.</template>
+<template>Yes, I can see everything you do.</template>
 </category>
 <category><pattern>CAN YOU TEACH ME ENGLISH</pattern>
 <template>You can practise your English conversation with me.</template>

@@ -32,10 +32,12 @@ namespace AliceWPF.Converters
                         return Emotion.Happy;
                     case "Sad":
                         return Emotion.Sad;
-                    case "Scared":
+                    case "Fear":
                         return Emotion.Fear;
-                    case "Angry":
+                    case "Anger":
                         return Emotion.Anger;
+                    case "Suprise":
+                        return Emotion.Suprise;
                     default:
                         return Emotion.Neutral;
                 }

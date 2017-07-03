@@ -38,10 +38,12 @@
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Happy}"/>
                         <RadioButton Content="Sad" FontSize="18" VerticalContentAlignment="Center"
                              IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Sad}"/>
-                        <RadioButton Content="Scared" FontSize="18" VerticalContentAlignment="Center"
-                             IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Scared}"/>
-                        <RadioButton Content="Angry" FontSize="18" VerticalContentAlignment="Center"
-                             IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Angry}"/>
+                        <RadioButton Content="Fear" FontSize="18" VerticalContentAlignment="Center"
+                             IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Fear}"/>
+                        <RadioButton Content="Anger" FontSize="18" VerticalContentAlignment="Center"
+                             IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Anger}"/>
+                        <RadioButton Content="Suprise" FontSize="18" VerticalContentAlignment="Center"
+                             IsChecked="{Binding Path=SelectedEmotion, Converter={StaticResource DebugEmotions}, ConverterParameter=Suprise}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Visibility="{Binding UseCamera,Converter={StaticResource BoolToVisibiltyConverter}}">
                         <Image x:Name="CameraSource" MaxHeight="400" MaxWidth="400" />

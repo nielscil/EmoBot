@@ -457,7 +457,7 @@ namespace EmotionLib
                 exactVal = emotions.Fear;
             }
 
-            if (emotions.Disgust > exactVal && emotions.Disgust > 60f)
+            if (emotions.Disgust > exactVal && emotions.Disgust > 80f)
             {
                 val = Emotion.Disgust;
                 exactVal = emotions.Disgust;
