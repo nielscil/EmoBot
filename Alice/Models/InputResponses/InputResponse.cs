@@ -24,11 +24,11 @@ namespace Alice.Models.InputResponses
             _previousResponsePatternsToMatch.Add(new Tuple<int, string>(dept, pattern));
         }
 
-        public bool IsMatch(InputResponseData inputResponseData)
+        private bool IsMatch(InputResponseData inputResponseData)
         {
             foreach (string pattern in _patternsToMatch)
             {
-                Match match = Regex.Match(inputResponseData.Input, pattern);
+                Match match = Regex.Match(inputResponseData.Input, pattern, RegexOptions.IgnoreCase);
                 List<InputResponseData> data;
 
                 if (match.Success && InputResponseManager.IsMatchingPreviousResponses(_previousResponsePatternsToMatch, out data))

@@ -22,9 +22,9 @@ namespace Alice.Classes
             return this;
         }
 
-        public InputResponseBuilder AddPreviousResponse(int dept,string pattern)
+        public InputResponseBuilder AddPreviousResponse(int depth,string pattern)
         {
-            _inputResponse.AddPreviousResponsePattern(dept, pattern);
+            _inputResponse.AddPreviousResponsePattern(depth, pattern);
             return this;
         }
 

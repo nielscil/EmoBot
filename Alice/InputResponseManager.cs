@@ -93,7 +93,7 @@ namespace Alice
                 foreach (string item in input)
                 {
                     var inputResponse = _history[index];
-                    if (Regex.IsMatch(inputResponse.Response, item))
+                    if (Regex.IsMatch(inputResponse.Response, item, RegexOptions.IgnoreCase))
                     {
                         data.Add(inputResponse);
                         return true;

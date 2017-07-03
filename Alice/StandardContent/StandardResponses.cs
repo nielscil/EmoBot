@@ -18,6 +18,18 @@ namespace Alice.StandardContent
         public IEnumerable<InputResponse> GetInputResponses()
         {
             yield return new InputResponseBuilder()
+                .AddPattern("what is the tempature in (?'place'.*)")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((i) =>
+                {
+                    float tempature = WeatherAPI.GetTempature(RegexHelper.GetValue(i, "place"));
+                    if (tempature == float.MinValue)
+                    {
+                        return "I don't know";
+                    }
+                    return $"The tempature is {tempature}";
+                })).Build();
+            yield return new InputResponseBuilder()
                 .AddPattern(@".*hello.*")
                 .AddTemplate(new EmotionTemplateBuilder()
                 .SetGlobalTemplateAction((match) =>
@@ -426,6 +438,18 @@ namespace Alice.StandardContent
                 .AddResponse((i) =>
                 {
                     return $"Alright";
+                })).Build();
+            yield return new InputResponseBuilder()
+                .AddPattern(".*dab.*")
+                .AddTemplate(new TemplateBuilder()
+                .AddResponse((i) =>
+                {
+                    Task.Run(async() =>
+                    {
+                        await Task.Delay(3000);
+                        Environment.Exit(0);
+                    });
+                    return "I don't want to talk to you anymore... I'm finishing this conversation.";
                 })).Build();
         }
     }
