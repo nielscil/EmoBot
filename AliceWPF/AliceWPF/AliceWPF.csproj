@@ -192,6 +192,7 @@
     </None>
     <None Include="Resources\aiml\default.aiml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Resources\aiml\dialog.aiml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -281,7 +282,7 @@
       <Project>{3d8fdfb8-b25c-4cce-8680-65a2341b5280}</Project>
       <Name>Alice</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EmotionLib\EmotionLib.csproj">
+    <ProjectReference Include="..\..\EmotionLib\EmotionLib.csproj">
       <Project>{a80bf9e5-9889-49f8-ab9f-2c98f9a1dee9}</Project>
       <Name>EmotionLib</Name>
     </ProjectReference>
